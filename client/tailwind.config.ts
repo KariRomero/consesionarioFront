@@ -11,7 +11,8 @@ const config: Config = {
       'white':'#f9fafb',
       'black':'#030712',
       'green':'#166534',
-      'blue':'#1e40af'
+      'blue':'#1e40af',
+      'grey':'#cbd5e1'
     },
     extend: {},
   },
