@@ -1,7 +1,13 @@
+import Banner from './Banner';
+import Filter from './Filter';
+import Description from './Description';
+
 const Home = () => {
   return (
-    <section>
-      <h1>This is Home</h1>      
+    <section className='flex flex-col items-center'>
+      <Banner/>
+      <Filter/>
+      <Description/>
     </section>
   )
 }

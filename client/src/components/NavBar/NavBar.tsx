@@ -1,5 +1,7 @@
 import Link from "next/link"
 import Logo from "./Logo"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faMobileScreen } from "@fortawesome/free-solid-svg-icons"
 
 const NavBar = () => {
   return (
@@ -12,6 +14,10 @@ const NavBar = () => {
         <NavLink to='/cars'>Vehiculos</NavLink>
         <NavLink to='/about'>Acerca de</NavLink>
         <NavLink to='/contact'>Contacto</NavLink>
+        <span className="font-medium">
+        <FontAwesomeIcon icon={faMobileScreen} />
+        +54 343 5123 789
+        </span>
       </div>
     </nav>
   )
