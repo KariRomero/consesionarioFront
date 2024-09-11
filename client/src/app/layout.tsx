@@ -2,6 +2,9 @@ import NavBar from "@/components/NavBar/NavBar";
 import type { Metadata } from "next";
 import { Montserrat } from 'next/font/google'
 import "./globals.css";
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 
 const montserrat = Montserrat({subsets: ["latin"]});
 
