@@ -1,13 +1,15 @@
+// src/app/layout.tsx
 import NavBar from "@/components/NavBar/NavBar";
 import type { Metadata } from "next";
-import { Montserrat } from 'next/font/google'
+import { Montserrat } from 'next/font/google';
 import "./globals.css";
-import { config } from '@fortawesome/fontawesome-svg-core'
-import '@fortawesome/fontawesome-svg-core/styles.css'
-config.autoAddCss = false
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import ReduxProvider from '../redux/ReduxProvider';  // Importa el nuevo componente
 
-const montserrat = Montserrat({subsets: ["latin"]});
+config.autoAddCss = false;
 
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Cars App",
@@ -22,8 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} bg-white text-black`}>
-        <NavBar/>
-        {children}
+        <ReduxProvider>  
+          <NavBar />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );
