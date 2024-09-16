@@ -4,7 +4,7 @@ import Description from './Description';
 
 const Home = () => {
   return (
-    <section className='flex flex-col items-center'>
+    <section className='flex flex-col items-center bg-white'>
       <Banner/>
       <Filter/>
       <Description/>
