@@ -11,6 +11,7 @@ interface Car {
   id: number;
   marca: string;
   modelo: string;
+  tipo: string,
   year: number;
   descripcion: string;
   precio: number;
