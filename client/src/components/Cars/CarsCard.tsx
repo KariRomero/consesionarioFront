@@ -33,17 +33,20 @@ const CarsCard: React.FC<CarsCardProps> = ({
   };
 
   return (
-    <div className="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-xs md:max-w-sm lg:max-w-md mx-auto" style={{ minHeight: '400px' }}>
+    <div 
+    className="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-[18rem] md:max-w-[20rem] lg:max-w-[22rem] mx-auto" 
+    style={{ minHeight: '250px' }}  // Reducimos la altura mínima
+  >
      
-      <div className="relative w-full h-56 overflow-hidden"> 
-        <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" />
+     <div className="relative w-full h-64 overflow-hidden">
+     <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" />
 
        
         {imageUrl.length > 1 && (
           <>
             <button
               onClick={handlePrevImage}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full"
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full" 
             >
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
