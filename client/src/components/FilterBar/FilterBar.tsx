@@ -1,8 +1,9 @@
 import React from 'react';
-import BrandFilter from './BrandFilter'; 
-import TypeFilter from './typesFilter'; 
-import CombustibleFilter from './CombustibleFilter'; 
-import TransmisionFilter from './TransmisionFilter'; 
+import BrandFilter from './BrandFilter';
+import TypeFilter from './typesFilter';
+import CombustibleFilter from './CombustibleFilter';
+import TransmisionFilter from './TransmisionFilter';
+import KilometrajeFilter from './KilometrajeFilter';
 
 interface FilterBarProps {
   filters: {
@@ -38,42 +39,32 @@ const FilterBar: React.FC<FilterBarProps> = ({
         </button>
       </div>
 
-      {/* Filtro de Marca */}
       <BrandFilter
         selectedBrand={filters.brand}
         onBrandChange={(brand) => onFilterChange('brand', brand)}
       />
 
-      {/* Filtro de Tipo */}
       <TypeFilter
         selectedType={filters.tipo}
         onTypeChange={(tipo) => onFilterChange('tipo', tipo)}
       />
 
-      {/* Filtro de Combustible */}
       <CombustibleFilter
         selectedCombustible={filters.fuelType}
         onCombustibleChange={(fuelType) => onFilterChange('fuelType', fuelType)}
       />
 
-      {/* Filtro de Transmisión */}
       <TransmisionFilter
         selectedTransmision={filters.transmision}
         onTransmisionChange={(transmision) => onFilterChange('transmision', transmision)}
       />
 
       {/* Filtro de Rango de Kilometraje */}
-      <input
-        type="range"
-        min="0"
-        max="300000"
-        step="10000"
-        className="border border-gray-300 rounded p-2 mb-4 w-full"
-        onChange={(e) => onFilterChange('kilometraje', Number(e.target.value))}
-        value={filters.kilometraje}
+      <KilometrajeFilter
+        selectedKilometraje={filters.kilometraje}
+        onKilometrajeChange={(kilometraje) => onFilterChange('kilometraje', kilometraje)}
       />
 
-      {/* Botón de Restablecer */}
       <button className="bg-red-500 text-black rounded p-2 w-full" onClick={onResetFilters}>
         Restablecer Filtros
       </button>
