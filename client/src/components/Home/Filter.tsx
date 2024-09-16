@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-const Filter = () => {  
+const Filter:React.FC = () => {  
   return (
     <section className="w-full py-28">
       <h1 className="text-center text-3xl font-semibold">Tipos de vehículos</h1>
