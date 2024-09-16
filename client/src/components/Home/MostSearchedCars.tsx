@@ -59,10 +59,10 @@ const MostSearchedCars: React.FC = () => {
                 <h1 className="text-center text-3xl font-semibold pb-6">Los más buscados</h1>
                 <div className='border border-b-grey border-t-0 border-x-0 flex justify-center items-center mb-8'>
                 <button className="text-lg font-semibold px-4 pb-4 hover:underline hover:underline-offset-8">Sedan</button>
-                <button className="text-lg font-semibold px-4 pb-4">Coupe</button>
-                <button className="text-lg font-semibold px-4 pb-4">SUV</button>
-                <button className="text-lg font-semibold px-4 pb-4">Pickup</button>
-                <button className="text-lg font-semibold px-4 pb-4">Hatchback</button>
+                <button className="text-lg font-semibold px-4 pb-4 hover:underline hover:underline-offset-8">Coupe</button>
+                <button className="text-lg font-semibold px-4 pb-4 hover:underline hover:underline-offset-8">SUV</button>
+                <button className="text-lg font-semibold px-4 pb-4 hover:underline hover:underline-offset-8">Pickup</button>
+                <button className="text-lg font-semibold px-4 pb-4 hover:underline hover:underline-offset-8">Hatchback</button>
                 </div>
             </Link>
             {cars && cars.length > 0 ? (

@@ -5,7 +5,7 @@ const Filter:React.FC = () => {
     <section className="w-full py-28">
       <h1 className="text-center text-3xl font-semibold">Tipos de vehículos</h1>
       <div className="flex justify-around items-center py-4">
-        <button className="text-lg font-semibold">
+        <button className="text-lg font-semibold border rounded-xl border-white hover:shadow-lg">
           <Image
           src='/sedan1.png'
           width={200}
@@ -14,7 +14,7 @@ const Filter:React.FC = () => {
           />
           Sedan
           </button>
-        <button className="text-lg font-semibold">
+        <button className="text-lg font-semibold border rounded-xl border-white hover:shadow-lg">
         <Image
           src='/coupe.png'
           width={200}
@@ -23,7 +23,7 @@ const Filter:React.FC = () => {
           />
           Coupe
           </button>
-        <button className="text-lg font-semibold">
+        <button className="text-lg font-semibold border rounded-xl border-white hover:shadow-lg">
         <Image
           src='/SUV.png'
           width={200}
@@ -32,7 +32,7 @@ const Filter:React.FC = () => {
           />
           SUV
           </button>
-        <button className="text-lg font-semibold">
+        <button className="text-lg font-semibold border rounded-xl border-white hover:shadow-lg">
         <Image
           src='/pickup.png'
           width={200}
@@ -41,7 +41,7 @@ const Filter:React.FC = () => {
           />
           Pickup
           </button>
-        <button className="text-lg font-semibold">
+        <button className="text-lg font-semibold border rounded-xl border-white hover:shadow-lg">
         <Image
           src='/hatchback.png'
           width={200}

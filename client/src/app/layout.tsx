@@ -1,5 +1,6 @@
 // src/app/layout.tsx
 import NavBar from "@/components/NavBar/NavBar";
+import Footer from "@/components/Footer/Footer";
 import type { Metadata } from "next";
 import { Montserrat } from 'next/font/google';
 import "./globals.css";
