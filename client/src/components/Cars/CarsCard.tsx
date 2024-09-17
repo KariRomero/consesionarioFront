@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';  // Importar Link de Next.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGasPump, faGaugeHigh, faGear, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,6 +11,7 @@ interface CarsCardProps {
   fuelType: string;
   transmission: string;
   price: string;
+  id: number; // Asegúrate de pasar el ID del vehículo para el enlace
 }
 
 const CarsCard: React.FC<CarsCardProps> = ({
@@ -20,6 +22,7 @@ const CarsCard: React.FC<CarsCardProps> = ({
   fuelType,
   transmission,
   price,
+  id,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -33,30 +36,29 @@ const CarsCard: React.FC<CarsCardProps> = ({
 
   return (
     <div className="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-xs md:max-w-sm lg:max-w-md mx-auto" style={{ minHeight: '400px' }}>
-    
-    <div className="relative w-full h-64 overflow-hidden"> 
-      <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
-      
-        
-        {imageUrl.length > 1 && (
-          <>
-            <button
-              onClick={handlePrevImage}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full" 
-            >
-              <FontAwesomeIcon icon={faChevronLeft} />
-            </button>
-            <button
-              onClick={handleNextImage}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full"
-            >
-              <FontAwesomeIcon icon={faChevronRight} />
-            </button>
-          </>
-        )}
-      </div>
+      <Link href={`/cars/${id}`}> {/* Envolver la imagen con Link para redirigir al detalle */}
+        <div className="relative w-full h-64 overflow-hidden cursor-pointer"> {/* Añadido cursor-pointer para indicar que es clickeable */}
+          <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
 
-     
+          {imageUrl.length > 1 && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); handlePrevImage(); }} // Prevenir la redirección al hacer clic en los botones
+                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full" 
+              >
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); handleNextImage(); }} // Prevenir la redirección al hacer clic en los botones
+                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full"
+              >
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </>
+          )}
+        </div>
+      </Link>
+
       <div className="p-5"> 
         <h2 className="text-xl font-bold mb-3">{title}</h2> 
         <p className="text-gray-600 mb-5">{subtitle}</p> 
@@ -78,7 +80,9 @@ const CarsCard: React.FC<CarsCardProps> = ({
         <hr className="my-3 border-gray-300 opacity-50" /> 
         <div className="flex items-center justify-between mt-4">
           <p className="text-xl font-bold">{price}</p>
-          <button className="text-blue font-semibold hover:underline ml-2">View Details</button>
+          <Link href={`/cars/${id}`}> {/* Usar Link de Next.js con la ruta dinámica */}
+            <button className="text-blue font-semibold hover:underline ml-2">View Details</button>
+          </Link>
         </div>
       </div>
     </div>
