@@ -56,14 +56,12 @@ const CarDetail: React.FC = () => {
       }
     };
 
-    // Agregar event listener para cuando el modal de zoom está abierto
     if (isZoomed) {
       window.addEventListener('keydown', handleKeyDown);
     } else {
       window.removeEventListener('keydown', handleKeyDown);
     }
 
-    // Agregar event listener para navegación de imágenes fuera del modal de zoom
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
@@ -76,7 +74,7 @@ const CarDetail: React.FC = () => {
   if (!carData) return <p>Car not found.</p>;
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="w-full max-w-screen-xl mx-auto p-4">
       {/* Breadcrumbs */}
       <div className="text-sm text-gray-600 mb-4">
         <button onClick={() => router.push('/cars')} className="hover:underline">Volver</button> | 
@@ -91,7 +89,6 @@ const CarDetail: React.FC = () => {
             onClick={toggleZoom}
             style={{ width: '600px', height: '470px' }}
           >
-            {/* Imagen principal ajustada */}
             <Image
               src={carData.imagenes[selectedImage].url}
               alt={carData.modelo}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';  // Importar Link de Next.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGasPump, faGaugeHigh, faGear, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faGasPump, faGaugeHigh, faGear, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'; // Importa el nuevo ícono
 
 interface CarsCardProps {
   imageUrl: string[]; 
@@ -39,23 +39,6 @@ const CarsCard: React.FC<CarsCardProps> = ({
       <Link href={`/cars/${id}`}> {/* Envolver la imagen con Link para redirigir al detalle */}
         <div className="relative w-full h-64 overflow-hidden cursor-pointer"> {/* Añadido cursor-pointer para indicar que es clickeable */}
           <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
-
-          {imageUrl.length > 1 && (
-            <>
-              <button
-                onClick={(e) => { e.stopPropagation(); handlePrevImage(); }} // Prevenir la redirección al hacer clic en los botones
-                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full" 
-              >
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); handleNextImage(); }} // Prevenir la redirección al hacer clic en los botones
-                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full"
-              >
-                <FontAwesomeIcon icon={faChevronRight} />
-              </button>
-            </>
-          )}
         </div>
       </Link>
 
@@ -81,7 +64,10 @@ const CarsCard: React.FC<CarsCardProps> = ({
         <div className="flex items-center justify-between mt-4">
           <p className="text-xl font-bold">{price}</p>
           <Link href={`/cars/${id}`}> {/* Usar Link de Next.js con la ruta dinámica */}
-            <button className="text-blue font-semibold hover:underline ml-2">View Details</button>
+            <button className="text-blue font-semibold hover:underline ml-2 flex items-center">
+              View Details
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" /> {/* Ícono al lado del texto */}
+            </button>
           </Link>
         </div>
       </div>
