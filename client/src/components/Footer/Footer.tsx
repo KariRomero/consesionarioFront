@@ -11,7 +11,7 @@ const Footer = () => {
     dispatch(fetchBrands())
   }, []);
 
-  const { brands } = useSelector((state: RootState) => state.brands)
+  const brands = useSelector((state: RootState) => state.brands)
   return (
     <section className="w-full border border-x-0 border-y-grey mt-28">
       <div className="grid grid-cols-4 pb-28 pt-16 px-10 gap-10">
@@ -22,7 +22,7 @@ const Footer = () => {
             <li>Contacto</li>
           </ul>
         </div>
-        <div>
+        {/* <div>
           <h1 className="font-semibold text-xl">Nuestras marcas</h1>
           <ul>
             {
@@ -31,7 +31,7 @@ const Footer = () => {
               ))
             }
           </ul>
-        </div>
+        </div> */}
         <div>
           <h1 className="font-semibold text-xl">Tipos de vehículo</h1>
         </div>

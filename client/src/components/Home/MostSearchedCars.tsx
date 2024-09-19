@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/redux/store';
@@ -19,10 +18,9 @@ const MostSearchedCars: React.FC = () => {
     const { cars } = useSelector((state: RootState) => state.cars);
     
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [cardsToShow, setCardsToShow] = useState(2); // Inicialmente mostrar 4 tarjetas
+    const [cardsToShow, setCardsToShow] = useState(2);
 
     useEffect(() => {
-        // Ajustar cardsToShow para mostrar una sola card en dispositivos pequeños
         const resizeHandler = () => {
             if (window.innerWidth < 640) {
                 setCardsToShow(1);
@@ -30,8 +28,6 @@ const MostSearchedCars: React.FC = () => {
                 setCardsToShow(2);
             }
         };
-
-        // Ejecutar una vez al cargar y luego cada vez que cambie el tamaño de la ventana
         resizeHandler();
         window.addEventListener('resize', resizeHandler);
 
@@ -95,7 +91,7 @@ const MostSearchedCars: React.FC = () => {
                     </button>
                 </>
             ) : (
-                <p>No hay adopciones disponibles en este momento.</p>
+                <p>No hay vehiculos disponibles en este momento.</p>
             )}
         </section>
     )
