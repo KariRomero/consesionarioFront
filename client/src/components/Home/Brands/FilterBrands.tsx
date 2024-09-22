@@ -7,13 +7,28 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import Image from "next/image";
 import FilteredByBrand from "./FilteredByBrand";
 
-interface Brand {
+interface Vehiculo {
+    id: number;
+    modelo: string;
+    year: number;
+    descripcion: string;
+    precio: number;
+    transmision: string;
+    combustible: string;
+    kilometraje: number;
+    tipoId: number;
+    brandId: number;
+    createdAt: string;
+    updatedAt: string;
+  }
+  
+  interface Brand {
     id: number;
     nombre: string;
     ImageBrand: string;
-    createdAt: string;
-    updatedAt: string;
-}
+    vehiculos?: Vehiculo[];
+  }
+ 
 
 const FilterBrands = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -25,7 +40,7 @@ const FilterBrands = () => {
     const { brands } = useSelector((state: RootState) => state.brands);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [cardsToShow, setCardsToShow] = useState(6);
-    const [brandId, setBrandId] = useState<number | undefined>(undefined); // Cambiado aquí
+    const [brandId, setBrandId] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         const resizeHandler = () => {
@@ -61,7 +76,7 @@ const FilterBrands = () => {
         if (brandId !== undefined) {
             console.log(brandId);
         }
-    }, [brandId]);
+    }, [brandId]);        
 
     return (
         <div>
@@ -102,7 +117,7 @@ const FilterBrands = () => {
                             </button>
                         </div>
                     ) : (
-                        <p>No hay vehículos disponibles en este momento.</p>
+                        []
                     )
                 }
             </div>

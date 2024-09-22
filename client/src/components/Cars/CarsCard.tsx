@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGasPump, faGaugeHigh, faGear, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 interface CarsCardProps {
-  imageUrl: string[]; 
+  imageUrl?: string[]; // Ahora es opcional
   title: string;
   subtitle: string;
   kilometraje: number;  
@@ -13,7 +13,7 @@ interface CarsCardProps {
 }
 
 const CarsCard: React.FC<CarsCardProps> = ({
-  imageUrl,
+  imageUrl = [], // Valor por defecto para evitar errores
   title,
   subtitle,
   kilometraje,
@@ -33,10 +33,14 @@ const CarsCard: React.FC<CarsCardProps> = ({
 
   return (
     <div className="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-xs md:max-w-sm lg:max-w-md mx-auto" style={{ minHeight: '400px' }}>
-    
-    <div className="relative w-full h-64 overflow-hidden"> 
-      <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
-      
+      <div className="relative w-full h-64 overflow-hidden"> 
+        {imageUrl.length > 0 ? (
+          <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
+        ) : (
+          <div className="flex items-center justify-center w-full h-full bg-gray-200">
+            <p>No Image Available</p>
+          </div>
+        )}
         
         {imageUrl.length > 1 && (
           <>
@@ -56,7 +60,6 @@ const CarsCard: React.FC<CarsCardProps> = ({
         )}
       </div>
 
-     
       <div className="p-5"> 
         <h2 className="text-xl font-bold mb-3">{title}</h2> 
         <p className="text-gray-600 mb-5">{subtitle}</p> 

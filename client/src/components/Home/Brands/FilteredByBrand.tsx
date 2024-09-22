@@ -1,55 +1,95 @@
 import { RootState, AppDispatch } from "@/redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchVehiculosByBrandId } from "@/redux/slices/vehiclesByBrandIdReducer";
+import { fetchBrandById } from "@/redux/slices/brandsSlice";
 import CarsCard from "@/components/Cars/CarsCard";
-import { log } from 'console';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-interface FilteredByBrandProps {
-    brandId: number;
-}
-
-interface VehicleData {
-    imagenes: { url: string }[]; 
-    marca: string;
+interface Vehiculo {
+    id: number;
     modelo: string;
     year: number;
     descripcion: string;
-    kilometraje: number;  
-    combustible: string;
-    transmision: string;
     precio: number;
-    id: number;
+    transmision: string;
+    combustible: string;
+    kilometraje: number;
+    imagenes: { url: string }[];
+    tipoId: number;
+    brandId: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
-const FilteredByBrand: React.FC<FilteredByBrandProps> = ({ brandId }) => {
+interface Brand {
+    id: number;
+    nombre: string;
+    ImageBrand: string;
+    vehiculos?: Vehiculo[]; 
+}
+
+const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
     const dispatch: AppDispatch = useDispatch();
-    const { vehiculos } = useSelector((state: RootState) => state.vehiculos);
+    const { brand, loading, error } = useSelector((state: RootState) => state.brands);
+    
+    useEffect(() => {
+        dispatch(fetchBrandById(brandId));
+    }, [brandId, dispatch]);
+    
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [cardsToShow, setCardsToShow] = useState(4);
 
     useEffect(() => {
-        dispatch(fetchVehiculosByBrandId(brandId.toString()));
-    }, [brandId, dispatch]);
+        const resizeHandler = () => {
+            setCardsToShow(window.innerWidth < 640 ? 1 : 4);
+        };
+        resizeHandler();
+        window.addEventListener('resize', resizeHandler);
 
-    console.log(vehiculos);
-    
+        return () => {
+            window.removeEventListener('resize', resizeHandler);
+        };
+    }, []);
+
+    const next = () => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % (brand?.vehiculos?.length || 1));
+    };
+
+    const prev = () => {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + (brand?.vehiculos?.length || 1)) % (brand?.vehiculos?.length || 1));
+    };
+
+    const displayedCards = brand?.vehiculos?.slice(currentIndex, currentIndex + cardsToShow) || [];
+
+    if (loading) return <p>Cargando...</p>;
+    if (error) return <p>{error}</p>;   
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-10 px-10 py-10">
-            {vehiculos && vehiculos.length > 0 ? (
-                vehiculos.map((v: VehicleData) => (
-                    <CarsCard
-                        key={v.id}
-                        imageUrl={v.imagenes.map(img => img.url)}
-                        title={`${v.marca} ${v.modelo} - ${v.year}`}
-                        subtitle={v.descripcion}
-                        kilometraje={v.kilometraje}  
-                        fuelType={v.combustible}
-                        transmission={v.transmision}
-                        price={`$${v.precio}`}
-                    />
-                ))
+        <div>
+            {displayedCards.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-10 px-10 py-10 relative">
+                    <button onClick={prev} className="absolute left-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </button>
+                    {displayedCards.map((v: Vehiculo) => (
+                        <CarsCard
+                            key={v.id}
+                            imageUrl={v.imagenes?.map(img => img.url)} 
+                            title={`${brand?.nombre} ${v.modelo} - ${v.year}`}
+                            subtitle={v.descripcion}
+                            kilometraje={v.kilometraje}
+                            fuelType={v.combustible}
+                            transmission={v.transmision}
+                            price={`$${v.precio}`}
+                        />
+                    ))}
+                    <button onClick={next} className="absolute right-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
+                </div>
             ) : (
-                <p>No hay vehículos disponibles para esta marca.</p>
+                []
             )}
         </div>
     );
