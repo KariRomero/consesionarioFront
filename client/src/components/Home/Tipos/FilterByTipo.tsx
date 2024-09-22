@@ -78,6 +78,7 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
                     {displayedCards.map((v: Vehiculo) => (
                         <CarsCard
                             key={v.id}
+                            id={v.id}
                             imageUrl={v.imagenes?.map(img => img.url)}
                             title={`${v.brand?.nombre || 'Sin marca'} ${v.modelo} - ${v.year}`}
                             subtitle={v.descripcion}
