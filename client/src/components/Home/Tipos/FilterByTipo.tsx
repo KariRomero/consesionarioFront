@@ -1,10 +1,16 @@
 import { RootState, AppDispatch } from "@/redux/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBrandById } from "@/redux/slices/brandsSlice";
+import { fetchTiposById } from "@/redux/slices/tiposSlice";
 import CarsCard from "@/components/Cars/CarsCard";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+
+interface Brand {
+    id: number;
+    nombre: string;
+    ImageBrand: string
+}
 
 interface Vehiculo {
     id: number;
@@ -17,19 +23,23 @@ interface Vehiculo {
     kilometraje: number;
     imagenes: { url: string }[];
     tipoId: number;
-    brandId: number;
+    brand?: Brand;  // Hacemos que la propiedad brand sea opcional
     createdAt: string;
     updatedAt: string;
 }
 
-const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
+
+const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
     const dispatch: AppDispatch = useDispatch();
-    const { brand, loading, error } = useSelector((state: RootState) => state.brands);
-    
+    const { tipo, loading, error } = useSelector((state: RootState) => state.tipos);
+
     useEffect(() => {
-        dispatch(fetchBrandById(brandId));
-    }, [brandId, dispatch]);
-    
+        if (tipoId > 0) {
+            dispatch(fetchTiposById(tipoId));
+        }
+    }, [tipoId, dispatch]);
+
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [cardsToShow, setCardsToShow] = useState(4);
 
@@ -46,17 +56,17 @@ const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
     }, []);
 
     const next = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % (brand?.vehiculos?.length || 1));
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % (tipo?.vehiculos?.length || 1));
     };
 
     const prev = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + (brand?.vehiculos?.length || 1)) % (brand?.vehiculos?.length || 1));
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + (tipo?.vehiculos?.length || 1)) % (tipo?.vehiculos?.length || 1));
     };
 
-    const displayedCards = brand?.vehiculos?.slice(currentIndex, currentIndex + cardsToShow) || [];
+    const displayedCards = tipo?.vehiculos?.slice(currentIndex, currentIndex + cardsToShow) || [];
 
     if (loading) return <p>Cargando...</p>;
-    if (error) return <p>{error}</p>;   
+    if (error) return <p>{error}</p>;
 
     return (
         <div>
@@ -68,8 +78,8 @@ const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
                     {displayedCards.map((v: Vehiculo) => (
                         <CarsCard
                             key={v.id}
-                            imageUrl={v.imagenes?.map(img => img.url)} 
-                            title={`${brand?.nombre} ${v.modelo} - ${v.year}`}
+                            imageUrl={v.imagenes?.map(img => img.url)}
+                            title={`${v.brand?.nombre || 'Sin marca'} ${v.modelo} - ${v.year}`}
                             subtitle={v.descripcion}
                             kilometraje={v.kilometraje}
                             fuelType={v.combustible}
@@ -77,6 +87,7 @@ const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
                             price={`$${v.precio}`}
                         />
                     ))}
+
                     <button onClick={next} className="absolute right-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
                         <FontAwesomeIcon icon={faChevronRight} />
                     </button>
@@ -85,7 +96,7 @@ const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
                 []
             )}
         </div>
-    );
-};
+    )
+}
 
-export default FilteredByBrand;
+export default FilterByTipo

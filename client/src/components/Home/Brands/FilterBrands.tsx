@@ -66,7 +66,7 @@ const FilterBrands = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + brands.length) % brands.length);
     };
 
-    const displayedBrands = brands.slice(currentIndex, currentIndex + cardsToShow);
+    const displayedBrands = brands?.slice(currentIndex, currentIndex + cardsToShow);
 
     const handleClick = async (id: number) => {
         setBrandId(id);

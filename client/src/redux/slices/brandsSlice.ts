@@ -21,8 +21,6 @@ interface Brand {
     id: number;
     nombre: string;
     ImageBrand: string;
-    createdAt: string;
-    updatedAt: string;
     vehiculos?: Vehiculo[];
 }
 

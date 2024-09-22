@@ -6,10 +6,12 @@ import typesReducer from '../redux/slices/typeSlice'
 import combustibleReducer from "../redux/slices/combustibleSlice"
 import transmisionReducer from "../redux/slices/transmSlice"
 import kilometrajeReducer from "../redux/slices/kilometrajeSlile"
+import tiposReducer from "../redux/slices/tiposSlice";
 const store = configureStore({
   reducer: {
     cars: carsReducer,
     brands: brandsReducer,
+    tipos: tiposReducer,
     types: typesReducer,
     combustibles: combustibleReducer,
     transmisiones: transmisionReducer,

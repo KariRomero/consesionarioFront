@@ -1,21 +1,20 @@
 'use client'
 import Banner from './Banner';
-import Filter from './Filter';
+import Tipos from './Tipos/Tipos';
 import Description from './Description';
 import MostSearchedCars from './MostSearchedCars';
 import Brands from './Brands/Brands';
 import Contact from './Contact';
 import Footer from '../Footer/Footer';
-import { useEffect } from 'react';
 
 const Home = () => {
  
   return (
     <section className='flex flex-col items-center bg-white pb-4 space-y-28'>
       <Banner/>
-      <Filter/>
+      <Tipos/>
       <Description/>
-      <MostSearchedCars/>
+      {/* <MostSearchedCars/> */}
       <Brands/>
       <Contact/>
       <Footer/>
