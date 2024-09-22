@@ -73,6 +73,7 @@ const MostSearchedCars: React.FC = () => {
                         {displayedCards.map((car) => (
                             <CarsCard
                                 key={car.id}
+                                id={car.id}
                                 imageUrl={car.imagenes.map((img) => img.url)}
                                 title={`${car.marca} ${car.modelo} - ${car.year}`}
                                 subtitle={car.descripcion}

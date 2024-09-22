@@ -1,6 +1,6 @@
 import React from 'react';
 import BrandFilter from './BrandFilter';
-import TypeFilter from './typesFilter';
+import TypeFilter from './TypesFilter';
 import CombustibleFilter from './CombustibleFilter';
 import TransmisionFilter from './TransmisionFilter';
 import KilometrajeFilter from './KilometrajeFilter';

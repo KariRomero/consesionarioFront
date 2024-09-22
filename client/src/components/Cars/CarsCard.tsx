@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import Link from 'next/link';  // Importar Link de Next.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGasPump, faGaugeHigh, faGear, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faGasPump, faGaugeHigh, faGear, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'; // Importa el nuevo ícono
 
 interface CarsCardProps {
   imageUrl?: string[]; // Ahora es opcional
@@ -10,6 +11,7 @@ interface CarsCardProps {
   fuelType: string;
   transmission: string;
   price: string;
+  id: number; // Asegúrate de pasar el ID del vehículo para el enlace
 }
 
 const CarsCard: React.FC<CarsCardProps> = ({
@@ -20,6 +22,7 @@ const CarsCard: React.FC<CarsCardProps> = ({
   fuelType,
   transmission,
   price,
+  id,
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -33,14 +36,10 @@ const CarsCard: React.FC<CarsCardProps> = ({
 
   return (
     <div className="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-xs md:max-w-sm lg:max-w-md mx-auto" style={{ minHeight: '400px' }}>
-      <div className="relative w-full h-64 overflow-hidden"> 
-        {imageUrl.length > 0 ? (
-          <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
-        ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gray-200">
-            <p>No Image Available</p>
-          </div>
-        )}
+    
+    <div className="relative w-full h-64 overflow-hidden"> 
+      <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" /> 
+      
         
         {imageUrl.length > 1 && (
           <>
@@ -60,6 +59,7 @@ const CarsCard: React.FC<CarsCardProps> = ({
         )}
       </div>
 
+     
       <div className="p-5"> 
         <h2 className="text-xl font-bold mb-3">{title}</h2> 
         <p className="text-gray-600 mb-5">{subtitle}</p> 
@@ -81,7 +81,12 @@ const CarsCard: React.FC<CarsCardProps> = ({
         <hr className="my-3 border-gray-300 opacity-50" /> 
         <div className="flex items-center justify-between mt-4">
           <p className="text-xl font-bold">{price}</p>
-          <button className="text-blue font-semibold hover:underline ml-2">View Details</button>
+          <Link href={`/cars/${id}`}> {/* Usar Link de Next.js con la ruta dinámica */}
+            <button className="text-blue font-semibold hover:underline ml-2 flex items-center">
+              View Details
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" /> {/* Ícono al lado del texto */}
+            </button>
+          </Link>
         </div>
       </div>
     </div>
