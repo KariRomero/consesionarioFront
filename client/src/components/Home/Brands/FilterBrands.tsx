@@ -6,29 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
 import FilteredByBrand from "./FilteredByBrand";
-
-interface Vehiculo {
-    id: number;
-    modelo: string;
-    year: number;
-    descripcion: string;
-    precio: number;
-    transmision: string;
-    combustible: string;
-    kilometraje: number;
-    tipoId: number;
-    brandId: number;
-    createdAt: string;
-    updatedAt: string;
-  }
-  
-  interface Brand {
-    id: number;
-    nombre: string;
-    ImageBrand: string;
-    vehiculos?: Vehiculo[];
-  }
- 
+import Brand from "@/types/brand";
 
 const FilterBrands = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -66,7 +44,7 @@ const FilterBrands = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + brands.length) % brands.length);
     };
 
-    const displayedBrands = brands?.slice(currentIndex, currentIndex + cardsToShow);
+    const displayedBrands = brands?.slice(currentIndex, currentIndex + cardsToShow) as Brand[];
 
     const handleClick = async (id: number) => {
         setBrandId(id);
@@ -91,7 +69,7 @@ const FilterBrands = () => {
                                 <FontAwesomeIcon icon={faChevronLeft} />
                             </button>
                             <div className="flex gap-4">
-                                {displayedBrands.map((b: Brand) => (
+                                {displayedBrands.map((b:Brand) => (
                                     <button
                                         key={b.id}
                                         className="flex flex-col items-center border border-grey rounded-md p-4 w-48 h-44 font-semibold hover:shadow-md overflow-hidden"
@@ -100,7 +78,7 @@ const FilterBrands = () => {
                                         <div className="relative w-full h-32">
                                             <Image
                                                 sizes="(max-width: 768px) 100vw, 200px"
-                                                src={b.ImageBrand}
+                                                src={b.ImageBrand || '/car1'}
                                                 fill
                                                 alt={b.nombre}
                                                 className="w-full h-full object-contain"

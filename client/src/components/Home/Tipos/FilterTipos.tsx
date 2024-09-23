@@ -6,28 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
 import FilterByTipo from "./FilterByTipo";
-
-interface Vehiculo {
-  id: number;
-  modelo: string;
-  year: number;
-  descripcion: string;
-  precio: number;
-  transmision: string;
-  combustible: string;
-  kilometraje: number;
-  tipoId: number;
-  brandId: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Tipo {
-  id: number;
-  nombre: string;
-  ImageTipo?: string;
-  vehiculos?: Vehiculo[];
-}
+import Tipo from "@/types/tipo";
 
 const FilterTipos: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -66,7 +45,8 @@ const FilterTipos: React.FC = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + tipos.length) % tipos.length);
   };
 
-  const displayedtipos = tipos?.slice(currentIndex, currentIndex + cardsToShow);
+  const displayedtipos = tipos?.slice(currentIndex, currentIndex + cardsToShow) as Tipo[];
+
 
   const handleClick = async (id: number) => {
     setTipoId(id);

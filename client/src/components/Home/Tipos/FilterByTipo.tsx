@@ -6,27 +6,6 @@ import CarsCard from "@/components/Cars/CarsCard";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-interface Brand {
-    id: number;
-    nombre: string;
-    ImageBrand: string
-}
-
-interface Vehiculo {
-    id: number;
-    modelo: string;
-    year: number;
-    descripcion: string;
-    precio: number;
-    transmision: string;
-    combustible: string;
-    kilometraje: number;
-    imagenes: { url: string }[];
-    tipoId: number;
-    brand?: Brand;  
-}
-
-
 const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
     const dispatch: AppDispatch = useDispatch();
     const { tipo, loading, error } = useSelector((state: RootState) => state.tipos);
@@ -36,7 +15,6 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
             dispatch(fetchTiposById(tipoId));
         }
     }, [tipoId, dispatch]);
-
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [cardsToShow, setCardsToShow] = useState(4);
@@ -62,6 +40,8 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
     };
 
     const displayedCards = tipo?.vehiculos?.slice(currentIndex, currentIndex + cardsToShow) || [];
+    console.log('displayedCards', displayedCards);
+    
 
     if (loading) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;
@@ -73,20 +53,19 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
                     <button onClick={prev} className="absolute left-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
-                    {displayedCards.map((v: Vehiculo) => (
+                    {displayedCards.map((v) => (
                         <CarsCard
                             key={v.id}
                             id={v.id}
                             imageUrl={v.imagenes?.map(img => img.url)}
                             title={`${v.brand?.nombre || 'Sin marca'} ${v.modelo} - ${v.year}`}
                             subtitle={v.descripcion}
-                            kilometraje={v.kilometraje}
-                            fuelType={v.combustible}
-                            transmission={v.transmision}
+                            kilometraje={v.kilometraje || 0}
+                            fuelType={v.combustible || 'Sin combustible'}
+                            transmission={v.transmision || 'Sin transmisión'}
                             price={`$${v.precio}`}
                         />
                     ))}
-
                     <button onClick={next} className="absolute right-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
                         <FontAwesomeIcon icon={faChevronRight} />
                     </button>
@@ -95,7 +74,7 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
                 []
             )}
         </div>
-    )
-}
+    );
+};
 
-export default FilterByTipo
+export default FilterByTipo;
