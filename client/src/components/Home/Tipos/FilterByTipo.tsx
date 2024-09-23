@@ -39,9 +39,7 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + (tipo?.vehiculos?.length || 1)) % (tipo?.vehiculos?.length || 1));
     };
 
-    const displayedCards = tipo?.vehiculos?.slice(currentIndex, currentIndex + cardsToShow) || [];
-    console.log('displayedCards', displayedCards);
-    
+    const displayedCards = tipo?.vehiculos?.slice(currentIndex, currentIndex + cardsToShow) || [];    
 
     if (loading) return <p>Cargando...</p>;
     if (error) return <p>{error}</p>;

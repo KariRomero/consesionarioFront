@@ -52,7 +52,6 @@ const FilterBrands = () => {
 
     useEffect(() => {
         if (brandId !== undefined) {
-            console.log(brandId);
         }
     }, [brandId]);        
 
