@@ -1,19 +1,29 @@
 import React from 'react';
-import BrandFilter from './BrandFilter';
-import TypeFilter from './TypesFilter';
 import CombustibleFilter from './CombustibleFilter';
 import TransmisionFilter from './TransmisionFilter';
 import KilometrajeFilter from './KilometrajeFilter';
 
+interface Brand {
+  id: number;
+  nombre: string;
+  ImageBrand: string;
+}
+
+interface Tipo {
+  id: number;
+  nombre: string;
+  ImageTipo: string;
+}
+
 interface FilterBarProps {
   filters: {
-    brand: string;
-    tipo: string;
+    brand: Brand | null;
+    tipo: Tipo | null;
     fuelType: string;
     kilometraje: number;
     transmision: string;
   };
-  onFilterChange: (key: string, value: string | number) => void;
+  onFilterChange: (key: string, value: string | number | Brand | Tipo | null) => void;
   onResetFilters: () => void;
   isVisible: boolean;
   onClose: () => void;
@@ -39,15 +49,15 @@ const FilterBar: React.FC<FilterBarProps> = ({
         </button>
       </div>
 
-      <BrandFilter
+      {/* <BrandFilter
         selectedBrand={filters.brand}
         onBrandChange={(brand) => onFilterChange('brand', brand)}
-      />
+      /> 
 
       <TypeFilter
         selectedType={filters.tipo}
         onTypeChange={(tipo) => onFilterChange('tipo', tipo)}
-      />
+      /> */}
 
       <CombustibleFilter
         selectedCombustible={filters.fuelType}

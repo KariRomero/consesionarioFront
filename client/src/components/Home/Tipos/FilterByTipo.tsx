@@ -23,9 +23,7 @@ interface Vehiculo {
     kilometraje: number;
     imagenes: { url: string }[];
     tipoId: number;
-    brand?: Brand;  // Hacemos que la propiedad brand sea opcional
-    createdAt: string;
-    updatedAt: string;
+    brand?: Brand;  
 }
 
 

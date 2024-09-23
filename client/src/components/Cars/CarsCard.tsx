@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import Link from 'next/link';  // Importar Link de Next.js
+import Link from 'next/link'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGasPump, faGaugeHigh, faGear, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'; // Importa el nuevo ícono
+import { faGasPump, faGaugeHigh, faGear, faArrowUpRightFromSquare , faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons'; 
 
 interface CarsCardProps {
-  imageUrl?: string[]; // Ahora es opcional
+  imageUrl?: string[]; 
   title: string;
   subtitle: string;
   kilometraje: number;  
   fuelType: string;
   transmission: string;
   price: string;
-  id: number; // Asegúrate de pasar el ID del vehículo para el enlace
+  id: number; 
 }
 
 const CarsCard: React.FC<CarsCardProps> = ({
-  imageUrl = [], // Valor por defecto para evitar errores
+  imageUrl = [], 
   title,
   subtitle,
   kilometraje,

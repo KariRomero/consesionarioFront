@@ -68,6 +68,7 @@ const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
                     {displayedCards.map((v: Vehiculo) => (
                         <CarsCard
                             key={v.id}
+                            id={v.id}
                             imageUrl={v.imagenes?.map(img => img.url)} 
                             title={`${brand?.nombre} ${v.modelo} - ${v.year}`}
                             subtitle={v.descripcion}

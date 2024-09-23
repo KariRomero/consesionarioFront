@@ -1,69 +1,89 @@
-'use client';
+import { RootState, AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { fetchCars } from "@/redux/slices/carsSlice";
+import CarsCard from "./CarsCard";
+import FilterBar from "../FilterBar/FilterBar";
 
-import React, { useState } from 'react';
-import FilterBar from '@/components/FilterBar/FilterBar'; 
-import CarsCard from '@/components/Cars/CarsCard';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@/redux/store';
-import { fetchCars } from '@/redux/slices/carsSlice';
+interface Brand {
+  id: number;
+  nombre: string;
+  ImageBrand: string;
+}
 
-const Cars: React.FC = () => {
+interface Tipo {
+  id: number;
+  nombre: string;
+  ImageTipo: string;
+}
+
+interface Car {
+  id: number;
+  brand: Brand;
+  tipo: Tipo;
+  combustible: string;
+  kilometraje: number;
+  transmision: string;
+  year: number;
+  precio: number;
+  imagenes: Array<{ url: string }>;
+  descripcion: string;
+}
+
+
+const Cars = () => {
   const dispatch: AppDispatch = useDispatch();
-  const { cars, loading, error } = useSelector((state: RootState) => state.cars);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
 
-  const [filters, setFilters] = useState<{ brand: string; tipo: string; fuelType: string; kilometraje: number; transmision: string }>({
-    brand: '',
-    tipo: '',
+  const [filters, setFilters] = useState<{
+    brand: Brand | null;
+    tipo: Tipo | null;
+    fuelType: string;
+    kilometraje: number;
+    transmision: string;
+  }>({
+    brand: null,
+    tipo: null,
     fuelType: '',
     kilometraje: 0,
     transmision: '',
   });
 
-  const [isFilterVisible, setIsFilterVisible] = useState(false); // Nuevo estado para manejar la visibilidad del menú de filtros
+  useEffect(() => {
+    dispatch(fetchCars());
+  }, [dispatch]);
 
-  const handleFilterChange = (key: string, value: string | number) => {
+  const { cars } = useSelector((state: RootState) => state.cars);
+  console.log(cars);
+  
+
+  const handleFilterChange = (key: string, value: string | number | Brand | Tipo | null) => {
     setFilters((prevFilters) => ({ ...prevFilters, [key]: value }));
   };
 
   const handleResetFilters = () => {
-    setFilters({ brand: '', tipo: '', fuelType: '', kilometraje: 0, transmision: '' });
+    setFilters({ brand: null, tipo: null, fuelType: '', kilometraje: 0, transmision: '' });
   };
 
-  React.useEffect(() => {
-    dispatch(fetchCars());
-  }, [dispatch]);
-
-  if (loading) {
-    return <p>Cargado . . . </p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  // Filtrar los autos en base a los filtros seleccionados
-  const filteredCars = cars.filter((car) => {
-    const matchesBrand = filters.brand ? car.marca === filters.brand : true;
-    const matchesTipo = filters.tipo ? car.tipo === filters.tipo : true;
+  // Filter the cars based on selected filters
+  const filteredCars = cars.filter((car: Car) => {
+    const matchesBrand = filters.brand ? car.brand?.nombre === filters.brand?.nombre : true;
+    const matchesTipo = filters.tipo ? car.tipo?.nombre === filters.tipo?.nombre : true;
     const matchesFuelType = filters.fuelType ? car.combustible === filters.fuelType : true;
-    const machestransmision = filters.transmision ? car.transmision === filters.transmision : true;
+    const matchesTransmision = filters.transmision ? car.transmision === filters.transmision : true;
     const matchesMileage = filters.kilometraje ? car.kilometraje <= filters.kilometraje : true;
-    return matchesBrand && matchesFuelType && matchesMileage && matchesTipo && machestransmision;
+    return matchesBrand && matchesFuelType && matchesMileage && matchesTipo && matchesTransmision;
   });
 
   return (
-    <section className="p-6 relative">
-      <h1 className="text-2xl font-bold mb-4">A nuestros Vehículos</h1>
-
-      {/* Botón para abrir el menú de filtros */}
+    <section className="pt-28">
+      <h1 className="text-center text-3xl font-semibold pb-8">Nuestros vehículos</h1>
       <button
         className="mb-4 bg-blue-500 text-blue px-4 py-2 rounded"
         onClick={() => setIsFilterVisible(!isFilterVisible)}
       >
         Filtros
       </button>
-
-      {/* Renderiza el componente de filtros aquí */}
       <FilterBar
         filters={filters}
         onFilterChange={handleFilterChange}
@@ -71,20 +91,18 @@ const Cars: React.FC = () => {
         isVisible={isFilterVisible}
         onClose={() => setIsFilterVisible(false)}
       />
-
-      {/* Ajustar el layout de las tarjetas cuando el menú de filtros esté visible */}
-      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ${isFilterVisible ? 'ml-64' : ''}`}>
-        {filteredCars.map((car) => (
+      <div className={`grid grid-cols-1 px-6 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ${isFilterVisible ? 'ml-64' : ''}`}>
+        {filteredCars.map((v: Car) => (
           <CarsCard
-            key={car.id}
-            id={car.id}
-            imageUrl={car.imagenes.map((img) => img.url)}
-            title={`${car.marca} ${car.modelo} - ${car.year}`}
-            subtitle={car.descripcion}
-            kilometraje={car.kilometraje}  
-            fuelType={car.combustible}
-            transmission={car.transmision}
-            price={`$${car.precio}`}
+            key={v.id}
+            id={v.id}
+            imageUrl={v.imagenes?.map((img) => img.url)}
+            title={`${v.brand?.nombre || "Sin marca"} ${v.modelo} - ${v.year}`}
+            subtitle={v.descripcion}
+            kilometraje={v.kilometraje}
+            fuelType={v.combustible}
+            transmission={v.transmision}
+            price={`$${v.precio}`}
           />
         ))}
       </div>
