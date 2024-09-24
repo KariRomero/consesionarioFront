@@ -7,6 +7,8 @@ import FilterBar from "../FilterBar/FilterBar";
 import { Vehiculo } from "@/types/vehiculo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import CarsPagination from "./CarsPagination";
+import Footer from "../Footer/Footer";
 
 const Cars = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -56,12 +58,11 @@ const Cars = () => {
   };
 
   const { cars } = useSelector((state: RootState) => state.cars);
-  console.log(cars);
 
   return (
     <section className="pt-28">
       <button
-        className="mb-4 bg-blue-500 text-blue px-4 py-2 rounded"
+        className="mb-4 px-4 py-2 rounded"
         onClick={() => setIsFilterVisible(!isFilterVisible)}
       >
         Filtros
@@ -73,6 +74,7 @@ const Cars = () => {
         onApplyFilters={applyFilters}
         onResetFilters={resetFilters}
       />
+      <CarsPagination/>
       <div className={`grid grid-cols-1 px-6 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ${isFilterVisible ? 'ml-64' : ''}`}>
         {cars.map((v: Vehiculo) => (
           <CarsCard
@@ -88,6 +90,8 @@ const Cars = () => {
           />
         ))}
       </div>
+      <CarsPagination/>
+      <Footer/>
     </section>
   );
 };
