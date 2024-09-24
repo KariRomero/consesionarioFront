@@ -5,22 +5,22 @@ import { fetchBrandById } from "@/redux/slices/brandsSlice";
 import CarsCard from "@/components/Cars/CarsCard";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-
-interface Vehiculo {
-    id: number;
-    modelo: string;
-    year: number;
-    descripcion: string;
-    precio: number;
-    transmision: string;
-    combustible: string;
-    kilometraje: number;
-    imagenes: { url: string }[];
-    tipoId: number;
-    brandId: number;
-    createdAt: string;
-    updatedAt: string;
-}
+import { Vehiculo } from "@/types/vehiculo";
+// interface Vehiculo {
+//     id: number;
+//     modelo: string;
+//     year: number;
+//     descripcion: string;
+//     precio: number;
+//     transmision: string;
+//     combustible: string;
+//     kilometraje: number;
+//     imagenes: { url: string }[];
+//     tipoId: number;
+//     brandId: number;
+//     createdAt: string;
+//     updatedAt: string;
+// }
 
 const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
     const dispatch: AppDispatch = useDispatch();
@@ -65,16 +65,16 @@ const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
                     <button onClick={prev} className="absolute left-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
-                    {displayedCards.map((v: Vehiculo) => (
+                    {displayedCards.map((v) => (
                         <CarsCard
                             key={v.id}
                             id={v.id}
                             imageUrl={v.imagenes?.map(img => img.url)} 
                             title={`${brand?.nombre} ${v.modelo} - ${v.year}`}
                             subtitle={v.descripcion}
-                            kilometraje={v.kilometraje}
-                            fuelType={v.combustible}
-                            transmission={v.transmision}
+                            kilometraje={v.kilometraje || 0}
+                            fuelType={v.combustible || 'Sin especificar'}
+                            transmission={v.transmision || 'Sin especificar'}
                             price={`$${v.precio}`}
                         />
                     ))}

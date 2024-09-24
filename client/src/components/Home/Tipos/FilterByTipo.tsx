@@ -59,8 +59,8 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
                             title={`${v.brand?.nombre || 'Sin marca'} ${v.modelo} - ${v.year}`}
                             subtitle={v.descripcion}
                             kilometraje={v.kilometraje || 0}
-                            fuelType={v.combustible || 'Sin combustible'}
-                            transmission={v.transmision || 'Sin transmisión'}
+                            fuelType={v.combustible || 'Sin especificar'}
+                            transmission={v.transmision || 'Sin especificar'}
                             price={`$${v.precio}`}
                         />
                     ))}

@@ -1,28 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-interface Vehiculo {
-  id: number;
-  modelo: string;
-  year: number;
-  descripcion: string;
-  precio: number;
-  transmision: string;
-  combustible: string;
-  kilometraje: number;
-  imagenes: { url: string }[];
-  tipoId: number;
-  brandId: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Brand {
-    id: number;
-    nombre: string;
-    ImageBrand: string;
-    vehiculos?: Vehiculo[];
-}
+import Brand from '@/types/brand';
 
 interface BrandState {
   brands: Brand[];
