@@ -44,7 +44,7 @@ const CarsPagination: React.FC = () => {
     };
 
     return (
-        <div className='w-full flex justify-center items-center space-x-4 sm:space-x-10 py-8'>
+        <div className='w-full flex justify-center items-center space-x-4 sm:space-x-10 md:space-x-10 lg:space-x-10 py-8'>
             <button onClick={handleFirstPage}>
                 <FontAwesomeIcon icon={faAnglesLeft} className='text-grey hover:text-black'/>
             </button>
