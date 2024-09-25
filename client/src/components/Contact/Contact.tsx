@@ -1,7 +1,11 @@
+import ContactCars from "./ContactCars"
+import Footer from "../Footer/Footer"
+
 const Contact = () => {
   return (
-    <section>
-      <h1>This is Contact</h1>      
+    <section className="pt-64">
+      <ContactCars/>
+      <Footer/>
     </section>
   )
 }
