@@ -4,6 +4,7 @@ import { Vehiculo } from '@/types/vehiculo';
 
 interface CarsState {
   cars: Vehiculo[];
+  car: Vehiculo | null;
   loading: boolean;
   error: string | null;
   page: number;
@@ -13,6 +14,7 @@ interface CarsState {
 
 const initialState: CarsState = {
   cars: [],
+  car: null,
   loading: false,
   error: null,
   page: 1,
@@ -45,7 +47,6 @@ export const fetchCars = createAsyncThunk(
     if (filters.tipoId) params.append('tipoId', filters.tipoId.toString());
     if (filters.brandId) params.append('brandId', filters.brandId.toString());
 
-
     params.append('page', (filters.page || 1).toString());
     params.append('limit', (filters.limit || 6).toString());
 
@@ -56,10 +57,13 @@ export const fetchCars = createAsyncThunk(
   }
 );
 
-export const fetchCarById = createAsyncThunk('cars/fetchCarById', async (id: number) => {
-  const response = await axios.get<{ vehiculo: Vehiculo }>(`http://localhost:3000/vehiculos/${id}`);
-  return response.data;
-});
+export const fetchCarById = createAsyncThunk(
+  'cars/fetchCarById',
+  async (id: number) => {
+    const response = await axios.get<{ vehiculo: Vehiculo }>(`http://localhost:3000/vehiculos/${id}`);
+    return response.data;
+  }
+);
 
 const carsSlice = createSlice({
   name: 'cars',
@@ -88,6 +92,7 @@ const carsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // fetchCars
       .addCase(fetchCars.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -100,6 +105,19 @@ const carsSlice = createSlice({
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch cars';
+      })
+      // fetchCarById
+      .addCase(fetchCarById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCarById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.car = action.payload.vehiculo;
+      })
+      .addCase(fetchCarById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch car by ID';
       });
   },
 });

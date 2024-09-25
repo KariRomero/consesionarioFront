@@ -1,30 +1,32 @@
-'use client';
+'use client'
+import { useParams } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useEffect, useState, useCallback } from "react";
+import { fetchCarById } from "@/redux/slices/carsSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
+import { faChevronRight, faChevronLeft, faGaugeHigh, faGasPump, faGear, faTimes } from '@fortawesome/free-solid-svg-icons';
+import Footer from "../Footer/Footer";
+import Brand from "@/types/brand";
+import Brands from "../Home/Brands/Brands";
 
-import React, { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGasPump, faGaugeHigh, faGear, faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { fetchCars } from '../../redux/slices/carsSlice';
+const CarsDetail = () => {
+  const params = useParams();
+  const id = params?.id;
 
-const CarDetail: React.FC = () => {
-  const params = useParams(); 
-  const id = params?.id; 
-  const router = useRouter(); 
-
-  const dispatch = useAppDispatch(); 
-  const { cars, loading, error } = useAppSelector((state: RootState) => state.cars); 
+  const dispatch:AppDispatch = useDispatch();
+  const { car, loading, error } = useSelector((state: RootState) => state.cars);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchCars());
-  }, [dispatch]);
-
-  const carData = cars.find((car) => car.id === Number(id));
+    if (id) {
+      dispatch(fetchCarById(Number(id)));
+      console.log(car);      
+    }
+  }, [dispatch, id]);
 
   const handleImageSelect = (index: number) => {
     setSelectedImage(index);
@@ -36,14 +38,14 @@ const CarDetail: React.FC = () => {
   };
 
   const handleNextImage = useCallback(() => {
-    if (!carData) return;
-    setSelectedImage((prevIndex) => (prevIndex === carData.imagenes.length - 1 ? 0 : prevIndex + 1));
-  }, [carData]);
+    if (!car || !car.imagenes) return;
+    setSelectedImage((prevIndex) => (prevIndex === car.imagenes.length - 1 ? 0 : prevIndex + 1));
+  }, [car]);
 
   const handlePrevImage = useCallback(() => {
-    if (!carData) return;
-    setSelectedImage((prevIndex) => (prevIndex === 0 ? carData.imagenes.length - 1 : prevIndex - 1));
-  }, [carData]);
+    if (!car || !car.imagenes) return;
+    setSelectedImage((prevIndex) => (prevIndex === 0 ? car.imagenes.length - 1 : prevIndex - 1));
+  }, [car]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -58,11 +60,7 @@ const CarDetail: React.FC = () => {
 
     if (isZoomed) {
       window.addEventListener('keydown', handleKeyDown);
-    } else {
-      window.removeEventListener('keydown', handleKeyDown);
     }
-
-    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -71,16 +69,10 @@ const CarDetail: React.FC = () => {
 
   if (loading) return <p>Loading car details...</p>;
   if (error) return <p>Error loading car details: {error}</p>;
-  if (!carData) return <p>Car not found.</p>;
+  if (!car) return <p>Car not found.</p>;
 
   return (
-    <div className="w-full max-w-screen-xl mx-auto p-4">
-      {/* Breadcrumbs */}
-      <div className="text-sm text-gray-600 mb-4">
-        <button onClick={() => router.push('/cars')} className="hover:underline">Volver</button> | 
-        <a href="#" className="hover:underline"> {carData.marca} </a> | {carData.modelo}
-      </div>
-
+    <section className="mt-96 pt-28">
       <div className="flex flex-col lg:flex-row">
         {/* Contenedor de la imagen principal */}
         <div className="lg:w-1/2 flex flex-col items-center">
@@ -89,13 +81,17 @@ const CarDetail: React.FC = () => {
             onClick={toggleZoom}
             style={{ width: '600px', height: '470px' }}
           >
-            <Image
-              src={carData.imagenes[selectedImage].url}
-              alt={carData.modelo}
-              width={600}
-              height={470}
-              className="rounded-lg object-cover w-full h-full"
-            />
+            {car?.imagenes?.[selectedImage]?.url ? (
+              <Image
+                src={car.imagenes[selectedImage].url}
+                alt={car.modelo || 'Imagen del coche'}
+                width={600}
+                height={470}
+                className="rounded-lg object-cover w-full h-full"
+              />
+            ) : (
+              <p>No image available</p>
+            )}
             {/* Botones de Navegación */}
             <button
               onClick={handlePrevImage}
@@ -112,8 +108,8 @@ const CarDetail: React.FC = () => {
           </div>
 
           {/* Miniaturas de imágenes */}
-          <div className="flex overflow-x-auto space-x-4"> {/* Espacio uniforme entre miniaturas */}
-            {carData.imagenes.map((img, index) => (
+          <div className="flex overflow-x-auto space-x-4">
+            {car?.imagenes?.map((img, index) => (
               <button key={index} onClick={() => handleImageSelect(index)}>
                 <img
                   src={img.url}
@@ -127,29 +123,29 @@ const CarDetail: React.FC = () => {
 
         {/* Información Detallada del Vehículo */}
         <div className="lg:w-1/2 lg:pl-8">
-          <h2 className="text-3xl font-bold mb-5">{`${carData.marca} ${carData.modelo}`}</h2>
-          <p className="text-gray-600 font-bold mb-4 flex items-center text-xl">{`${carData.year}`}</p>
-          <p className=" font-bold mb-6 flex items-center text-xl">{`$ ${carData.precio}`}</p>
+          <h2 className="text-3xl font-bold mb-5">{`${car?.brand?.nombre || ''} ${car?.modelo || ''}`}</h2>
+          <p className="text-gray-600 font-bold mb-4 flex items-center text-xl">{`${car?.year || 'N/A'}`}</p>
+          <p className="font-bold mb-6 flex items-center text-xl">{`$ ${car?.precio || 'N/A'}`}</p>
 
           <div className="flex items-center space-x-8 mb-6">
             <div className="flex items-center text-xl">
               <FontAwesomeIcon icon={faGaugeHigh} className="mr-3 text-2xl" />
-              {`${carData.kilometraje} KM`}
+              {`${car?.kilometraje || 'N/A'} KM`}
             </div>
             <div className="flex items-center text-xl">
               <FontAwesomeIcon icon={faGasPump} className="mr-3 text-2xl" />
-              {carData.combustible}
+              {car?.combustible || 'N/A'}
             </div>
             <div className="flex items-center text-xl">
               <FontAwesomeIcon icon={faGear} className="mr-3 text-2xl" />
-              {carData.transmision}
+              {car?.transmision || 'N/A'}
             </div>
           </div>
 
           {/* Información de la Concesionaria */}
           <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-bold">Información del vehiculo</h3>
-            <p className="text-gray-700">{carData.descripcion}</p>
+            <h3 className="text-lg font-bold">Información del vehículo</h3>
+            <p className="text-gray-700">{car?.descripcion || 'No hay descripción disponible'}</p>
           </div>
         </div>
       </div>
@@ -159,14 +155,18 @@ const CarDetail: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(50,50,50,0.8)] backdrop-blur-sm">
           <div className="relative max-w-full max-h-full flex items-center justify-center">
             {isImageLoading && <div className="loader">Loading...</div>}
-            <Image
-              src={carData.imagenes[selectedImage].url}
-              alt={carData.modelo}
-              width={800}
-              height={600}
-              className="object-contain max-h-[90vh] max-w-[90vw] rounded-lg"
-              onLoadingComplete={() => setIsImageLoading(false)}
-            />
+            {car?.imagenes?.[selectedImage]?.url ? (
+              <Image
+                src={car.imagenes[selectedImage].url}
+                alt={car.modelo || 'Imagen del coche'}
+                width={800}
+                height={600}
+                className="object-contain max-h-[90vh] max-w-[90vw] rounded-lg"
+                onLoadingComplete={() => setIsImageLoading(false)}
+              />
+            ) : (
+              <p>No image available</p>
+            )}
             {/* Botón de Cierre */}
             <button
               onClick={toggleZoom}
@@ -190,8 +190,10 @@ const CarDetail: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+      {/* <Brands/> */}
+      <Footer/>
+    </section>
   );
 };
 
-export default CarDetail;
+export default CarsDetail;
