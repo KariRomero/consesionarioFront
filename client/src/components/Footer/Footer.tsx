@@ -2,7 +2,8 @@
 import { RootState, AppDispatch } from "@/redux/store"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react";
-import { fetchBrands } from "@/redux/slices/brandsSlice";
+import { fetchBrands } from "@/redux/slices/brandsSlice"
+import Link from "next/link";
 
 const Footer = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -20,6 +21,10 @@ const Footer = () => {
           <ul>
             <li>Acerca de nosotros</li>
             <li>Contacto</li>
+            <Link href="/admin">
+            <li>
+              Administrador
+              </li></Link>
           </ul>
         </div>
         {/* <div>

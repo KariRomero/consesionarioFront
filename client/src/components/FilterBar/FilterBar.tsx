@@ -55,7 +55,7 @@ const FilterBar: React.FC<{
   };
 
   return (
-    <div
+    <aside
       className={`fixed top-20 left-0 w-64 h-full bg-white shadow-lg p-4 transition-transform transform ${isVisible ? 'translate-x-0' : '-translate-x-full'
         }`}
     >
@@ -165,7 +165,7 @@ const FilterBar: React.FC<{
         </button>
       </div>
 
-    </div>
+    </aside>
   );
 };
 
