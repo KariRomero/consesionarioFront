@@ -45,13 +45,13 @@ const CarsCard: React.FC<CarsCardProps> = ({
           <>
             <button
               onClick={handlePrevImage}
-              className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full" 
+              className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white p-1 rounded-full" 
             >
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
             <button
               onClick={handleNextImage}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-gray-800 text-white p-1 rounded-full"
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white p-1 rounded-full"
             >
               <FontAwesomeIcon icon={faChevronRight} />
             </button>
@@ -62,9 +62,9 @@ const CarsCard: React.FC<CarsCardProps> = ({
      
       <div className="p-5"> 
         <h2 className="text-xl font-bold mb-3">{title}</h2> 
-        <p className="text-gray-600 mb-5">{subtitle}</p> 
-        <hr className="my-3 border-gray-300 opacity-50" /> 
-        <div className="flex items-center justify-between text-gray-700 mb-5 text-sm space-x-3">
+        <p className="mb-5">{subtitle}</p> 
+        <hr className="my-3 opacity-50" /> 
+        <div className="flex items-center justify-between mb-5 text-sm space-x-3">
           <div className="flex items-center">
             <FontAwesomeIcon icon={faGaugeHigh} className="mr-2" />
             {`${kilometraje} KM`}
@@ -78,7 +78,7 @@ const CarsCard: React.FC<CarsCardProps> = ({
             {transmission}
           </div>
         </div>
-        <hr className="my-3 border-gray-300 opacity-50" /> 
+        <hr className="my-3 opacity-50" /> 
         <div className="flex items-center justify-between mt-4">
           <p className="text-xl font-bold">{price}</p>
           <Link href={`/cars/${id}`}> {/* Usar Link de Next.js con la ruta dinámica */}

@@ -72,7 +72,7 @@ const CarsDetail = () => {
   if (!car) return <p>Car not found.</p>;
 
   return (
-    <section className="mt-96 pt-28">
+    <section className="w-full bg-white mt-96 pt-28">
       <div className="flex flex-col lg:flex-row">
         {/* Contenedor de la imagen principal */}
         <div className="lg:w-1/2 flex flex-col items-center">

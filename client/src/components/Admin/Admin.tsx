@@ -1,10 +1,4 @@
-'use client'
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import SideBar from "../NavBar/SideBar";
-
-const Admin = () => {
+const Admin: React.FC = () => {
   
   return (
     <section>    

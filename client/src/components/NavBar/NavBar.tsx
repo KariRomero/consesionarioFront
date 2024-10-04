@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 
-const NavBar = () => {
+const NavBar: React.FC = () => {
   return (
     <nav
       className="fixed top-0 left-0 w-full bg-white flex flex-wrap justify-between items-center z-50 px-4 py-4 md:py-6 lg:py-8"

@@ -8,7 +8,7 @@ import Image from "next/image";
 import FilteredByBrand from "./FilteredByBrand";
 import Brand from "@/types/brand";
 
-const FilterBrands = () => {
+const FilterBrands: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 
-const ContactCars = () => {
+const ContactCars: React.FC = () => {
   
     const [formData, setFormData] = useState({
       name: '',

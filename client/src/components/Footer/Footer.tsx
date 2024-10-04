@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { fetchBrands } from "@/redux/slices/brandsSlice"
 import Link from "next/link";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
