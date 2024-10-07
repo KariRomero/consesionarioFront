@@ -2,25 +2,45 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { fetchTipos } from "@/redux/slices/tiposSlice";
+import { fetchTipos, deleteTiposById } from "@/redux/slices/tiposSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faEye, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 import Image from "next/image";
 import Link from "next/link";
 
-const Tipos = ({ isSidebarVisible }: { isSidebarVisible: boolean }) => {
+const Tipos = () => {
     const dispatch: AppDispatch = useDispatch();
-
+    
     useEffect(() => {
         dispatch(fetchTipos());
     }, [dispatch]);
 
     const { tipos } = useSelector((state: RootState) => state.tipos);
 
-    const handleDelete = () => { };
+    const handleDelete = (id:number) => {
+        Swal.fire({
+            title: "Seguro quieres eliminar este Tipo ?",
+            text: "Esta acción no se revertirá",
+            icon: "warning",
+            confirmButtonColor: "#1e40af",
+            confirmButtonText: "Eliminar"
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Eliminado!",
+                    text: "Ha eliminado el Tipo",
+                    icon: "success",
+                    confirmButtonColor: "#1e40af",
+                });
+                dispatch(deleteTiposById(id));
+            }
+        });
+    };
 
     return (
-        <section className={`bg-white transition-all duration-300 ${isSidebarVisible ? "ml-0" : "ml-48"} pr-6 pt-10`}>
+        <section className='bg-white transition-all duration-300 pr-6 pt-10 ml-40'>
             <div>
                 <h1 className="text-center text-3xl font-semibold pb-8">Todos tus tipos de vehiculo</h1>
                 <Link href={'/admin/tipos/create'}>
@@ -49,7 +69,7 @@ const Tipos = ({ isSidebarVisible }: { isSidebarVisible: boolean }) => {
                                 <FontAwesomeIcon icon={faEye} className="text-xl" />
                             </button>
                         </Link>
-                        <button>
+                        <button onClick={() => handleDelete(t.id)}>
                             <FontAwesomeIcon icon={faTrashCan} className="text-xl" />
                         </button>
                     </div>
