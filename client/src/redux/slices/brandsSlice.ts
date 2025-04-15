@@ -20,26 +20,16 @@ const initialState: BrandState = {
 export const fetchBrands = createAsyncThunk(
   'brands/fetchBrands',
   async () => {
-<<<<<<< HEAD
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/brands`);
-=======
     const response = await axios.get(`${prod_url}/brands`);
->>>>>>> b4a171e6418a247aaed82458d57927887dc03dec
     return response.data.brands;
   }
 );
 
 export const fetchBrandById = createAsyncThunk(
   'brands/fetchBrandById',
-<<<<<<< HEAD
-  async (id: number) => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/brands/${id}`);
-        return response.data;
-=======
   async (id: string) => {
     const response = await axios.get(`${prod_url}/brands/${id}`);
     return response.data;
->>>>>>> b4a171e6418a247aaed82458d57927887dc03dec
   }
 );
 

@@ -11,7 +11,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import { FormVehiculoUpdateType } from '@/types/vehiculo';
 
-type Moneda = 'ARS' | 'USD';
+type Moneda = 'ARS' | 'USD'; // ✅ agregado
 
 export default function EditVehiculoPage() {
   const { id } = useParams();
@@ -24,7 +24,7 @@ export default function EditVehiculoPage() {
   const [tipos, setTipos] = useState<{ id: string; nombre: string }[]>([]);
   const [brands, setBrands] = useState<{ id: string; nombre: string }[]>([]);
 
-  const [formData, setFormData] = useState<FormVehiculoUpdateType & { moneda: Moneda }>({
+  const [formData, setFormData] = useState<FormVehiculoUpdateType>({
     modelo: '',
     year: '',
     descripcion: '',
@@ -34,25 +34,25 @@ export default function EditVehiculoPage() {
     kilometraje: '',
     tipoId: '',
     brandId: '',
-    moneda: 'ARS', // Valor inicial válido requerido
+    moneda: 'ARS',
     vendido: false,
     ubicacion: '',
   });
 
+  // ✅ corregido: el id es string
   useEffect(() => {
     if (id) dispatch(fetchCarById(id as string));
   }, [dispatch, id]);
-
   useEffect(() => {
     if (car) {
       setFormData({
         modelo: car.modelo || '',
-        year: car.year || '',
+        year: String(car.year || ''),
         descripcion: car.descripcion || '',
-        precio: car.precio || '',
+        precio: String(car.precio || ''),
         transmision: car.transmision || '',
         combustible: car.combustible || '',
-        kilometraje: car.kilometraje || '',
+        kilometraje: String(car.kilometraje || ''),
         tipoId: car.tipoId || '',
         brandId: car.brandId || '',
         moneda: car.moneda as Moneda || 'ARS',
@@ -91,11 +91,17 @@ export default function EditVehiculoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-
     const formDataToSend = new FormData();
 
+    const camposNumericos = ['year', 'precio', 'kilometraje'];
+
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== undefined) formDataToSend.append(key, String(value));
+      if (value !== undefined && value !== '') {
+        formDataToSend.append(
+          key,
+          camposNumericos.includes(key) ? String(Number(value)) : String(value)
+        );
+      }
     });
 
     formDataToSend.append('imagenesEliminar', JSON.stringify(imagenesEliminar));
@@ -121,9 +127,7 @@ export default function EditVehiculoPage() {
   return (
     <section className="w-full bg-white mt-96 pt-28 px-6">
       <h1 className="text-3xl font-bold mb-6">Editar Vehículo</h1>
-
       <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-8">
-        {/* Imágenes */}
         <div className="lg:w-1/2">
           <div className="w-full mb-4 relative" style={{ width: '100%', height: '470px' }}>
             <Image
@@ -133,12 +137,10 @@ export default function EditVehiculoPage() {
               height={470}
               className="rounded-lg object-cover w-full h-full"
             />
-            <button type="button" onClick={() => setSelectedImage(i => (i === 0 ? car.imagenes.length - 1 : i - 1))}
-              className="absolute left-2 top-1/2 transform -translate-y-1/2 p-4 bg-gray-800 text-white rounded-full">
+            <button type="button" onClick={() => setSelectedImage(i => (i === 0 ? (car.imagenes?.length || 1) - 1 : i - 1))} className="absolute left-2 top-1/2 transform -translate-y-1/2 p-4 bg-gray-800 text-white rounded-full">
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
-            <button type="button" onClick={() => setSelectedImage(i => (i === car.imagenes.length - 1 ? 0 : i + 1))}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 p-4 bg-gray-800 text-white rounded-full">
+            <button type="button" onClick={() => setSelectedImage(i => (i === (car.imagenes?.length || 1) - 1 ? 0 : i + 1))} className="absolute right-2 top-1/2 transform -translate-y-1/2 p-4 bg-gray-800 text-white rounded-full">
               <FontAwesomeIcon icon={faChevronRight} />
             </button>
           </div>
@@ -158,22 +160,11 @@ export default function EditVehiculoPage() {
           </div>
         </div>
 
-        {/* Formulario */}
         <div className="lg:w-1/2">
           <div className="grid grid-cols-1 gap-4">
-            {/* Campos simples */}
-            {[
-              ['modelo', 'Modelo'],
-              ['year', 'Año'],
-              ['descripcion', 'Descripción'],
-              ['precio', 'Precio'],
-              ['kilometraje', 'Kilometraje'],
-              ['ubicacion', 'Ubicación'],
-              ['transmision', 'Transmisión'],
-              ['combustible', 'Combustible'],
-            ].map(([key, label]) => (
+            {['modelo', 'year', 'descripcion', 'precio', 'kilometraje', 'ubicacion', 'transmision', 'combustible'].map((key) => (
               <div key={key}>
-                <label className="block font-semibold">{label}</label>
+                <label className="block font-semibold">{key.charAt(0).toUpperCase() + key.slice(1)}</label>
                 <input
                   type="text"
                   name={key}
@@ -184,76 +175,42 @@ export default function EditVehiculoPage() {
               </div>
             ))}
 
-            {/* Moneda */}
             <div>
               <label className="block font-semibold">Moneda</label>
-              <select
-                name="moneda"
-                value={formData.moneda}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              >
+              <select name="moneda" value={formData.moneda} onChange={handleChange} className="w-full border p-2 rounded" required>
                 <option disabled value="">Seleccionar moneda</option>
                 <option value="ARS">ARS</option>
                 <option value="USD">USD</option>
               </select>
             </div>
 
-            {/* Tipo */}
             <div>
               <label className="block font-semibold">Tipo de Vehículo</label>
-              <select
-                name="tipoId"
-                value={formData.tipoId}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              >
+              <select name="tipoId" value={formData.tipoId} onChange={handleChange} className="w-full border p-2 rounded" required>
                 <option disabled value="">Seleccionar tipo</option>
                 {tipos.map((tipo) => (
-                  <option key={tipo.id} value={tipo.id}>
-                    {tipo.nombre}
-                  </option>
+                  <option key={tipo.id} value={tipo.id}>{tipo.nombre}</option>
                 ))}
               </select>
             </div>
 
-            {/* Marca */}
             <div>
               <label className="block font-semibold">Marca</label>
-              <select
-                name="brandId"
-                value={formData.brandId}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              >
+              <select name="brandId" value={formData.brandId} onChange={handleChange} className="w-full border p-2 rounded" required>
                 <option disabled value="">Seleccionar marca</option>
                 {brands.map((brand) => (
-                  <option key={brand.id} value={brand.id}>
-                    {brand.nombre}
-                  </option>
+                  <option key={brand.id} value={brand.id}>{brand.nombre}</option>
                 ))}
               </select>
             </div>
 
-            {/* Vendido */}
             <div>
               <label className="block font-semibold">¿Vendido?</label>
-              <input
-                type="checkbox"
-                name="vendido"
-                checked={formData.vendido}
-                onChange={handleChange}
-              />
+              <input type="checkbox" name="vendido" checked={formData.vendido} onChange={handleChange} />
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="mt-6 bg-green-600 text-black px-6 py-3 rounded hover:bg-green-700 transition"
-          >
+          <button type="submit" className="mt-6 bg-green-600 text-black px-6 py-3 rounded hover:bg-green-700 transition">
             Guardar cambios
           </button>
         </div>

@@ -1,6 +1,4 @@
-import Brand from "./brand";
-import Tipo from "./tipo";
-import Imagenes from "./imagenes";
+
 export interface Vehiculo {
     id: number;
     modelo: string;
@@ -22,17 +20,17 @@ export interface Vehiculo {
 
 
   export interface FormVehiculoUpdateType {
-    modelo?: string;
-    year?: string;
-    descripcion?: string;
-    precio?: string;
+    modelo: string;
+    year: string;            // string en el form, lo convertimos al enviar
+    descripcion: string;
+    precio: string;
     transmision?: string;
     combustible?: string;
     kilometraje?: string;
-    tipoId?: string;
-    brandId?: string;
-    moneda?: 'ARS' | 'USD';
-    vendido?: boolean;
+    tipoId: string;
+    brandId: string;
+    moneda: 'ARS' | 'USD';
+    vendido: boolean;
     ubicacion?: string;
     imagenesEliminar?: string[];
   }
