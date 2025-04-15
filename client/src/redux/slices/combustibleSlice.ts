@@ -17,8 +17,8 @@ const initialState: CombustibleState = {
 export const fetchCombustibles = createAsyncThunk<string[]>(
   'combustibles/fetchCombustibles',
   async () => {
-    const response = await axios.get('http://localhost:3000/vehiculos/combustible');
-    return response.data;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/combustible`);
+        return response.data;
   }
 );
 

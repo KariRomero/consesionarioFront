@@ -7,6 +7,8 @@ import combustibleReducer from "../redux/slices/combustibleSlice"
 import transmisionReducer from "../redux/slices/transmSlice"
 import kilometrajeReducer from "../redux/slices/kilometrajeSlile"
 import tiposReducer from "../redux/slices/tiposSlice";
+import authReducer from './slices/authSlice';
+
 const store = configureStore({
   reducer: {
     cars: carsReducer,
@@ -16,6 +18,8 @@ const store = configureStore({
     combustibles: combustibleReducer,
     transmisiones: transmisionReducer,
     kilometraje: kilometrajeReducer,
+    auth: authReducer,
+
   },
 });
 

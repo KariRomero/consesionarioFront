@@ -19,7 +19,7 @@ const initialState: TipoState = {
 export const postTipo = createAsyncThunk(
   'tipos/createTipo',
   async (formData: FormData) => {
-    const response = await axios.post('http://localhost:3000/tipos', formData);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/tipos`, formData);
     return response.data
   }
 )
@@ -27,7 +27,7 @@ export const postTipo = createAsyncThunk(
 export const fetchTipos = createAsyncThunk(
   'tipos/fetchTipos',
   async () => {
-    const response = await axios.get('http://localhost:3000/tipos');
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tipos`);
     return response.data;
   }
 );
@@ -35,7 +35,7 @@ export const fetchTipos = createAsyncThunk(
 export const fetchTiposById = createAsyncThunk(
   'tipos/fetchTiposById',
   async (id: number) => {
-    const response = await axios.get(`http://localhost:3000/tipos/${id}`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tipos/${id}`);
     return response.data;
   }
 );
@@ -43,7 +43,7 @@ export const fetchTiposById = createAsyncThunk(
 export const deleteTiposById = createAsyncThunk(
   'tipos/deleteYTiposById',
   async (id: number) => {
-    const response = await axios.delete(`http://localhost:3000/tipos/${id}`);
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/tipos/${id}`);
     return { id };
   }
 )
@@ -51,8 +51,7 @@ export const deleteTiposById = createAsyncThunk(
 export const updateTipo = createAsyncThunk(
   'tipos/updateTipo',
   async ({ id, formData }: { id: number; formData: FormData }) => {
-    const response = await axios.put(`http://localhost:3000/tipos/${id}`, formData);
-    return response.data;
+    const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/tipos/${id}`, formData);    return response.data;
   }
 );
 

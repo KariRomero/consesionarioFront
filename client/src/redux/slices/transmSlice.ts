@@ -17,8 +17,7 @@ const initialState: TransmisionState = {
 export const fetchTransmision = createAsyncThunk<string[]>(
   'transmision/fetchTransmision',
   async () => {
-    const response = await axios.get('http://localhost:3000/vehiculos/transmision');
-    return response.data;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/transmision`);    return response.data;
   }
 );
 

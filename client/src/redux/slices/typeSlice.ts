@@ -14,10 +14,11 @@ const initialState: TypesState = {
   error: null,
 };
 
+
 // Thunk para obtener los tipos de vehículos únicos desde el backend
 export const fetchTypes = createAsyncThunk('types/fetchTypes', async () => {
-  const response = await axios.get<string[]>('http://localhost:3000/vehiculos/tipos');
-  return response.data;
+  const response = await axios.get<string[]>(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/tipos`);
+    return response.data;
 });
 
 // Slice de Redux para tipos de vehículos

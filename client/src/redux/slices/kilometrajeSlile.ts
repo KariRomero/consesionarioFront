@@ -18,8 +18,8 @@ const initialState: KilometrajeState = {
 export const fetchKilometrajeRange = createAsyncThunk(
   'kilometraje/fetchKilometrajeRange',
   async () => {
-    const response = await axios.get('http://localhost:3000/vehiculos/rango-kilometraje');
-    return response.data;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/rango-kilometraje`);
+        return response.data;
   }
 );
 

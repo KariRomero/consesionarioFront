@@ -1,19 +1,38 @@
 import Brand from "./brand";
 import Tipo from "./tipo";
 import Imagenes from "./imagenes";
-
 export interface Vehiculo {
-    id:number;
-    modelo:string;
-    year:number;
-    descripcion:string;
-    precio:number;
-    transmision?:string;
-    combustible?:string;
-    kilometraje?:number;
-    tipoId:number;
-    brandId:number;
-    imagenes: Imagenes[];
-    tipo?:Tipo;
-    brand?:Brand
-}
+    id: number;
+    modelo: string;
+    year: string;
+    descripcion: string;
+    precio: string;
+    transmision: string;
+    combustible: string;
+    kilometraje: string;
+    tipoId?: string;
+    brandId?: string;
+    brand?: { nombre: string }; // si usás esto en cards
+    tipo?: { nombre: string };  // opcional si se usa
+    imagenes: { url: string }[];
+    vendido?: boolean;
+    ubicacion?: string;
+    moneda?: 'ARS' | 'USD'; // 👈 agregá esta línea
+  }
+
+
+  export interface FormVehiculoUpdateType {
+    modelo?: string;
+    year?: string;
+    descripcion?: string;
+    precio?: string;
+    transmision?: string;
+    combustible?: string;
+    kilometraje?: string;
+    tipoId?: string;
+    brandId?: string;
+    moneda?: 'ARS' | 'USD';
+    vendido?: boolean;
+    ubicacion?: string;
+    imagenesEliminar?: string[];
+  }

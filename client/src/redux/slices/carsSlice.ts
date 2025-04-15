@@ -31,8 +31,8 @@ export const fetchCars = createAsyncThunk(
     maxKilometraje?: number;
     minPrecio?: number;
     maxPrecio?: number;
-    tipoId?: number;
-    brandId?: number;
+    tipoId?: string;
+    brandId?: string;
     page?: number;
     limit?: number;
   }) => {
@@ -51,16 +51,15 @@ export const fetchCars = createAsyncThunk(
     params.append('limit', (filters.limit || 6).toString());
 
     const response = await axios.get<{ vehiculos: Vehiculo[], total: number }>(
-      `http://localhost:3000/vehiculos?${params.toString()}`
-    );
+      `${process.env.NEXT_PUBLIC_API_URL}/vehiculos?${params.toString()}`    );
     return response.data;
   }
 );
 
 export const fetchCarById = createAsyncThunk(
   'cars/fetchCarById',
-  async (id: number) => {
-    const response = await axios.get<{ vehiculo: Vehiculo }>(`http://localhost:3000/vehiculos/${id}`);
+  async (id: string) => {
+    const response = await axios.get<{ vehiculo: Vehiculo }>(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/${id}`);
     return response.data;
   }
 );

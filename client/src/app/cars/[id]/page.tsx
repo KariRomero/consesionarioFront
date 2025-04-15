@@ -1,10 +1,13 @@
 import CarsDetail from "@/components/Cars/CarsDetail";
 
-export default function Page() {
+interface PageProps {
+  params: { id: string };
+}
+
+export default function Page({ params }: PageProps) {
   return (
     <div className='w-full h-screen flex justify-center items-center'>
-      {/* <h1>estoy en detail</h1> */}
-      <CarsDetail/>
+      <CarsDetail id={params.id} />
     </div>
-  )
+  );
 }

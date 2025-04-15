@@ -11,9 +11,8 @@ import Footer from "../Footer/Footer";
 import Brand from "@/types/brand";
 import Brands from "../Home/Brands/Brands";
 
-const CarsDetail = () => {
-  const params = useParams();
-  const id = params?.id;
+const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
+
 
   const dispatch:AppDispatch = useDispatch();
   const { car, loading, error } = useSelector((state: RootState) => state.cars);
@@ -23,8 +22,8 @@ const CarsDetail = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchCarById(Number(id)));
-      console.log(car);      
+      dispatch(fetchCarById(id));
+            console.log(car);      
     }
   }, [dispatch, id]);
 
