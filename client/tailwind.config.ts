@@ -12,7 +12,8 @@ const config: Config = {
     colors: {
       'white':'#f9fafb',
       'black':'#030712',
-      'primary':'#4275f5'   
+      'primary':'#4275f5',
+      'gray-1':'#f1f1f1'   
     },
     extend: {},
   },
