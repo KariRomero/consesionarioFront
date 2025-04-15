@@ -11,7 +11,7 @@ interface CarsCardProps {
   fuelType: string;
   transmission: string;
   price: string;
-  id: number; 
+  id: string; 
 }
 
 const CarsCard: React.FC<CarsCardProps> = ({

@@ -12,9 +12,7 @@ const config: Config = {
     colors: {
       'white':'#f9fafb',
       'black':'#030712',
-      'green':'#166534',
-      'blue':'#1e40af',
-      'grey':'#cbd5e1'
+      'primary':'#4275f5'   
     },
     extend: {},
   },

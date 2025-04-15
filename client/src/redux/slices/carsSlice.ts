@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Vehiculo } from '@/types/vehiculo';
+import { Vehiculo } from '@/types/types';
+import { prod_url } from '@/utils/routes';
 
 interface CarsState {
   cars: Vehiculo[];
@@ -58,8 +59,13 @@ export const fetchCars = createAsyncThunk(
 
 export const fetchCarById = createAsyncThunk(
   'cars/fetchCarById',
+<<<<<<< HEAD
   async (id: string) => {
     const response = await axios.get<{ vehiculo: Vehiculo }>(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/${id}`);
+=======
+  async (id: number) => {
+    const response = await axios.get<{ vehiculo: Vehiculo }>(`${prod_url}/vehiculos/${id}`);
+>>>>>>> b4a171e6418a247aaed82458d57927887dc03dec
     return response.data;
   }
 );

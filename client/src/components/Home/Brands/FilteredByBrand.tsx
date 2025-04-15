@@ -5,7 +5,7 @@ import { fetchBrandById } from "@/redux/slices/brandsSlice";
 import CarsCard from "@/components/Cars/CarsCard";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { Vehiculo } from "@/types/vehiculo";
+import { Vehiculo } from "@/types/types";
 // interface Vehiculo {
 //     id: number;
 //     modelo: string;
@@ -22,7 +22,7 @@ import { Vehiculo } from "@/types/vehiculo";
 //     updatedAt: string;
 // }
 
-const FilteredByBrand: React.FC<{ brandId: number }> = ({ brandId }) => {
+const FilteredByBrand: React.FC<{ brandId: string }> = ({ brandId }) => {
     const dispatch: AppDispatch = useDispatch();
     const { brand, loading, error } = useSelector((state: RootState) => state.brands);
     
