@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginAdmin } from '@/redux/slices/authSlice';
+import { prod_url } from '@/utils/routes';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ export default function AdminLoginPage() {
     setError('');
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      const response = await axios.post(`${prod_url}/auth/login`, {
         email,
         password,
       });

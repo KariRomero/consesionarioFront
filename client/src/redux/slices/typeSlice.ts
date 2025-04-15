@@ -1,3 +1,4 @@
+import { prod_url } from '@/utils/routes';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -17,7 +18,7 @@ const initialState: TypesState = {
 
 // Thunk para obtener los tipos de vehículos únicos desde el backend
 export const fetchTypes = createAsyncThunk('types/fetchTypes', async () => {
-  const response = await axios.get<string[]>(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/tipos`);
+  const response = await axios.get<string[]>(`${prod_url}/vehiculos/tipos`);
     return response.data;
 });
 

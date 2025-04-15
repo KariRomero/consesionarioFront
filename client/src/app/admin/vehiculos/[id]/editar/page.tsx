@@ -10,6 +10,7 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import Image from 'next/image';
 import axios from 'axios';
 import { FormVehiculoUpdateType } from '@/types/vehiculo';
+import { prod_url } from '@/utils/routes';
 
 type Moneda = 'ARS' | 'USD'; // ✅ agregado
 
@@ -63,11 +64,11 @@ export default function EditVehiculoPage() {
   }, [car]);
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tipos`)
+    axios.get(`${prod_url}/tipos`)
       .then(res => setTipos(res.data))
       .catch(err => console.error('Error al cargar tipos', err));
 
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/brands`)
+    axios.get(`${prod_url}/brands`)
       .then(res => setBrands(res.data.brands))
       .catch(err => console.error('Error al cargar marcas', err));
   }, []);
@@ -107,7 +108,7 @@ export default function EditVehiculoPage() {
     formDataToSend.append('imagenesEliminar', JSON.stringify(imagenesEliminar));
 
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/${id}`, formDataToSend, {
+      await axios.put(`${prod_url}/vehiculos/${id}`, formDataToSend, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

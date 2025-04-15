@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { prod_url } from '@/utils/routes';
 
 export default function CrearVehiculoPage() {
   const router = useRouter();
@@ -28,8 +29,8 @@ export default function CrearVehiculoPage() {
   });
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/tipos`).then(res => setTipos(res.data));
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/brands`).then(res => setBrands(res.data.brands));
+    axios.get(`${prod_url}/tipos`).then(res => setTipos(res.data));
+    axios.get(`${prod_url}/brands`).then(res => setBrands(res.data.brands));
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -65,7 +66,7 @@ export default function CrearVehiculoPage() {
     });
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos`, form, {
+      await axios.post(`${prod_url}/vehiculos`, form, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

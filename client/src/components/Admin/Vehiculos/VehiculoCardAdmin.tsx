@@ -15,6 +15,7 @@ import {
 import { Vehiculo } from '@/types/vehiculo';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { prod_url } from '@/utils/routes';
 
 interface Props {
   vehiculo: Vehiculo;
@@ -46,7 +47,7 @@ const VehiculoCardAdmin: React.FC<Props> = ({ vehiculo }) => {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/${vehiculo.id}`, {
+      await axios.delete(`${prod_url}/vehiculos/${vehiculo.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

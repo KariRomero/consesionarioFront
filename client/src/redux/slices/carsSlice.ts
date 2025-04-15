@@ -52,7 +52,7 @@ export const fetchCars = createAsyncThunk(
     params.append('limit', (filters.limit || 6).toString());
 
     const response = await axios.get<{ vehiculos: Vehiculo[], total: number }>(
-      `${process.env.NEXT_PUBLIC_API_URL}/vehiculos?${params.toString()}`    );
+      `${prod_url}/vehiculos?${params.toString()}`    );
     return response.data;
   }
 );
