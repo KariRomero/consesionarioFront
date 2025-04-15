@@ -65,6 +65,22 @@ export const fetchCarById = createAsyncThunk(
   }
 );
 
+export const fetchCarsByBrand = createAsyncThunk(
+  'cars/fetchCarsByBrand',
+  async (brandId:string) => {
+    const response = await axios.get<{ vehiculos: Vehiculo[]}>(`${prod_url}/vehiculos?brandId=${brandId}`);
+    return response.data;
+  }
+)
+
+export const fetchCarsByTipo = createAsyncThunk(
+  'cars/fetchCarsByTipo',
+  async (tipoId:string) => {
+    const response = await axios.get<{ vehiculos: Vehiculo[]}>(`${prod_url}/vehiculos?tipoId=${tipoId}`);
+    return response.data;
+  }
+)
+
 const carsSlice = createSlice({
   name: 'cars',
   initialState,
@@ -118,7 +134,33 @@ const carsSlice = createSlice({
       .addCase(fetchCarById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch car by ID';
-      });
+      })
+      //fetchCarsByBrand
+      .addCase(fetchCarsByBrand.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCarsByBrand.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cars = action.payload.vehiculos
+      })
+      .addCase(fetchCarsByBrand.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch cars by brands';
+      })
+      //fetchCarsByTipo
+      .addCase(fetchCarsByTipo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCarsByTipo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cars = action.payload.vehiculos
+      })
+      .addCase(fetchCarsByTipo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch cars by tipo';
+      })
   },
 });
 
