@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
 import FilteredByBrand from "./FilteredByBrand";
-import Brand from "@/types/brand";
+import { Brand } from "@/types/types";
 
 const FilterBrands: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -18,7 +18,7 @@ const FilterBrands: React.FC = () => {
     const { brands } = useSelector((state: RootState) => state.brands);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [cardsToShow, setCardsToShow] = useState(6);
-    const [brandId, setBrandId] = useState<number | undefined>(undefined);
+    const [brandId, setBrandId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         const resizeHandler = () => {
@@ -46,7 +46,7 @@ const FilterBrands: React.FC = () => {
 
     const displayedBrands = brands?.slice(currentIndex, currentIndex + cardsToShow) as Brand[];
 
-    const handleClick = async (id: number) => {
+    const handleClick = async (id: string) => {
         setBrandId(id);
     };
 
@@ -99,7 +99,7 @@ const FilterBrands: React.FC = () => {
                 }
             </div>
 
-            <FilteredByBrand  brandId={brandId !== undefined ? brandId : 0}/>
+            <FilteredByBrand  brandId={brandId !== undefined ? brandId : ''}/>
 
         </div>
     );
