@@ -1,0 +1,1 @@
+export const prod_url = 'https://concesionarioback-1.onrender.com'
