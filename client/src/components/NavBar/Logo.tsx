@@ -1,10 +1,16 @@
 import Link from "next/link"
+import Image from "next/image"
 
 const Logo: React.FC = () => {
   return (
-    <Link href='/'>
-        <h1 className="text-2xl font-bold">A U T O E N V E N T A</h1>      
-    </Link>
+    <Link href={'/'}>
+          <Image
+            src={"/rodar_letras_ultra_hd.png"}
+            alt="Logo"
+            width={150}
+            height={100}
+          />
+        </Link>
   )
 }
 
