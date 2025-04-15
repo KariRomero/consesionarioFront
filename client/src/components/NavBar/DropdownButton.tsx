@@ -36,8 +36,9 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 
   const handleMouseLeave = () => {
     if (onMouseLeave) return onMouseLeave();
-    if (setOpenDropdown) setOpenDropdown(null);
+    // No cerramos aquí, el wrapper lo maneja
   };
+  
 
   return (
     <button

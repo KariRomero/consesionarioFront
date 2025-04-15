@@ -48,7 +48,7 @@ const DropdownWrapper: React.FC<DropdownWrapperProps> = ({ dropdown, type, isOpe
         ) : (
           <div className="w-full flex justify-between px-6 sm:px-12 md:px-16">
             {dropdown?.map((d) => (
-              <div
+              <button
                 key={d.id}
                 className="w-36 h-36 flex flex-col items-center text-center mx-2"
               >
@@ -61,7 +61,7 @@ const DropdownWrapper: React.FC<DropdownWrapperProps> = ({ dropdown, type, isOpe
                   />
                 </div>
                 <p className="mt-4 text-base font-semibold text-black">{d.nombre}</p>
-              </div>
+              </button>
             ))}
           </div>
         )}

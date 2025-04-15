@@ -44,45 +44,46 @@ export default function DesktopMenu({
 
       <NavLink to="/vende">VENDE TU AUTO</NavLink>
 
-      <div className="relative">
+      <div
+        className="relative"
+        onMouseEnter={() => {
+          setShowNosotrosDropdown(true);
+          setHover(true);
+        }}
+        onMouseLeave={() => {
+          setShowNosotrosDropdown(false);
+          setHover(false);
+        }}
+      >
         <DropdownButton
           label="NOSOTROS"
-          hover={hover}
-          onMouseEnter={() => {
-            setShowNosotrosDropdown(true);
-            setHover(true);
-          }}
-          onMouseLeave={() => setShowNosotrosDropdown(false)}
           className={showNosotrosDropdown && hover ? 'text-primary' : 'text-black'}
         />
 
-        {showNosotrosDropdown && (
-          <div className="absolute mt-9 w-64 z-50">
-            <DropdownWrapper
-              isOpen={showNosotrosDropdown}
-              customContent={
-                <div className="flex flex-col">
-                  <Link
-                    href="/nosotros/faq"
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                    onClick={() => setShowNosotrosDropdown(false)}
-                  >
-                    Preguntas Frecuentes
-                  </Link>
-                  <Link
-                    href="/nosotros/quienes-somos"
-                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                    onClick={() => setShowNosotrosDropdown(false)}
-                  >
-                    Quiénes Somos
-                  </Link>
-                </div>
-              }
-            />
-          </div>
-        )}
-
-
+        {/* Este contenedor está DENTRO del mismo <div> que tiene onMouseEnter/onMouseLeave */}
+        <div className="absolute mt-9 w-64 z-50">
+          <DropdownWrapper
+            isOpen={showNosotrosDropdown}
+            customContent={
+              <div className="flex flex-col ">
+                <Link
+                  href="/nosotros/faq"
+                  className="block px-4 py-2 text-sm hover:bg-gray-1 rounded-sm hover:shadow-sm"
+                  onClick={() => setShowNosotrosDropdown(false)}
+                >
+                  Preguntas Frecuentes
+                </Link>
+                <Link
+                  href="/nosotros/quienes-somos"
+                  className="block px-4 py-2 text-sm hover:bg-gray-1 rounded-sm hover:shadow-sm"
+                  onClick={() => setShowNosotrosDropdown(false)}
+                >
+                  Quiénes Somos
+                </Link>
+              </div>
+            }
+          />
+        </div>
       </div>
 
       <NavLink to="/contact">CONTACTO</NavLink>
