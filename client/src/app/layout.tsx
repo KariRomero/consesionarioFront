@@ -1,13 +1,11 @@
-'use client'
-import NavBar from "@/components/NavBar/NavBar";
-import { Montserrat } from 'next/font/google';
 import "./globals.css";
-import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import ReduxProvider from '../redux/ReduxProvider';
-import { usePathname } from 'next/navigation';
+import { Montserrat } from 'next/font/google';
+import { config } from '@fortawesome/fontawesome-svg-core';
 import { metadata } from "./metadata";
-import { Toaster } from 'react-hot-toast';
+import ReduxProvider from '../redux/ReduxProvider';
+import StateLoader from "@/components/StateLoader/StateLoader";
+import MainWrapper from "@/components/Wrappers/MainWrapper";
 
 config.autoAddCss = false;
 
@@ -18,7 +16,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname(); 
 
   return (
     <html lang="en">
@@ -28,9 +25,10 @@ export default function RootLayout({
       </head>
       <body className={`${montserrat.className} bg-white text-black`}>
         <ReduxProvider>
-          {!pathname.startsWith('/admin') && <NavBar />}
-          {children}
-          <Toaster position="top-right" />
+          <StateLoader />
+          <MainWrapper>
+            {children}
+          </MainWrapper>
         </ReduxProvider>
       </body>
     </html>

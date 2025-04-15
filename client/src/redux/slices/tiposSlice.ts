@@ -1,146 +1,138 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Brand } from '@/types/types';
+import { Tipo } from '@/types/types';
 import { prod_url } from '@/utils/routes';
 
-interface BrandState {
-  brands: Brand[];
-  brand: Brand | null;
+interface TipoState {
+  tipos: Tipo[];
+  tipo: Tipo | null;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: BrandState = {
-  brands: [],
-  brand: null,
+const initialState: TipoState = {
+  tipos: [],
+  tipo: null,
   loading: false,
   error: null
 };
 
-export const fetchBrands = createAsyncThunk(
-  'brands/fetchBrands',
+export const postTipo = createAsyncThunk(
+  'tipos/createTipo',
+  async (formData: FormData) => {
+    const response = await axios.post(`${prod_url}/tipos`, formData);
+    return response.data
+  }
+)
+
+export const fetchTipos = createAsyncThunk(
+  'tipos/fetchTipos',
   async () => {
-    const response = await axios.get(`${prod_url}/brands`);
-    return response.data.brands;
+    const response = await axios.get(`${prod_url}/tipos`);
+    return response.data;
   }
 );
 
-export const fetchBrandById = createAsyncThunk(
-  'brands/fetchBrandById',
+export const fetchTiposById = createAsyncThunk(
+  'tipos/fetchTiposById',
   async (id: string) => {
-    const response = await axios.get(`${prod_url}/brands/${id}`);
+    const response = await axios.get(`${prod_url}/tipos/${id}`);
     return response.data;
   }
 );
 
-export const createBrand = createAsyncThunk(
-  'brands/createBrand',
-  async (newBrand: Partial<Brand>) => {
-    const response = await axios.post(`${prod_url}/brands`, newBrand);
-    return response.data;
-  }
-);
-
-export const updateBrand = createAsyncThunk(
-  'brands/updateBrand',
-  async ({ id, updatedData }: { id: string; updatedData: Partial<Brand> }) => {
-    const response = await axios.put(`${prod_url}/brands/${id}`, updatedData);
-    return response.data;
-  }
-);
-
-export const deleteBrand = createAsyncThunk(
-  'brands/deleteBrand',
+export const deleteTiposById = createAsyncThunk(
+  'tipos/deleteYTiposById',
   async (id: string) => {
-    await axios.delete(`${prod_url}/brands/${id}`);
-    return id;
+    const response = await axios.delete(`${prod_url}/tipos/${id}`);
+    return { id };
+  }
+)
+
+export const updateTipo = createAsyncThunk(
+  'tipos/updateTipo',
+  async ({ id, formData }: { id: string; formData: FormData }) => {
+    const response = await axios.put(`${prod_url}/tipos/${id}`, formData);
+    return response.data;
   }
 );
 
-
-const brandsSlice = createSlice({
-  name: 'brands',
+const tiposSlice = createSlice({
+  name: 'tipos',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBrands.pending, (state) => {
+      .addCase(updateTipo.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchBrands.fulfilled, (state, action) => {
+      .addCase(updateTipo.fulfilled, (state, action) => {
         state.loading = false;
-        state.brands = action.payload;
+        state.tipos = state.tipos.map(tipo =>
+          tipo.id === action.payload.id ? action.payload : tipo
+        );
+        state.error = null;
       })
-      .addCase(fetchBrands.rejected, (state, action) => {
+      .addCase(updateTipo.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error fetching brands';
+        state.error = action.error.message || 'Error al actualizar el tipo';
       });
     builder
-      .addCase(fetchBrandById.pending, (state) => {
+      .addCase(postTipo.pending, (state) => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(postTipo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tipos = [...state.tipos, action.payload]
+        state.error = null
+      })
+      .addCase(postTipo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Error al rear Tipo'
+      })
+    builder
+      .addCase(fetchTipos.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchBrandById.fulfilled, (state, action) => {
+      .addCase(fetchTipos.fulfilled, (state, action) => {
         state.loading = false;
-        state.brand = action.payload;
+        state.tipos = action.payload;
       })
-      .addCase(fetchBrandById.rejected, (state, action) => {
+      .addCase(fetchTipos.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error fetching brand by ID';
+        state.error = action.error.message || 'Error fetching tipos';
       });
     builder
-      .addCase(createBrand.pending, (state) => {
+      .addCase(fetchTiposById.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createBrand.fulfilled, (state, action) => {
+      .addCase(fetchTiposById.fulfilled, (state, action) => {
         state.loading = false;
-        state.brands.push(action.payload); 
+        state.tipo = action.payload;
       })
-      .addCase(createBrand.rejected, (state, action) => {
+      .addCase(fetchTiposById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error creating brand';
+        state.error = action.error.message || 'Error fetching tipo by ID';
       });
+    builder
+    .addCase(deleteTiposById.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(deleteTiposById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.tipos = state.tipos.filter((tipo) => tipo.id !== action.payload.id);
+    })
+    .addCase(deleteTiposById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || 'Error al eliminar'
 
-    builder
-      .addCase(updateBrand.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateBrand.fulfilled, (state, action) => {
-        state.loading = false;
-        const index = state.brands.findIndex(b => b.id === action.payload.id);
-        if (index !== -1) {
-          state.brands[index] = action.payload;
-        }
-        if (state.brand?.id === action.payload.id) {
-          state.brand = action.payload;
-        }
-      })
-      .addCase(updateBrand.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Error updating brand';
-      });
-
-    builder
-      .addCase(deleteBrand.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(deleteBrand.fulfilled, (state, action) => {
-        state.loading = false;
-        state.brands = state.brands.filter(b => b.id !== action.payload);
-        if (state.brand?.id === action.payload) {
-          state.brand = null;
-        }
-      })
-      .addCase(deleteBrand.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Error deleting brand';
-      });
-
-  }
+    })
+}
 });
 
-export default brandsSlice.reducer;
+export default tiposSlice.reducer;
