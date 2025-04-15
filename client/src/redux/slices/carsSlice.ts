@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Vehiculo } from '@/types/vehiculo';
+import { Vehiculo } from '@/types/types';
+import { prod_url } from '@/utils/routes';
 
 interface CarsState {
   cars: Vehiculo[];
@@ -60,7 +61,7 @@ export const fetchCars = createAsyncThunk(
 export const fetchCarById = createAsyncThunk(
   'cars/fetchCarById',
   async (id: number) => {
-    const response = await axios.get<{ vehiculo: Vehiculo }>(`http://localhost:3000/vehiculos/${id}`);
+    const response = await axios.get<{ vehiculo: Vehiculo }>(`${prod_url}/vehiculos/${id}`);
     return response.data;
   }
 );

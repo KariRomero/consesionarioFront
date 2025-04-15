@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import Tipo from '@/types/tipo';
+import { Tipo } from '@/types/types';
+import { prod_url } from '@/utils/routes';
 
 interface TipoState {
   tipos: Tipo[];
@@ -19,7 +20,7 @@ const initialState: TipoState = {
 export const postTipo = createAsyncThunk(
   'tipos/createTipo',
   async (formData: FormData) => {
-    const response = await axios.post('http://localhost:3000/tipos', formData);
+    const response = await axios.post(`${prod_url}/tipos`, formData);
     return response.data
   }
 )
@@ -27,31 +28,31 @@ export const postTipo = createAsyncThunk(
 export const fetchTipos = createAsyncThunk(
   'tipos/fetchTipos',
   async () => {
-    const response = await axios.get('http://localhost:3000/tipos');
+    const response = await axios.get(`${prod_url}/tipos`);
     return response.data;
   }
 );
 
 export const fetchTiposById = createAsyncThunk(
   'tipos/fetchTiposById',
-  async (id: number) => {
-    const response = await axios.get(`http://localhost:3000/tipos/${id}`);
+  async (id: string) => {
+    const response = await axios.get(`${prod_url}/tipos/${id}`);
     return response.data;
   }
 );
 
 export const deleteTiposById = createAsyncThunk(
   'tipos/deleteYTiposById',
-  async (id: number) => {
-    const response = await axios.delete(`http://localhost:3000/tipos/${id}`);
+  async (id: string) => {
+    const response = await axios.delete(`${prod_url}/tipos/${id}`);
     return { id };
   }
 )
 
 export const updateTipo = createAsyncThunk(
   'tipos/updateTipo',
-  async ({ id, formData }: { id: number; formData: FormData }) => {
-    const response = await axios.put(`http://localhost:3000/tipos/${id}`, formData);
+  async ({ id, formData }: { id: string; formData: FormData }) => {
+    const response = await axios.put(`${prod_url}/tipos/${id}`, formData);
     return response.data;
   }
 );
