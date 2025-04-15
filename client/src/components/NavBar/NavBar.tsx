@@ -1,31 +1,110 @@
+'use client';
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import Link from "next/link";
+import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import DropdownWrapper from "./DropdownWrapper";
+import { fetchTipos } from "@/redux/slices/tiposSlice";
+import { fetchBrands } from "@/redux/slices/brandsSlice";
+import DropdownButton from "./DropdownButton";
 import Logo from "./Logo";
+import DesktopMenu from "./DesktopMenu";
 
 const NavBar: React.FC = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<"brands" | "tipos" | null>(null);
+  const [showDropdown, setShowDropdown] = useState<"brands" | "tipos" | null>(null);
+  const [showNosotrosDropdown, setShowNosotrosDropdown] = useState(false);
+  const [hover, setHover] = useState(false);
+
+
+  const { tipos } = useSelector((state: RootState) => state.tipos);
+  const { brands } = useSelector((state: RootState) => state.brands);
+
+  const dispatch: AppDispatch = useDispatch();
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    dispatch(fetchBrands());
+    dispatch(fetchTipos());
+  }, [dispatch]);
+
+  // Cerrar dropdown al hacer clic fuera o scroll
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        navRef.current &&
+        !navRef.current.contains(event.target as Node)
+      ) {
+        setOpenDropdown(null);
+      }
+    };
+
+    const handleScroll = () => {
+      setOpenDropdown(null);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const toggleDropdown = (type: "brands" | "tipos") => {
+    if (openDropdown === type) {
+      setOpenDropdown(null);
+    } else {
+      setOpenDropdown(type);
+      setShowDropdown(type); // aseguramos que esté montado
+    }
+    setHover(true);
+  };
+
+  useEffect(() => {
+    if (openDropdown === null) {
+      const timeout = setTimeout(() => {
+        setShowDropdown(null); // desmonta después de la animación
+      }, 300); // debe coincidir con duration en `DropdownWrapper`
+      return () => clearTimeout(timeout);
+    } else {
+      setShowDropdown(openDropdown);
+    }
+  }, [openDropdown]);
+
+
+
   return (
-    <nav
-      className="fixed top-0 left-0 w-full bg-white flex flex-wrap justify-between items-center z-50 px-4 py-4 md:py-6 lg:py-8"
-    >
-      <Logo />
-      <div className="flex flex-wrap justify-center items-center space-x-4 md:space-x-6 lg:space-x-8">
-        <NavLink to="/">Inicio</NavLink>
-        <NavLink to="/cars">Vehículos</NavLink>
-        <NavLink to="/contact">Contacto</NavLink>     
+    <nav ref={navRef} className="fixed top-0 left-0 w-full bg-white z-50 shadow-sm">
+      <div className="px-6 py-4 md:px-10 md:py-6 lg:py-8 flex justify-between items-center">
+
+        <Logo/>
+
+        {/* Menú escritorio */}
+        <DesktopMenu
+        openDropdown={openDropdown}
+        hover={hover}
+        showNosotrosDropdown={showNosotrosDropdown}
+        setOpenDropdown={setOpenDropdown}
+        setHover={setHover}
+        setShowNosotrosDropdown={setShowNosotrosDropdown}        
+        />
       </div>
+
+      {/* Dropdowns visibles solo en escritorio */}
+      {showDropdown && (
+        <DropdownWrapper
+          dropdown={showDropdown === "brands" ? brands : tipos}
+          type={showDropdown}
+          isOpen={openDropdown === showDropdown}
+        />
+      )}
     </nav>
-  );
-};
-
-type NavLinkProps = {
-  children: React.ReactNode;
-  to: string;
-};
-
-const NavLink = ({ children, to }: NavLinkProps) => {
-  return (
-    <Link href={to}>
-      <button className="font-medium">{children}</button>
-    </Link>
   );
 };
 
