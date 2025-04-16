@@ -8,18 +8,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { faChevronRight, faChevronLeft, faGaugeHigh, faGasPump, faGear, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Footer from "../Footer/Footer";
-import Brands from "../Home/Brands/Brands";
-import { VehiculoConMarca } from "@/types/types";
 
 const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
 
 
   const dispatch:AppDispatch = useDispatch();
-  const { car, loading, error } = useSelector((state: RootState) => state.cars) as {
-    car: VehiculoConMarca | null;
-    loading: boolean;
-    error: string | null;
-  };
+  const { car, loading, error } = useSelector((state: RootState) => state.cars) 
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
