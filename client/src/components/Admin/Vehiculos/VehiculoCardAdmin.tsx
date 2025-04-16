@@ -12,13 +12,13 @@ import {
   faPenToSquare,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import { Vehiculo } from '@/types/vehiculo';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { prod_url } from '@/utils/routes';
+import { VehiculoConMarca } from '@/types/types';
 
 interface Props {
-  vehiculo: Vehiculo;
+  vehiculo: VehiculoConMarca;
 }
 
 const VehiculoCardAdmin: React.FC<Props> = ({ vehiculo }) => {

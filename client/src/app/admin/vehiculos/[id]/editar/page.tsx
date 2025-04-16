@@ -9,8 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import axios from 'axios';
-import { FormVehiculoUpdateType } from '@/types/vehiculo';
 import { prod_url } from '@/utils/routes';
+import { FormVehiculoUpdateType } from '@/types/types';
 
 type Moneda = 'ARS' | 'USD'; // ✅ agregado
 

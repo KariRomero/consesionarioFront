@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import Image from "next/image";
 import FilterByTipo from "./FilterByTipo";
-import Tipo from "@/types/tipo";
+import { Tipo } from "@/types/types";
 
 const FilterTipos: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -19,7 +19,7 @@ const FilterTipos: React.FC = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(5);
-  const [tipoId, setTipoId] = useState<number | undefined>(undefined);
+  const [tipoId, setTipoId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const resizeHandler = () => {
@@ -48,10 +48,9 @@ const FilterTipos: React.FC = () => {
   const displayedtipos = tipos?.slice(currentIndex, currentIndex + cardsToShow) as Tipo[];
 
 
-  const handleClick = async (id: number) => {
-    setTipoId(id);
+  const handleClick = async (id: string) => {
+    setTipoId(id.toString());
   };
-
   return (
     <div>
       <div className="flex flex-wrap justify-center gap-4">
@@ -97,8 +96,7 @@ const FilterTipos: React.FC = () => {
         }
       </div>
 
-      <FilterByTipo  tipoId={tipoId !== undefined ? tipoId : 0}/>
-
+      <FilterByTipo tipoId={tipoId !== undefined ? tipoId.toString() : ''} />
     </div>
 
   )

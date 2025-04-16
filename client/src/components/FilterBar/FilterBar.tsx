@@ -16,8 +16,8 @@ const FilterBar: React.FC<{
     maxKilometraje?: number;
     minPrecio?: number;
     maxPrecio?: number;
-    tipoId?: number;
-    brandId?: number;
+    tipoId?: string;
+    brandId?: string;
   }) => void;
   onResetFilters: () => void;
 }> = ({ isVisible, onClose, onApplyFilters, onResetFilters }) => {
@@ -38,8 +38,8 @@ const FilterBar: React.FC<{
   const [maxKilometraje, setMaxKilometraje] = useState<number>(10000);
   const [minPrecio, setMinPrecio] = useState<number | undefined>(undefined);
   const [maxPrecio, setMaxPrecio] = useState<number | undefined>(undefined);
-  const [tipoId, setTipoId] = useState<number | undefined>(undefined);
-  const [brandId, setBrandId] = useState<number | undefined>(undefined);
+  const [tipoId, setTipoId] = useState<string | undefined>(undefined);
+  const [brandId, setBrandId] = useState<string | undefined>(undefined);
 
   const applyFilters = () => {
     onApplyFilters({
@@ -70,7 +70,7 @@ const FilterBar: React.FC<{
         <select
           className='w-full p-1 border rounded-lg'
           value={brandId}
-          onChange={(e) => setBrandId(Number(e.target.value))}
+          onChange={(e) => setBrandId(String(e.target.value))}
         >
           <option value="">Cualquiera</option>
           {brands.map((b) => (
@@ -84,7 +84,7 @@ const FilterBar: React.FC<{
         <select
           className='w-full p-1 border rounded-lg'
           value={tipoId}
-          onChange={(e) => setTipoId(Number(e.target.value))}
+          onChange={(e) => setTipoId(String(e.target.value))}
         >
           <option value="">Cualquiera</option>
           {tipos.map((t) => (

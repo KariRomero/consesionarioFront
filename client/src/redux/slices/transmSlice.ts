@@ -1,4 +1,5 @@
 // src/redux/slices/transmSlice.ts
+import { prod_url } from '@/utils/routes';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
