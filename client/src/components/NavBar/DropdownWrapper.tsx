@@ -54,7 +54,7 @@ const DropdownWrapper: React.FC<DropdownWrapperProps> = ({ dropdown, type, isOpe
               <button
                 key={d.id}
                 onClick={() => {
-                  router.push(`/cars/navfilter/${type}/${d.id}`)
+                  window.open(`/cars/navfilter/${type}/${d.id}`, "_blank")
                 }}
                 className="w-36 h-36 flex flex-col items-center text-center mx-2"
               >
