@@ -12,7 +12,7 @@ export type Tipo = {
     vehiculos?: Vehiculo[]
 }
 
-type Imagenes = {
+export type Imagenes = {
     id: string;
     url: string;
     vehiculoId: string
