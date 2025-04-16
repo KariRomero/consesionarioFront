@@ -11,7 +11,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import CarsPagination from "./CarsPagination";
 import Footer from "../Footer/Footer";
 import VehiculoCardAdmin from "../Admin/Vehiculos/VehiculoCardAdmin";
-import { Vehiculo, VehiculoConMarca } from "@/types/types";
+import { Vehiculo } from "@/types/types";
 
 interface CarsProps {
   editable?: boolean;
@@ -66,20 +66,13 @@ export default function Cars({ editable = false }: CarsProps) {
       <CarsPagination />
 
       <div className={`grid grid-cols-1 px-6 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ${isFilterVisible ? 'ml-64' : ''}`}>
-      {cars.map((v: VehiculoConMarca) =>
+      {cars.map((v: Vehiculo) =>
   editable ? (
     <VehiculoCardAdmin key={v.id} vehiculo={v} />
   ) : (
     <CarsCard
       key={v.id}
-      id={v.id}
-      imageUrl={v.imagenes?.map((img) => img.url)}
-      title={`${v.brand?.nombre || "Sin marca"} ${v.modelo} - ${v.year}`}
-      subtitle={v.descripcion}
-      kilometraje={v.kilometraje || 0}
-      fuelType={v.combustible || 'Sin especificar'}
-      transmission={v.transmision || 'Sin especificar'}
-      price={`$${v.precio}`}
+      car={v}
     />
   )
 )}
