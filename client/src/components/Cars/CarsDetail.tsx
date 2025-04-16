@@ -76,7 +76,7 @@ const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
   if (!car) return <p>Car not found.</p>;
 
   return (
-    <section className="w-full bg-white mt-96 pt-28">
+    <section className="w-full bg-white">
       <div className="flex flex-col lg:flex-row">
         {/* Contenedor de la imagen principal */}
         <div className="lg:w-1/2 flex flex-col items-center">
