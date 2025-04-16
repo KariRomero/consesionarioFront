@@ -47,7 +47,7 @@ export default function Cars({ editable = false }: CarsProps) {
   const { cars } = useSelector((state: RootState) => state.cars);
 
   return (
-    <section className="pt-28">
+    <section >
       <button
         className="mb-4 px-4 py-2 rounded"
         onClick={() => setIsFilterVisible(!isFilterVisible)}
@@ -79,7 +79,7 @@ export default function Cars({ editable = false }: CarsProps) {
       </div>
 
       <CarsPagination />
-      <Footer />
+      {/* <Footer /> */}
     </section>
   );
 }
