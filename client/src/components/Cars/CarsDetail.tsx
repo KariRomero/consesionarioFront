@@ -8,14 +8,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { faChevronRight, faChevronLeft, faGaugeHigh, faGasPump, faGear, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Footer from "../Footer/Footer";
-import Brand from "@/types/brand";
 import Brands from "../Home/Brands/Brands";
+import { VehiculoConMarca } from "@/types/types";
 
 const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
 
 
   const dispatch:AppDispatch = useDispatch();
-  const { car, loading, error } = useSelector((state: RootState) => state.cars);
+  const { car, loading, error } = useSelector((state: RootState) => state.cars) as {
+    car: VehiculoConMarca | null;
+    loading: boolean;
+    error: string | null;
+  };
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -37,15 +41,22 @@ const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
   };
 
   const handleNextImage = useCallback(() => {
-    if (!car || !car.imagenes) return;
-    setSelectedImage((prevIndex) => (prevIndex === car.imagenes.length - 1 ? 0 : prevIndex + 1));
+    const imagenes = car?.imagenes;
+    if (!imagenes || imagenes.length === 0) return;
+  
+    setSelectedImage((prevIndex) =>
+      prevIndex === imagenes.length - 1 ? 0 : prevIndex + 1
+    );
   }, [car]);
 
   const handlePrevImage = useCallback(() => {
-    if (!car || !car.imagenes) return;
-    setSelectedImage((prevIndex) => (prevIndex === 0 ? car.imagenes.length - 1 : prevIndex - 1));
+    const imagenes = car?.imagenes;
+    if (!imagenes || imagenes.length === 0) return;
+  
+    setSelectedImage((prevIndex) =>
+      prevIndex === 0 ? imagenes.length - 1 : prevIndex - 1
+    );
   }, [car]);
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {

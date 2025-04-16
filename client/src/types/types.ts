@@ -32,5 +32,30 @@ export type Vehiculo = {
     brandId: string;
     vendido?: boolean;
     ubicacion?: string;
-    imagenes?: Imagenes[]
-}
+    imagenes?: { id: string; url: string; vehiculoId: string }[];
+  };
+
+export interface FormVehiculoUpdateType {
+    modelo: string;
+    year: string;            // string en el form, lo convertimos al enviar
+    descripcion: string;
+    precio: string;
+    transmision?: string;
+    combustible?: string;
+    kilometraje?: string;
+    tipoId: string;
+    brandId: string;
+    moneda: 'ARS' | 'USD';
+    vendido: boolean;
+    ubicacion?: string;
+    imagenesEliminar?: string[];
+  }
+
+
+  export type VehiculoConMarca = Vehiculo & {
+    brand?: {
+      id: string;
+      nombre: string;
+      ImageBrand?: string;
+    };
+  };

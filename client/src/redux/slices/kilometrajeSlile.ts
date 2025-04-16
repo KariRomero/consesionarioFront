@@ -1,3 +1,4 @@
+import { prod_url } from '@/utils/routes';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -18,7 +19,7 @@ const initialState: KilometrajeState = {
 export const fetchKilometrajeRange = createAsyncThunk(
   'kilometraje/fetchKilometrajeRange',
   async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/vehiculos/rango-kilometraje`);
+    const response = await axios.get(`${prod_url}/vehiculos/rango-kilometraje`);
         return response.data;
   }
 );

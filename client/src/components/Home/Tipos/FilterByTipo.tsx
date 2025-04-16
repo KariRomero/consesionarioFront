@@ -5,15 +5,16 @@ import { fetchTiposById } from "@/redux/slices/tiposSlice";
 import CarsCard from "@/components/Cars/CarsCard";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { VehiculoConMarca } from "@/types/types";
 
-const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
+const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
     const dispatch: AppDispatch = useDispatch();
     const { tipo, loading, error } = useSelector((state: RootState) => state.tipos);
 
     useEffect(() => {
-        if (tipoId > 0) {
+        if (tipoId.trim() !== '') {
             dispatch(fetchTiposById(tipoId));
-        }
+          }
     }, [tipoId, dispatch]);
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,13 +52,13 @@ const FilterByTipo: React.FC<{ tipoId: number }> = ({ tipoId }) => {
                     <button onClick={prev} className="absolute left-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
-                    {displayedCards.map((v) => (
-                        <CarsCard
+                    {displayedCards.map((v: VehiculoConMarca) => (   
+                                            <CarsCard
                             key={v.id}
                             id={v.id}
                             imageUrl={v.imagenes?.map(img => img.url)}
                             title={`${v.brand?.nombre || 'Sin marca'} ${v.modelo} - ${v.year}`}
-                            subtitle={v.descripcion}
+                                                        subtitle={v.descripcion}
                             kilometraje={v.kilometraje || 0}
                             fuelType={v.combustible || 'Sin especificar'}
                             transmission={v.transmision || 'Sin especificar'}

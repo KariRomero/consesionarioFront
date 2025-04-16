@@ -18,7 +18,7 @@ const Tipos = () => {
 
     const { tipos } = useSelector((state: RootState) => state.tipos);
 
-    const handleDelete = (id:number) => {
+    const handleDelete = (id:string) => {
         Swal.fire({
             title: "Seguro quieres eliminar este Tipo ?",
             text: "Esta acción no se revertirá",
