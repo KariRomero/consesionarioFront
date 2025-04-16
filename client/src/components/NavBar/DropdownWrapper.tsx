@@ -3,6 +3,8 @@
 import type React from "react"
 import { useEffect, useState } from "react"
 import type { Brand, Tipo } from "@/types/types"
+import { useRouter } from "next/navigation"
+import { fetchCarsByBrand, fetchCarsByTipo } from "@/redux/slices/carsSlice"
 import Image from "next/image"
 
 type DropdownWrapperProps = {
@@ -16,6 +18,7 @@ type DropdownWrapperProps = {
 
 const DropdownWrapper: React.FC<DropdownWrapperProps> = ({ dropdown, type, isOpen, customContent }) => {
   const [isVisible, setIsVisible] = useState(false)
+  const router = useRouter();
 
   useEffect(() => {
     if (isOpen) {
@@ -50,6 +53,9 @@ const DropdownWrapper: React.FC<DropdownWrapperProps> = ({ dropdown, type, isOpe
             {dropdown?.map((d) => (
               <button
                 key={d.id}
+                onClick={() => {
+                  router.push(`/cars/navfilter/${type}/${d.id}`)
+                }}
                 className="w-36 h-36 flex flex-col items-center text-center mx-2"
               >
                 <div className="w-full h-44 relative">
@@ -57,6 +63,7 @@ const DropdownWrapper: React.FC<DropdownWrapperProps> = ({ dropdown, type, isOpe
                     src={isBrand(d) ? d.ImageBrand || "/default.png" : d.ImageTipo || "/default.png"}
                     alt="logo"
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     className="object-contain p-2"
                   />
                 </div>
