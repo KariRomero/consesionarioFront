@@ -10,7 +10,7 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import Image from 'next/image';
 import axios from 'axios';
 import { prod_url } from '@/utils/routes';
-import { FormVehiculoUpdateType } from '@/types/types';
+import { FormVehiculoUpdateType, Imagenes } from '@/types/types';
 
 type Moneda = 'ARS' | 'USD'; // ✅ agregado
 
@@ -147,7 +147,7 @@ export default function EditVehiculoPage() {
           </div>
 
           <div className="flex overflow-x-auto space-x-4">
-            {car.imagenes?.map((img, index) => (
+            {car.imagenes?.map((img:Imagenes, index:any) => (
               <div key={index} className="relative">
                 <img
                   src={img.url}
