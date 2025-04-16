@@ -32,7 +32,9 @@ export type Vehiculo = {
     brandId: string;
     vendido?: boolean;
     ubicacion?: string;
-    imagenes?: { id: string; url: string; vehiculoId: string }[];
+    imagenes?: Imagenes[];
+    brand?:Brand,
+    tipo?:Tipo
   };
 
 export interface FormVehiculoUpdateType {
@@ -50,12 +52,3 @@ export interface FormVehiculoUpdateType {
     ubicacion?: string;
     imagenesEliminar?: string[];
   }
-
-
-  export type VehiculoConMarca = Vehiculo & {
-    brand?: {
-      id: string;
-      nombre: string;
-      ImageBrand?: string;
-    };
-  };
