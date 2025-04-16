@@ -6,6 +6,7 @@ import { metadata } from "./metadata";
 import ReduxProvider from '../redux/ReduxProvider';
 import StateLoader from "@/components/StateLoader/StateLoader";
 import MainWrapper from "@/components/Wrappers/MainWrapper";
+import Footer from "@/components/Footer/Footer";
 
 config.autoAddCss = false;
 
@@ -23,13 +24,14 @@ export default function RootLayout({
         <title>{typeof metadata.title === 'string' ? metadata.title : 'default title'}</title>
         <meta name="description" content={typeof metadata.description === 'string' ? metadata.description : 'undefined content'} />
       </head>
-      <body className={`${montserrat.className} bg-white text-black`}>
+      <body className={`${montserrat.className} text-black `}>
         <ReduxProvider>
           <StateLoader />
           <MainWrapper>
             {children}
           </MainWrapper>
         </ReduxProvider>
+        {/* <Footer/> */}
       </body>
     </html>
   );
