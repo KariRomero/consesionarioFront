@@ -15,10 +15,10 @@ import {
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { prod_url } from '@/utils/routes';
-import { VehiculoConMarca } from '@/types/types';
+import { Vehiculo } from '@/types/types';
 
 interface Props {
-  vehiculo: VehiculoConMarca;
+  vehiculo: Vehiculo;
 }
 
 const VehiculoCardAdmin: React.FC<Props> = ({ vehiculo }) => {

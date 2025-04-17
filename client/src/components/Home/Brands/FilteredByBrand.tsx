@@ -68,14 +68,7 @@ const FilteredByBrand: React.FC<{ brandId: string }> = ({ brandId }) => {
                     {displayedCards.map((v) => (
                         <CarsCard
                             key={v.id}
-                            id={v.id}
-                            imageUrl={v.imagenes?.map(img => img.url)} 
-                            title={`${brand?.nombre} ${v.modelo} - ${v.year}`}
-                            subtitle={v.descripcion}
-                            kilometraje={v.kilometraje || 0}
-                            fuelType={v.combustible || 'Sin especificar'}
-                            transmission={v.transmision || 'Sin especificar'}
-                            price={`$${v.precio}`}
+                            car={v}
                         />
                     ))}
                     <button onClick={next} className="absolute right-0 top-1/2 transform -translate-y-1/2 hover:bg-blue px-4 py-2 rounded-full z-10">

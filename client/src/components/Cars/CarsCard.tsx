@@ -16,43 +16,37 @@ import {
   faWhatsapp,
   faFacebookMessenger
 } from '@fortawesome/free-brands-svg-icons';
+import { Vehiculo } from '@/types/types';
 
-interface CarsCardProps {
-  imageUrl?: string[];
-  title: string;
-  subtitle: string;
-  kilometraje: number;
-  fuelType: string;
-  transmission: string;
-  price: string;
-  id: string;
-}
+type CarsCardProps = {
+  car: Vehiculo;
+};
 
-const CarsCard: React.FC<CarsCardProps> = ({
-  imageUrl = [],
-  title,
-  subtitle,
-  kilometraje,
-  fuelType,
-  transmission,
-  price,
-  id,
-}) => {
+const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const brandName = car?.brand?.nombre ?? 'Sin marca';
+  const title = `${brandName} ${car?.modelo ?? ''} - ${car?.year ?? ''}`;
+  const subtitle = car.descripcion;
+  const kilometraje = car.kilometraje || 0;
+  const fuelType = car.combustible || 'Sin especificar';
+  const transmission = car.transmision || 'Sin especificar';
+  const price = `$${car.precio}`;
+  const imageList = car.imagenes ?? [];
   const [showModal, setShowModal] = useState(false);
 
-  const shareUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/cars/${id}`;
+  const shareUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/cars/${car.id}`;
   const shareText = `Mirá este auto a la venta en RodAR: ${shareUrl}`;
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? imageUrl.length - 1 : prevIndex - 1
+      prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
     );
   };
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === imageUrl.length - 1 ? 0 : prevIndex + 1
+      prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -121,7 +115,7 @@ const CarsCard: React.FC<CarsCardProps> = ({
 
       {/* Imagen con botón compartir */}
       <div className="relative w-full h-64 overflow-hidden">
-        <img src={imageUrl[currentImageIndex]} alt={title} className="w-full h-full object-cover" />
+        <img src={imageList[currentImageIndex].url} alt={title} className="w-full h-full object-cover" />
 
         {/* Botón compartir arriba a la derecha */}
         <button
@@ -130,7 +124,7 @@ const CarsCard: React.FC<CarsCardProps> = ({
           <FontAwesomeIcon icon={faShareNodes} />
         </button>
 
-        {imageUrl.length > 1 && (
+        {imageList.length > 1 && (
           <>
             <button
               onClick={handlePrevImage}
@@ -171,9 +165,10 @@ const CarsCard: React.FC<CarsCardProps> = ({
         <hr className="my-3 opacity-50" />
         <div className="flex items-center justify-between mt-4">
           <p className="text-xl font-bold">{price}</p>
-          <Link href={`/cars/${id}`}>
+          <Link href={`/cars/${car.id}`}>
             <button className="text-blue font-semibold hover:underline ml-2 flex items-center">
-              View Details <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" />
+              View Details
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" />
             </button>
           </Link>
         </div>

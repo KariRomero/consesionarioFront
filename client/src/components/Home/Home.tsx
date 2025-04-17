@@ -10,7 +10,7 @@ import Footer from '../Footer/Footer';
 const Home: React.FC = () => {
  
   return (
-    <section className='flex flex-col items-center bg-white pb-4 space-y-28'>
+    <section className='flex flex-col items-center space-y-28'>
       <Banner/>
       <Tipos/>
       <Description/>

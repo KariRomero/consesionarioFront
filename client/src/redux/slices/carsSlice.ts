@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Vehiculo, VehiculoConMarca } from '@/types/types';
+import { Vehiculo } from '@/types/types';
 import { prod_url } from '@/utils/routes';
 
 interface CarsState {
   cars: Vehiculo[];
-  car: VehiculoConMarca | null; // 👈 cambiamos esto
+  car: Vehiculo | null; // 👈 cambiamos esto
   loading: boolean;
   error: string | null;
   page: number;

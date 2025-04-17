@@ -12,7 +12,7 @@ export type Tipo = {
     vehiculos?: Vehiculo[]
 }
 
-type Imagenes = {
+export type Imagenes = {
     id: string;
     url: string;
     vehiculoId: string
@@ -32,7 +32,11 @@ export type Vehiculo = {
     brandId: string;
     vendido?: boolean;
     ubicacion?: string;
-    imagenes?: { id: string; url: string; vehiculoId: string }[];
+    imagenes?: Imagenes[];
+    brand?:Brand,
+    tipo?:Tipo,
+    destacado?: boolean; // 👈 ahora está en el lugar correcto
+    descripcion2?: string; // 👈 también
   };
 
 export interface FormVehiculoUpdateType {
@@ -54,15 +58,3 @@ export interface FormVehiculoUpdateType {
 
   }
 
-
-  export type VehiculoConMarca = Vehiculo & {
-    brand?: {
-      id: string;
-      nombre: string;
-      ImageBrand?: string;
- 
-
-    };
-    destacado?: boolean; // 👈 ahora está en el lugar correcto
-    descripcion2?: string; // 👈 también
-  };

@@ -10,7 +10,7 @@ import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons
 import Image from 'next/image';
 import axios from 'axios';
 import { prod_url } from '@/utils/routes';
-import { FormVehiculoUpdateType } from '@/types/types';
+import { FormVehiculoUpdateType, Imagenes } from '@/types/types';
 import toast from 'react-hot-toast';
 
 type Moneda = 'ARS' | 'USD';
@@ -151,7 +151,7 @@ export default function EditVehiculoPage() {
           </div>
 
           <div className="flex overflow-x-auto space-x-4">
-            {car.imagenes?.map((img, index) => (
+            {car.imagenes?.map((img:Imagenes, index:any) => (
               <div key={index} className="relative">
                 <img src={img.url} alt={`img-${index}`} className="w-20 h-20 object-cover rounded border-2" />
                 <button type="button" onClick={() => confirmarEliminar(img.url)} className="text-xs text-center mt-1 text-red-600 hover:underline w-full">
