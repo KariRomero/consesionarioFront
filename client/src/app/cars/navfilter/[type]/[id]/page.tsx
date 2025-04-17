@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from '@/redux/store'
 import CarsPagination from '@/components/Cars/CarsPagination'
 import NoDisponible from '@/app/cars/componentes/NoDisponible'
 import CarsCards from '@/components/Cars/CarsCards'
+import Footer from '@/components/Footer/Footer'
 
 export default function NavFilterPage() {
   const path = usePathname();
@@ -36,15 +37,15 @@ export default function NavFilterPage() {
 
 
   return (
-    <section className="w-full h-screen flex flex-col items-center">
+    <section className="w-full flex flex-col items-center bg-white">
       {
         type === 'brands' ?
           (
-            <h2 className="text-3xl mt-32 mb-8 font-semibold">
+            <h2 className="text-3xl my-8 font-semibold">
               Estas viendo vehiculos {brand?.nombre}
             </h2>
           ) : (
-            <h2 className="text-3xl mt-32 mb-8 font-semibold">
+            <h2 className="text-3xl my-8 font-semibold">
               Estas viendo vehiculos {tipo?.nombre}
             </h2>
           )
@@ -57,6 +58,7 @@ export default function NavFilterPage() {
         )
       }
       {/* <CarsPagination/> */}
+      <Footer/>
     </section>
   )
 }
