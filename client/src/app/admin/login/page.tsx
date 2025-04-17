@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
         localStorage.setItem('token_expires_at', String(expiresAt));
 
         // ✅ Redirigir
-        router.push('/admin/vehiculos');
+        router.push('/admin');
       } else {
         setError('Login inválido.');
       }

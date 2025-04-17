@@ -74,10 +74,11 @@ const VehiculoCardAdmin: React.FC<Props> = ({ vehiculo }) => {
   )}
       {/* Banda VENDIDO */}
       {vehiculo.vendido && (
-  <div className="absolute top-[110px] left-0 w-full bg-[#FFD700] text-black text-center font-bold py-2 z-50">
+  <div className="absolute top-[110px] left-0 w-full bg-primary text-black text-center font-bold py-2 z-50">
     VENDIDO
   </div>
 )}
+
 
       <div className="relative w-full h-64 overflow-hidden">
         <img

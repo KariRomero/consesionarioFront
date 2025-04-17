@@ -49,6 +49,9 @@ export interface FormVehiculoUpdateType {
     vendido: boolean;
     ubicacion?: string;
     imagenesEliminar?: string[];
+    descripcion2?: string; // 👈 nuevo campo
+    destacado?: boolean; // 👈 nuevo campo
+
   }
 
 
@@ -57,5 +60,9 @@ export interface FormVehiculoUpdateType {
       id: string;
       nombre: string;
       ImageBrand?: string;
+ 
+
     };
+    destacado?: boolean; // 👈 ahora está en el lugar correcto
+    descripcion2?: string; // 👈 también
   };

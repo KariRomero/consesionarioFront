@@ -16,6 +16,8 @@ export default function CrearVehiculoPage() {
   const [formData, setFormData] = useState({
     modelo: '',
     descripcion: '',
+    descripcion2: '', // 👈 nuevo
+
     year: '',
     precio: '',
     transmision: '',
@@ -23,6 +25,8 @@ export default function CrearVehiculoPage() {
     kilometraje: '',
     moneda: '',
     vendido: false,
+    destacado: false, // 👈 nuevo
+
     ubicacion: '',
     tipoId: '',
     brandId: '',
@@ -116,7 +120,29 @@ export default function CrearVehiculoPage() {
             <option key={brand.id} value={brand.id}>{brand.nombre}</option>
           ))}
         </select>
+{/* 🟡 Descripción extendida */}
+<div>
+  <label className="block font-semibold mb-1">Descripción extendida</label>
+  <textarea
+    name="descripcion2"
+    value={formData.descripcion2}
+    onChange={handleChange}
+    rows={4}
+    placeholder="Descripción más detallada del vehículo..."
+    className="w-full border p-2 rounded"
+  />
+</div>
 
+{/* 🔵 ¿Destacado? */}
+<div>
+  <label className="block font-semibold">¿Destacado?</label>
+  <input
+    type="checkbox"
+    name="destacado"
+    checked={formData.destacado}
+    onChange={handleChange}
+  />
+</div>
         <div>
           <label className="block font-semibold">¿Vendido?</label>
           <input
