@@ -42,9 +42,15 @@ const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
     );
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? imageList.length - 1 : prevIndex - 1
+    );
   };
 
   const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
+    );
     setCurrentImageIndex((prevIndex) =>
       prevIndex === imageList.length - 1 ? 0 : prevIndex + 1
     );
@@ -168,6 +174,7 @@ const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
           <Link href={`/cars/${car.id}`}>
             <button className="text-blue font-semibold hover:underline ml-2 flex items-center">
               View Details
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" />
               <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="ml-2" />
             </button>
           </Link>
