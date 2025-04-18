@@ -1,3 +1,5 @@
+// ✅ CÓDIGO COMPLETO Y CORREGIDO: incluye clienteId, publicado, numeroChasis, dominio
+
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
@@ -24,36 +26,58 @@ export default function EditVehiculoPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [tipos, setTipos] = useState<{ id: string; nombre: string }[]>([]);
   const [brands, setBrands] = useState<{ id: string; nombre: string }[]>([]);
+  const [clientes, setClientes] = useState<{ id: string; nombre: string; apellido: string }[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [imagenSeleccionadaParaEliminar, setImagenSeleccionadaParaEliminar] = useState<string | null>(null);
   const [imagenesNuevas, setImagenesNuevas] = useState<File[]>([]);
 
   const [formData, setFormData] = useState<FormVehiculoUpdateType>({
-    modelo: '', year: '', descripcion: '',   descripcion2: '', // 👈 nuevo
-    precio: '', transmision: '',
-    combustible: '', kilometraje: '', tipoId: '', brandId: '',
-    moneda: 'ARS', vendido: false, ubicacion: '',   destacado: false, // 👈 nuevo
-
+    modelo: '', year: '', descripcion: '', descripcion2: '',
+    precio: '', transmision: '', combustible: '', kilometraje: '', tipoId: '', brandId: '',
+    moneda: 'ARS', vendido: false, ubicacion: '', destacado: false,
+    publicado: false, numeroChasis: '', dominio: '', clienteId: ''
   });
 
-  useEffect(() => { if (id) dispatch(fetchCarById(id as string)); }, [dispatch, id]);
+  useEffect(() => {
+    if (id) dispatch(fetchCarById(id as string));
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (car) {
       setFormData({
-        modelo: car.modelo || '', year: String(car.year || ''), descripcion: car.descripcion || '',    descripcion2: car.descripcion2 || '', // 👈 nuevo
-
-        precio: String(car.precio || ''), transmision: car.transmision || '', combustible: car.combustible || '',
-        kilometraje: String(car.kilometraje || ''), tipoId: car.tipoId || '', brandId: car.brandId || '',
-        moneda: car.moneda as Moneda || 'ARS', vendido: car.vendido || false,     destacado: car.destacado || false, // 👈 nuevo
+        modelo: car.modelo || '',
+        year: String(car.year || ''),
+        descripcion: car.descripcion || '',
+        descripcion2: car.descripcion2 || '',
+        precio: String(car.precio || ''),
+        transmision: car.transmision || '',
+        combustible: car.combustible || '',
+        kilometraje: String(car.kilometraje || ''),
+        tipoId: car.tipoId || '',
+        brandId: car.brandId || '',
+        moneda: car.moneda as Moneda || 'ARS',
+        vendido: car.vendido || false,
+        destacado: car.destacado || false,
         ubicacion: car.ubicacion || '',
+        publicado: car.publicado || false,
+        numeroChasis: car.numeroChasis || '',
+        dominio: car.dominio || '',
+        clienteId: car.clienteId || '',
       });
     }
   }, [car]);
 
   useEffect(() => {
-    axios.get(`${prod_url}/tipos`).then(res => setTipos(res.data)).catch(err => console.error('Error al cargar tipos', err));
-    axios.get(`${prod_url}/brands`).then(res => setBrands(res.data.brands)).catch(err => console.error('Error al cargar marcas', err));
+    const token = localStorage.getItem('token');
+    axios.get(`${prod_url}/tipos`).then(res => setTipos(res.data)).catch(console.error);
+    axios.get(`${prod_url}/brands`).then(res => setBrands(res.data.brands)).catch(console.error);
+    axios.get(`${prod_url}/clientes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => setClientes(res.data.clientes || res.data))
+      .catch(console.error);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -82,7 +106,7 @@ export default function EditVehiculoPage() {
       await axios.delete(`${prod_url}/vehiculos/${id}/imagenes-por-url`, {
         headers: { Authorization: `Bearer ${token}` },
         params: { urls: [imagenSeleccionadaParaEliminar] },
-        paramsSerializer: (params) => new URLSearchParams(params.urls.map((u: string) => ['urls', u])).toString(),
+        paramsSerializer: params => new URLSearchParams(params.urls.map((u: string) => ['urls', u])).toString(),
       });
       toast.success('Imagen eliminada correctamente');
       setModalVisible(false);
@@ -104,14 +128,18 @@ export default function EditVehiculoPage() {
     const token = localStorage.getItem('token');
     const formDataToSend = new FormData();
     const camposNumericos = ['year', 'precio', 'kilometraje'];
+
     Object.entries(formData).forEach(([key, value]) => {
-      if (value !== undefined && value !== '') {
-        formDataToSend.append(key, camposNumericos.includes(key) ? String(Number(value)) : String(value));
+      if (value !== undefined) {
+        if (camposNumericos.includes(key)) {
+          formDataToSend.append(key, value === '' ? '' : String(Number(value)));
+        } else {
+          formDataToSend.append(key, String(value));
+        }
       }
     });
-    imagenesNuevas.forEach((file) => {
-      formDataToSend.append('imagenes', file);
-    });
+    imagenesNuevas.forEach((file) => formDataToSend.append('imagenes', file));
+
     try {
       await axios.put(`${prod_url}/vehiculos/${id}`, formDataToSend, {
         headers: {
@@ -226,6 +254,27 @@ export default function EditVehiculoPage() {
               </select>
             </div>
             <div>
+      <div>
+          <label className="block font-semibold">Número de chasis</label>
+          <input
+            type="text"
+            name="numeroChasis"
+            value={formData.numeroChasis || ''}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block font-semibold">Dominio</label>
+          <input
+            type="text"
+            name="dominio"
+            value={formData.dominio || ''}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
               <label className="block font-semibold">¿Vendido?</label>
               <input type="checkbox" name="vendido" checked={formData.vendido} onChange={handleChange} />
             </div>
@@ -239,11 +288,40 @@ export default function EditVehiculoPage() {
     onChange={handleChange}
   />
 </div>
+
+        <div>
+          <label className="block font-semibold">¿Publicado?</label>
+          <input
+            type="checkbox"
+            name="publicado"
+            checked={formData.publicado}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <label className="block font-semibold">Cliente</label>
+          <select
+            name="clienteId"
+            value={formData.clienteId || ''}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          >
+            <option value="">Sin cliente asignado</option>
+            {clientes.map((cliente) => (
+              <option key={cliente.id} value={cliente.id}>
+                {cliente.nombre} {cliente.apellido}
+              </option>
+            ))}
+          </select>
+        </div>
           <button type="submit" className="mt-6 bg-green-600 text-black px-6 py-3 rounded hover:bg-green-700 transition">
             Guardar cambios
           </button>
         </div>
       </form>
+
+
 
       {modalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

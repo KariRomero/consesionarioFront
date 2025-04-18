@@ -23,37 +23,65 @@ const initialState: CarsState = {
   total: 0,
 };
 
+
 export const fetchCars = createAsyncThunk(
   'cars/fetchCars',
-  async (filters: {
-    transmision?: string;
-    combustible?: string;
-    minKilometraje?: number;
-    maxKilometraje?: number;
-    minPrecio?: number;
-    maxPrecio?: number;
-    tipoId?: string;
-    brandId?: string;
-    page?: number;
-    limit?: number;
-  }) => {
-    const params = new URLSearchParams();
+  async (
+    {
+      filters,
+      editable = false,
+      token,
+    }: {
+      filters: {
+        transmision?: string;
+        combustible?: string;
+        minKilometraje?: number;
+        maxKilometraje?: number;
+        minPrecio?: number;
+        maxPrecio?: number;
+        tipoId?: string;
+        brandId?: string;
+        page?: number;
+        limit?: number;
+      };
+      editable?: boolean;
+      token?: string;
+    },
+    thunkAPI
+  ) => {
+    try {
+      const params = new URLSearchParams();
 
-    if (filters.transmision) params.append('transmision', filters.transmision);
-    if (filters.combustible) params.append('combustible', filters.combustible);
-    if (filters.minKilometraje) params.append('minKilometraje', filters.minKilometraje.toString());
-    if (filters.maxKilometraje) params.append('maxKilometraje', filters.maxKilometraje.toString());
-    if (filters.minPrecio) params.append('minPrecio', filters.minPrecio.toString());
-    if (filters.maxPrecio) params.append('maxPrecio', filters.maxPrecio.toString());
-    if (filters.tipoId) params.append('tipoId', filters.tipoId.toString());
-    if (filters.brandId) params.append('brandId', filters.brandId.toString());
+      if (filters.transmision) params.append('transmision', filters.transmision);
+      if (filters.combustible) params.append('combustible', filters.combustible);
+      if (filters.minKilometraje) params.append('kmMin', filters.minKilometraje.toString());
+      if (filters.maxKilometraje) params.append('kmMax', filters.maxKilometraje.toString());
+      if (filters.minPrecio) params.append('precioMin', filters.minPrecio.toString());
+      if (filters.maxPrecio) params.append('precioMax', filters.maxPrecio.toString());
+      if (filters.tipoId) params.append('tipoId', filters.tipoId.toString());
+      if (filters.brandId) params.append('brandId', filters.brandId.toString());
 
-    params.append('page', (filters.page || 1).toString());
-    params.append('limit', (filters.limit || 6).toString());
+      params.append('page', (filters.page || 1).toString());
+      params.append('limit', (filters.limit || 6).toString());
 
-    const response = await axios.get<{ vehiculos: Vehiculo[], total: number }>(
-      `${prod_url}/vehiculos?${params.toString()}`    );
-    return response.data;
+      const endpoint = editable
+        ? `${prod_url}/vehiculos/findAll/admin`
+        : `${prod_url}/vehiculos`;
+
+      const headers = editable && token
+        ? { Authorization: `Bearer ${token}` }
+        : {};
+
+      const response = await axios.get<{ vehiculos: Vehiculo[]; total: number }>(
+        `${endpoint}?${params.toString()}`,
+        { headers }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error al cargar los vehículos:', error);
+      return thunkAPI.rejectWithValue('Error al cargar los vehículos');
+    }
   }
 );
 

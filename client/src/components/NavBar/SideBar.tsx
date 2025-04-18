@@ -1,69 +1,62 @@
-'use client'
+// ✅ Sidebar con opción de expandir/minimizar, iniciando expandida y con props para layout
+"use client";
 
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCarSide, faTags, faTruckPickup, faUser, faChevronRight, faChevronCircleLeft, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCarSide,
+  faTags,
+  faTruckPickup,
+  faUser,
+  faChevronRight,
+  faChevronLeft,
+  faHandshake,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
-interface SideBarProps {
-  isVisible: boolean;
-  toggleVisibility: () => void;
+interface SidebarProps {
+  isExpanded: boolean;
+  toggleExpand: () => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ isVisible, toggleVisibility }) => {
-  const [isSelected, setIsSelected] = useState('');
-  const handleClick = (buttonName: string) => {
-    setIsSelected(buttonName)
-  };
+const Sidebar: React.FC<SidebarProps> = ({ isExpanded, toggleExpand }) => {
+  const navItems = [
+    { label: "Administrador", href: "/admin", icon: faUser },
+    { label: "Tipos", href: "/admin/tipos", icon: faTruckPickup },
+    { label: "Marcas", href: "/admin/marcas", icon: faTags },
+    { label: "Vehículos", href: "/admin/vehiculos", icon: faCarSide },
+    { label: "Clientes", href: "/admin/clientes", icon: faUsers },
+    { label: "Contratos", href: "/admin/contratos", icon: faHandshake },
+  ];
+
   return (
-    <aside className={`fixed top-0 left-0 w-72 h-full bg-white shadow-lg transition-transform transform ${isVisible ? "translate-x-0" : "-translate-x-36"}`}>
-      <button
-        className="absolute -right-4 pt-10 hover:text-base"
-        onClick={toggleVisibility}
-      >
-        {isVisible ? (
-          <FontAwesomeIcon icon={faChevronLeft} className="text-blue" />
-        ) : (
-          <FontAwesomeIcon icon={faChevronRight} className="text-blue" />
-        )}
-      </button>
-      <ul className="w-full h-full bg-white flex flex-col pt-8">
-        {/* Enlaces del sidebar */}
-        <Link href="/admin">
-          <li >
-            <button onClick={() => handleClick('Administrador')} className=" w-full flex justify-between items-center text-blue font-semibold py-6 px-4 hover:shadow-lg">
-              Administrador
-              <FontAwesomeIcon icon={faUser} className={`text-blue text-4xl shadow-lg rounded-full px-8 py-8 ${isSelected === 'Administrador' ? 'shadow-sm shadow-blue' : ''}`} />
-            </button>
+    <aside
+      className={`fixed top-0 left-0 h-full bg-white border-r transition-all duration-300 shadow z-50
+        ${isExpanded ? "w-64" : "w-16"}`}
+    >
+      <div className="flex items-center justify-between p-4">
+        {isExpanded && <h2 className="text-xl font-bold">RodAR Admin</h2>}
+        <button onClick={toggleExpand} className="text-blue">
+          <FontAwesomeIcon icon={isExpanded ? faChevronLeft : faChevronRight} />
+        </button>
+      </div>
+
+      <ul className="mt-6">
+        {navItems.map(({ label, href, icon }) => (
+          <li key={label} className="group">
+            <Link
+              href={href}
+              className="flex items-center gap-4 px-4 py-3 hover:bg-gray-100 text-blue transition"
+            >
+              <FontAwesomeIcon icon={icon} className="text-lg" />
+              {isExpanded && <span className="text-sm font-medium">{label}</span>}
+            </Link>
           </li>
-        </Link>
-        <Link href="/admin/tipos">
-          <li >
-            <button onClick={() => handleClick('Tipos')} className="w-full flex justify-between items-center text-blue font-semibold py-6 px-4 hover:shadow-lg">
-              Tipos
-              <FontAwesomeIcon icon={faTruckPickup} className={`text-blue text-4xl shadow-lg rounded-full px-8 py-8 ${isSelected === 'Tipos' ? 'shadow-sm shadow-blue' : ''}`} />
-            </button>
-          </li>
-        </Link>
-        <Link href="/admin/marcas">
-          <li >
-            <button onClick={() => handleClick('Marcas')} className="w-full flex justify-between items-center text-blue font-semibold py-6 px-4 hover:shadow-lg">
-              Marcas
-              <FontAwesomeIcon icon={faTags} className={`text-blue text-4xl shadow-lg rounded-full px-8 py-8 ${isSelected === 'Marcas' ? 'shadow-sm shadow-blue' : ''}`} />
-            </button>
-          </li>
-        </Link>
-        <Link href="/admin/vehiculos">
-          <li >
-            <button onClick={() => handleClick('Vehiculos')} className="w-full flex justify-between items-center text-blue font-semibold py-6 px-4 hover:shadow-lg">
-              Vehiculos
-              <FontAwesomeIcon icon={faCarSide} className={`text-blue text-4xl shadow-lg rounded-full px-8 py-8 ${isSelected === 'Vehiculos' ? 'shadow-sm shadow-blue' : ''}`} />
-            </button>
-          </li>
-        </Link>
+        ))}
       </ul>
     </aside>
   );
 };
 
-export default SideBar;
+export default Sidebar;

@@ -33,8 +33,9 @@ export default function Cars({ editable = false }: CarsProps) {
   }>({});
 
   useEffect(() => {
-    dispatch(fetchCars(filters));
-  }, [dispatch, filters]);
+    const token = localStorage.getItem('token') ?? undefined;
+        dispatch(fetchCars({ filters, editable, token }));
+  }, [dispatch, filters, editable]);
 
   const applyFilters = (newFilters: typeof filters) => {
     setFilters(newFilters);

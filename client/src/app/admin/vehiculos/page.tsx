@@ -9,8 +9,8 @@ export default function Page() {
 
   return (
     <AdminGuard>
-      <section className="w-full h-screen px-6 py-8">
-        <div className="flex justify-end mb-4">
+<section className="min-h-screen px-6 py-8">
+          <div className="flex justify-end mb-4">
           <button
             onClick={() => router.push('/admin/vehiculos/crear')}
             className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition"

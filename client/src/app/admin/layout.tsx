@@ -13,7 +13,7 @@ import { Toaster } from "react-hot-toast";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const pathname = usePathname();
   const hideSidebar = pathname === "/admin/login";
 
@@ -22,19 +22,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <ReduxProvider>
         <CustomNextUIProvider>
           <AppInitializer />
-
           <Toaster position="top-center" />
 
+          {/* Sidebar */}
           {!hideSidebar && (
             <SideBar
-              isVisible={isSidebarVisible}
-              toggleVisibility={() => setIsSidebarVisible(!isSidebarVisible)}
+              isExpanded={isSidebarExpanded}
+              toggleExpand={() => setIsSidebarExpanded((prev) => !prev)}
             />
           )}
 
+          {/* Contenido principal */}
           <main
-            className={`transition-all duration-300 ${
-              !hideSidebar && isSidebarVisible ? "ml-64" : "ml-0"
+            className={`transition-all duration-300 min-h-screen overflow-x-hidden ${
+              !hideSidebar && isSidebarExpanded ? "ml-64" : "ml-16"
             }`}
           >
             {children}

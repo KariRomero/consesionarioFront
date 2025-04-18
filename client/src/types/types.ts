@@ -35,6 +35,11 @@ export type Vehiculo = {
     imagenes?: Imagenes[];
     brand?:Brand,
     tipo?:Tipo,
+    publicado?: boolean; // ✅ nuevo campo
+    numeroChasis?: string; // ✅ nuevo campo
+    clienteId?: string; // ✅ para asociar o desvincular cliente
+    dominio?: string; // ✅ nuevo campo
+
     destacado?: boolean; // 👈 ahora está en el lugar correcto
     descripcion2?: string; // 👈 también
   };
@@ -52,6 +57,11 @@ export interface FormVehiculoUpdateType {
     moneda: 'ARS' | 'USD';
     vendido: boolean;
     ubicacion?: string;
+    publicado?: boolean; // ✅ nuevo campo
+    numeroChasis?: string; // ✅ nuevo campo
+    dominio?: string; // ✅ nuevo campo
+    clienteId?: string; // ✅ para asociar o desvincular cliente
+
     imagenesEliminar?: string[];
     descripcion2?: string; // 👈 nuevo campo
     destacado?: boolean; // 👈 nuevo campo
