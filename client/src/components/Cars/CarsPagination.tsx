@@ -13,14 +13,14 @@ const CarsPagination: React.FC = () => {
 
     const handlePageClick = (pageNumber: number) => {
         dispatch(setPage(pageNumber));
-        dispatch(fetchCars({ page: pageNumber, limit }) as any);
+        dispatch(fetchCars({ filters: { page: pageNumber, limit } }) as any);
     };
 
     const handleNextPage = () => {
         if (page < totalPages) {
             const nextPageNumber = page + 1;
             dispatch(nextPage());
-            dispatch(fetchCars({ page: nextPageNumber, limit }) as any);
+            dispatch(fetchCars({ filters: { page: nextPageNumber, limit } }) as any);
         }
     };
 
@@ -28,18 +28,18 @@ const CarsPagination: React.FC = () => {
         if (page > 1) {
             const previousPageNumber = page - 1;
             dispatch(previousPage());
-            dispatch(fetchCars({ page: previousPageNumber, limit }) as any);
+            dispatch(fetchCars({ filters: { page: previousPageNumber, limit } }) as any);
         }
     };
 
     const handleFirstPage = () => {
         dispatch(resetPage());
-        dispatch(fetchCars({ page: 1, limit }) as any);
+        dispatch(fetchCars({ filters: { page: 1, limit } }) as any);
     };
 
     const handleLastPage = () => {
         dispatch(goToLastPage());
-        dispatch(fetchCars({ page: Math.ceil(total / limit), limit }) as any);
+        dispatch(fetchCars({ filters: { page: Math.ceil(total / limit), limit } }) as any);
     };
 
     const renderPageNumbers = () => {
