@@ -155,7 +155,7 @@ const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
   <div className="mt-6">
     <a
       href={`https://wa.me/5493435263738?text=${encodeURIComponent(
-        `Hola Rodar, estoy interesado en el vehículo ${car?.brand?.nombre || ''} ${car?.modelo || ''} que vi en su página. Quisiera más información. https://rodar.ar/vehiculos/${car?.id}`
+        `Hola Rodar, estoy interesado en el vehículo ${car?.brand?.nombre || ''} ${car?.modelo || ''} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
       )}`}
       target="_blank"
       rel="noopener noreferrer"
