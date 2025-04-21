@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { faChevronRight, faChevronLeft, faGaugeHigh, faGasPump, faGear, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Footer from "../Footer/Footer";
-
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
 
 
@@ -146,10 +146,26 @@ const CarsDetail = ({ id }: { id: string }) => {  const params = useParams();
             </div>
           </div>
 
-          {/* Información de la Concesionaria */}
-          <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-bold">Información del vehículo</h3>
-            <p className="text-gray-700">{car?.descripcion || 'No hay descripción disponible'}</p>
+       {/* Información de la Concesionaria */}
+<div className="bg-gray-100 p-4 rounded-lg shadow-md">
+  <h3 className="text-lg font-bold">Información del vehículo</h3>
+  <p className="text-gray-700">{car?.descripcion || 'No hay descripción disponible'}</p>
+
+  {/* Botón de WhatsApp */}
+  <div className="mt-6">
+    <a
+      href={`https://wa.me/5493435263738?text=${encodeURIComponent(
+        `Hola Rodar, estoy interesado en el vehículo ${car?.brand?.nombre || ''} ${car?.modelo || ''} que vi en su página. Quisiera más información. https://rodar.ar/vehiculos/${car?.id}`
+      )}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center bg-green-500 hover:bg-green-600 text-black font-bold py-2 px-4 rounded shadow transition"
+    >
+      <FontAwesomeIcon icon={['fab', 'whatsapp']} className="mr-2 text-xl" />
+      Contactar por WhatsApp
+    </a>
+  </div>
+
           </div>
         </div>
       </div>
