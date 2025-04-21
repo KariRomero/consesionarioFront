@@ -1,11 +1,31 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import VizualizarContrato from '@/components/Admin/contratos/VizualizarContrato';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { prod_url } from '@/utils/routes';
+import TablaContratos from '@/components/Admin/contratos/TablaContratos';
 
 export default function ContratosPage() {
+  const [contrato, setContrato] = useState<any>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchContrato = async () => {
+      const res = await axios.get(`${prod_url}/contratos`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+  
+      setContrato(res.data[0]);
+    };
+  
+    fetchContrato();
+  }, []);
 
   return (
     <section className="px-6 py-8">
@@ -20,8 +40,11 @@ export default function ContratosPage() {
         </button>
       </div>
 
-      {/* Acá irá el listado */}
-      <div className="text-gray-500">Listado de contratos próximamente...</div>
+      {contrato ? (
+       <TablaContratos />
+      ) : (
+        <div className="text-gray-500">Cargando contrato...</div>
+      )}
     </section>
   );
 }

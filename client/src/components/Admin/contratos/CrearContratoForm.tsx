@@ -219,9 +219,9 @@ export default function CrearContratoForm() {
       <div className="flex gap-4">
         <button
           type="submit"
-          className="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-black px-4 py-2  rounded hover:bg-blue-700"
         >
-          Crear contrato
+          Crear contrato y enviarlo por mail
         </button>
         <button
           type="button"
