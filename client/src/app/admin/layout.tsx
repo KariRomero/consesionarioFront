@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Contenido principal */}
           <main
-            className={`transition-all duration-300 min-h-screen overflow-x-hidden ${
+            className={`transition-all duration-300 min-h-screen mt-[5rem] overflow-x-hidden ${
               !hideSidebar && isSidebarExpanded ? "ml-0 lg:ml-64" : "ml-0"
             }`}
           >

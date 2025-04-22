@@ -9,7 +9,7 @@ export default function Page() {
 
   return (
     <AdminGuard>
-<section className="min-h-screen px-6 py-8">
+<section className="min-h-screen px-6 py-[0rem] lg:py-[0rem]">
           <div className="flex justify-end mb-4">
           <button
             onClick={() => router.push('/admin/vehiculos/crear')}
