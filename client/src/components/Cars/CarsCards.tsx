@@ -8,12 +8,10 @@ type CarsCardsProps = {
 
 export default function CarsCards({ cars }: CarsCardsProps) {
   return (
-    <div className="grid grid-cols-3 gap-6 px-6">
-    {/* <div className="flex flex-wrap gap-10 justify-start"> */}
+    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 sm:px-6">
       {cars.map((c, index) => (
         <CarsCard car={c} key={index} />
       ))}
     </div>
   );
 }
-
