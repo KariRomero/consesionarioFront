@@ -3,6 +3,8 @@
 import { useDispatch } from 'react-redux';
 import { logoutAdmin } from '@/redux/slices/authSlice';
 import { useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 export default function LogoutButton() {
   const dispatch = useDispatch();
@@ -19,9 +21,9 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="mt-6 ml-10 bg-red-600 text-black px-4 py-2 rounded hover:bg-red-700 transition"
+      className="flex flex-col items-center text-blue hover:text-black transition"
     >
-      Cerrar sesión
+      <FontAwesomeIcon icon={faRightFromBracket} className="text-xl" />
     </button>
   );
 }

@@ -69,12 +69,18 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded shadow-md w-full max-w-sm"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Login de Admin</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-400">
+   <form
+  onSubmit={handleLogin}
+  className="bg-white p-8 rounded-lg shadow-lg w-[80%] max-w-sm"
+>
+  <div className="flex justify-center mb-6">
+    <img
+      src="https://res.cloudinary.com/ddkfwu9pm/image/upload/v1745293171/WhatsApp_Image_2025-04-12_at_16.20.00_shwnuf.jpg"
+      alt="Logo RodAR"
+      className="w-32 h-auto"
+    />
+  </div>
 
         {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
 
@@ -96,12 +102,12 @@ export default function AdminLoginPage() {
           required
         />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-black p-2 border:black rounded hover:bg-blue-700 transition"
-        >
-          Iniciar sesión
-        </button>
+<button
+  type="submit"
+  className="w-full bg-white text-black border border-black p-2 rounded transition hover:bg-black hover:text-white active:bg-black active:text-white"
+>
+  Iniciar sesión
+</button>
       </form>
     </div>
   );
