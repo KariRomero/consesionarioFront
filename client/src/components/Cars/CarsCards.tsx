@@ -1,5 +1,5 @@
 import React from 'react'
-import CarsCard from './CarsCard'
+import CarsCard from './Card/CarsCard'
 import { Vehiculo } from '@/types/types'
 
 type CarsCardsProps = {

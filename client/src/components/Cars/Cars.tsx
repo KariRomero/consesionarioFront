@@ -4,7 +4,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchCars } from "@/redux/slices/carsSlice";
-import CarsCard from "./CarsCard";
+import CarsCard from "./Card/CarsCard";
 import FilterBar from "../FilterBar/FilterBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';

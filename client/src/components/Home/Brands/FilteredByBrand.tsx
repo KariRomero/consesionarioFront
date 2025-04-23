@@ -2,7 +2,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBrandById } from "@/redux/slices/brandsSlice";
-import CarsCard from "@/components/Cars/CarsCard";
+import CarsCard from "@/components/Cars/Card/CarsCard";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Vehiculo } from "@/types/types";
