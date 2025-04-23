@@ -89,13 +89,13 @@ const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
             </div>
           </div>
           <div className="flex flex-col">
-            {car.vendido ? (
-              <p className="text-lg sm:text-xl font-bold">{moneda} {price}</p>
-
-            ) : (
+            {car.vendido === true ? (
               <div className="inline-block px-2 py-1 text-center text-lg text-white sm:text-xl font-bold bg-primary rounded">
                 Vendido
               </div>
+
+            ) : (
+              <p className="text-lg sm:text-xl font-bold">{moneda} {price}</p>
             )}
             <Link href={`/cars/${car.id}`}>
               <button className="text-primary text-sm sm:text-sm font-medium hover:underline">
