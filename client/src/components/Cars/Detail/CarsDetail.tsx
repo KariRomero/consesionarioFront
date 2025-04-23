@@ -1,12 +1,13 @@
 'use client'
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation"
 import { AppDispatch, RootState } from "@/redux/store";
 import { useEffect, useState, useCallback } from "react";
 import { fetchCarById } from "@/redux/slices/carsSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGaugeHigh, faGasPump, faGear, faPaperPlane, faCopy } from '@fortawesome/free-solid-svg-icons';
-import { faWhatsapp, faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+import { faGaugeHigh, faGasPump, faGear, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import Footer from "../../Footer/Footer";
 import Imagenes from "./Imagenes";
 import ModalZoom from "@/components/Modal/ModalZoom";
@@ -14,7 +15,7 @@ import ModalCompartir from "@/components/Modal/ModalCompartir";
 import ButtonsCompartir from "@/components/Buttons/ButtonsCompartir";
 
 const CarsDetail = ({ id }: { id: string }) => {
-  const params = useParams();
+  const router = useRouter();
 
 
   const dispatch: AppDispatch = useDispatch();
@@ -98,7 +99,12 @@ const CarsDetail = ({ id }: { id: string }) => {
         />
         {/* Información Detallada del Vehículo */}
         <div className="lg:w-1/2 lg:pl-8">
+        <div className="w-full flex items-center justify-between">
           <h2 className="text-3xl font-bold mb-5">{`${car?.brand?.nombre || ''} ${car?.modelo || ''}`}</h2>
+          <button onClick={() => router.push('/cars')}>
+          <FontAwesomeIcon icon={faChevronRight} className="mr-1 sm:mr-2 text-gray-500" />
+          </button>
+        </div>
           <p className="text-gray-600 font-bold mb-4 flex items-center text-xl">{`${car?.year || 'N/A'}`}</p>
 
           <div className="flex items-center mb-3">
