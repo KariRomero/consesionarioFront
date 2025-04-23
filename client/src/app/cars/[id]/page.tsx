@@ -1,4 +1,4 @@
-import CarsDetail from "@/components/Cars/CarsDetail";
+import CarsDetail from "@/components/Cars/Detail/CarsDetail";
 
 interface PageProps {
   params: { id: string };
