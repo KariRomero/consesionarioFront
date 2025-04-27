@@ -122,7 +122,7 @@ const CrearVehiculoModal: React.FC<CrearVehiculoModalProps> = ({ isOpen, onClose
     <Modal
       isOpen={isOpen}
       onOpenChange={onClose}
-      placement="center"
+      placement="top"
       className="bg-background text-foreground w-full max-w-2xl"
       scrollBehavior="inside"
     >
@@ -131,8 +131,7 @@ const CrearVehiculoModal: React.FC<CrearVehiculoModalProps> = ({ isOpen, onClose
           <>
             <ModalHeader className="text-xl font-bold">Crear Vehículo</ModalHeader>
 
-            <ModalBody className="overflow-y-auto max-h-[600px] md:max-h-[75vh] space-y-4 px-2">
-              <Select
+            <ModalBody className="overflow-y-auto max-h-[500px] md:max-h-[75vh] space-y-4 px-2">              <Select
                 label="Tipo"
                 selectedKeys={[formData.tipoId]}
                 items={tipos}
