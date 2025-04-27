@@ -38,7 +38,6 @@ export default function AdminPanelPage() {
       <div className="w-full flex justify-center mt-10 mb-10">
   <h1 className="text-4xl font-bold text-center">Panel de estadísticas</h1>
 </div>
-              <LogoutButton />
       </div>
 
       {/* 📊 Resumen rápido */}

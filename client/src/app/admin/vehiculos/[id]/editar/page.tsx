@@ -14,7 +14,9 @@ import axios from 'axios';
 import { prod_url } from '@/utils/routes';
 import { FormVehiculoUpdateType, Imagenes } from '@/types/types';
 import toast from 'react-hot-toast';
-
+const handleVehiculoActualizado = () => {
+  setRefreshKey(prev => prev + 1); // 🔥 forzamos reload de <Cars>
+};
 type Moneda = 'ARS' | 'USD';
 
 export default function EditVehiculoPage() {
@@ -67,6 +69,8 @@ export default function EditVehiculoPage() {
     }
   }, [car]);
 
+
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     axios.get(`${prod_url}/tipos`).then(res => setTipos(res.data)).catch(console.error);

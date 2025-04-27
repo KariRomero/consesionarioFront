@@ -11,6 +11,8 @@ import {
   faChevronLeft,
   faHandshake,
   faUsers,
+  faMoneyBillWave, // 👈 agregado
+
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import LogoutButton from "../Admin/utilities/LogoutButton";
@@ -28,6 +30,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isExpanded, toggleExpand }) => {
     { label: "Vehículos", href: "/admin/vehiculos", icon: faCarSide },
     { label: "Clientes", href: "/admin/clientes", icon: faUsers },
     { label: "Contratos", href: "/admin/contratos", icon: faHandshake },
+    { label: "Finanzas", href: "/admin/finanzas", icon: faMoneyBillWave }, // ✅ Nuevo
+
   ];
 
   return (
