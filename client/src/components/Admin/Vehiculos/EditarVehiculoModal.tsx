@@ -255,8 +255,8 @@ const EditarVehiculoModal: React.FC<EditarVehiculoModalProps> = ({
     Eliminar Vehículo
   </Button>
 </ModalHeader>
-              <ModalBody className="overflow-y-auto max-h-[75vh] space-y-4 px-2">
-                {!verTodasLasImagenes ? (
+<ModalBody className="overflow-y-auto max-h-[80dvh] md:max-h-[75vh] space-y-4 px-2">
+               {!verTodasLasImagenes ? (
                   <div className="flex flex-col items-center gap-4">
                     <div className="flex justify-center">
                       <Image

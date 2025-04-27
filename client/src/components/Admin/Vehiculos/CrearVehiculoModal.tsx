@@ -131,8 +131,7 @@ const CrearVehiculoModal: React.FC<CrearVehiculoModalProps> = ({ isOpen, onClose
           <>
             <ModalHeader className="text-xl font-bold">Crear Vehículo</ModalHeader>
 
-            <ModalBody className="overflow-y-auto max-h-[75vh] space-y-4 px-2">
-
+            <ModalBody className="overflow-y-auto max-h-[600px] md:max-h-[75vh] space-y-4 px-2">
               <Select
                 label="Tipo"
                 selectedKeys={[formData.tipoId]}
