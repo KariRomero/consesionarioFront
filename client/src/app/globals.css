@@ -32,7 +32,11 @@ body {
   flex-direction: column;
 }
 
-
+/* 🔥 Agregá esto para evitar zoom al tocar inputs en iPhone */
+/* 🔥 Fix definitivo para evitar zoom en inputs en iPhone Safari */
+input, textarea, select, [role="combobox"], [role="textbox"] {
+  font-size: 16px !important;
+}
 
 
 @layer utilities {

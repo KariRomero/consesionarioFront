@@ -1,18 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdminGuard from '@/components/Admin/AdminGuard';
 import Cars from '@/components/Cars/Cars';
 import CrearVehiculoModal from '@/components/Admin/Vehiculos/CrearVehiculoModal';
+import { useSearchParams, useRouter } from 'next/navigation'; // ✅
 
 export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0); // 🔥 Nuevo
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const handleVehiculoCreado = () => {
     setIsModalOpen(false);
-    setRefreshKey(prev => prev + 1); // 🔥 Cambiamos el key para forzar refresh
+    setRefreshKey(prev => prev + 1); // 🔥 actualizamos la lista
   };
+
+  useEffect(() => {
+    if (searchParams.get('reload') === 'true') {
+      setRefreshKey(prev => prev + 1); // 🔥 forzar refresh después de eliminar
+      const url = new URL(window.location.href);
+      url.searchParams.delete('reload');
+      router.replace(url.pathname); // 🔥 limpiamos la URL
+    }
+  }, [searchParams, router]);
 
   return (
     <AdminGuard>
@@ -27,7 +40,7 @@ export default function Page() {
         </div>
 
         {/* Vehículos existentes */}
-        <Cars editable key={refreshKey} /> {/* 🔥 Agregamos key dinámico */}
+        <Cars editable key={refreshKey} />
 
         {/* Modal para crear vehículo */}
         <CrearVehiculoModal
