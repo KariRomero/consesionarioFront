@@ -36,7 +36,7 @@ const CarsDetail = ({ id }: { id: string }) => {
   useEffect(() => {
     if (id) {
       dispatch(fetchCarById(id));
-      console.log(car);
+
     }
   }, [dispatch, id]);
 
@@ -86,6 +86,7 @@ const CarsDetail = ({ id }: { id: string }) => {
   }, [isZoomed, handleNextImage, handlePrevImage]);
 
   const closeModal = () => setShowModal(false);
+  // console.log(car);
 
   return (
     <section className="w-full bg-white px-4">
@@ -99,12 +100,12 @@ const CarsDetail = ({ id }: { id: string }) => {
         />
         {/* Información Detallada del Vehículo */}
         <div className="lg:w-1/2 lg:pl-8">
-        <div className="w-full flex items-center justify-between">
-          <h2 className="text-3xl font-bold mb-5">{`${car?.brand?.nombre || ''} ${car?.modelo || ''}`}</h2>
-          <button onClick={() => router.push('/cars')}>
-          <FontAwesomeIcon icon={faChevronRight} className="mr-1 sm:mr-2 text-gray-500" />
-          </button>
-        </div>
+          <div className="w-full flex items-center justify-between">
+            <h2 className="text-3xl font-bold mb-5">{`${car?.brand?.nombre || ''} ${car?.modelo || ''}`}</h2>
+            <button onClick={() => router.push('/cars')}>
+              <FontAwesomeIcon icon={faChevronRight} className="mr-1 sm:mr-2 text-gray-500" />
+            </button>
+          </div>
           <p className="text-gray-600 font-bold mb-4 flex items-center text-xl">{`${car?.year || 'N/A'}`}</p>
 
           <div className="flex items-center mb-3">
@@ -142,25 +143,25 @@ const CarsDetail = ({ id }: { id: string }) => {
             </div>
 
             <div className="flex flex-col space-y-2">
-              {car?.vendido ? (
-                <p className="text-lg sm:text-4xl font-bold">{moneda} {car?.precio}</p>
-
-              ) : (
+              {car?.vendido === true ? (
                 <div className="inline-block px-2 py-1 text-center text-lg text-white sm:text-xl font-bold bg-primary rounded mr-4">
                   Vendido
                 </div>
+
+              ) : (
+                <p className="text-lg sm:text-4xl font-bold">{moneda} {car?.precio}</p>
               )}
               <div className="flex items-center">
-              <a
-                href={`https://wa.me/5493435263738?text=${encodeURIComponent(
-                  `Hola Rodar, estoy interesado en el vehículo ${car?.brand?.nombre || ''} ${car?.modelo || ''} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-lg"
-              >
-                Contactar por WhatsApp
-              </a>
+                <a
+                  href={`https://wa.me/5493435263738?text=${encodeURIComponent(
+                    `Hola Rodar, estoy interesado en el vehículo ${car?.brand?.nombre || ''} ${car?.modelo || ''} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lg"
+                >
+                  Contactar por WhatsApp
+                </a>
                 <FontAwesomeIcon icon={faWhatsapp} size="lg" className="ml-2 bg-green-700 text-white px-2 py-1.5 rounded-full" />
 
               </div>
