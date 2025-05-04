@@ -20,15 +20,7 @@ export default function ButtonsCompartir({
       >
         <FontAwesomeIcon icon={faWhatsapp} size='lg'/>
 
-      </button>
-
-      <button
-        onClick={() => window.open(`https://www.messenger.com/share?link=${encodeURIComponent(shareUrl)}&app_id=123456789`, '_blank')}
-        className=" text-blue-600  px-3 py-2 text-sm sm:text-base flex items-center justify-center gap-2"
-      >
-        <FontAwesomeIcon icon={faFacebookMessenger} size='lg'/>
-
-      </button>
+      </button>     
 
       <button
         onClick={() => {
