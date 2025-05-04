@@ -10,19 +10,34 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { prod_url } from '@/utils/routes';
 import ClienteEditModal from './ClienteEditModal'; // ✅ importar el modal
-
+// ✅ Tipos completos y unificados
 interface Imagen {
+  id: string;
   url: string;
+  vehiculoId: string;
 }
 
 interface Vehiculo {
-  imagenes: Imagen[];
-}
-
-
-interface ClienteCardProps {
-  cliente: Cliente;
-  onUpdated?: () => void; // ✅ nueva prop
+  id: string;
+  modelo: string;
+  year: number;
+  descripcion?: string;
+  moneda?: 'ARS' | 'USD';
+  precio?: number;
+  transmision?: string;
+  combustible?: string;
+  kilometraje?: number;
+  tipoId?: string;
+  brandId?: string;
+  vendido?: boolean;
+  ubicacion?: string;
+  imagenes?: Imagen[];
+  publicado?: boolean;
+  numeroChasis?: string;
+  clienteId?: string;
+  dominio?: string;
+  descripcion2?: string;
+  destacado?: boolean;
 }
 
 interface Cliente {
@@ -36,6 +51,10 @@ interface Cliente {
   vehiculos: Vehiculo[];
 }
 
+interface ClienteCardProps {
+  cliente: Cliente;
+  onUpdated?: () => void;
+}
 
 
 const ClienteCard: React.FC<ClienteCardProps> = ({ cliente, onUpdated }) => {
@@ -43,9 +62,10 @@ const ClienteCard: React.FC<ClienteCardProps> = ({ cliente, onUpdated }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const router = useRouter();
 
-  const imagenes = cliente.vehiculos
-    .map((v) => v.imagenes?.[0]?.url)
-    .filter(Boolean);
+  const imagenes: string[] = cliente.vehiculos
+  .map((v) => v.imagenes?.[0]?.url)
+  .filter((url): url is string => typeof url === 'string');
+
 
   const handleDelete = async () => {
     try {

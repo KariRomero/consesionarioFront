@@ -9,18 +9,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import ClienteFormModal from '@/components/Admin/clientes/ClienteFormModal';
 
-interface Imagen {
+// ✅ TIPOS UNIFICADOS (compartidos con ClienteCard)
+export interface Imagen {
+  id: string;
   url: string;
+  vehiculoId: string;
 }
 
-interface Vehiculo {
+export interface Vehiculo {
   id: string;
   modelo: string;
   year: number;
   imagenes: Imagen[];
+  descripcion?: string;
+  moneda?: 'ARS' | 'USD';
+  precio?: number;
+  transmision?: string;
+  combustible?: string;
+  kilometraje?: number;
+  tipoId?: string;
+  brandId?: string;
+  vendido?: boolean;
+  ubicacion?: string;
+  publicado?: boolean;
+  numeroChasis?: string;
+  clienteId?: string;
+  dominio?: string;
+  descripcion2?: string;
+  destacado?: boolean;
 }
 
-interface Cliente {
+export interface Cliente {
   id: string;
   nombre: string;
   apellido: string;
@@ -67,14 +86,13 @@ export default function ClientesPage() {
         </div>
 
         <div className="flex flex-wrap gap-6">
-        {clientes.map((cliente) => (
-  <ClienteCard
-    key={cliente.id}
-    cliente={cliente}
-    onUpdated={fetchClientes} // ✅ importante
-  />
-))}
-
+          {clientes.map((cliente) => (
+            <ClienteCard
+              key={cliente.id}
+              cliente={cliente}
+              onUpdated={fetchClientes}
+            />
+          ))}
         </div>
       </div>
 
@@ -82,7 +100,7 @@ export default function ClientesPage() {
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
-          fetchClientes(); // recarga lista
+          fetchClientes();
         }}
       />
     </AdminGuard>
