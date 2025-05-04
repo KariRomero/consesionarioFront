@@ -38,6 +38,28 @@ export default function ClientePerfilPage() {
   if (loading) return <p className="p-10">Cargando perfil del cliente...</p>;
   if (!cliente) return <p className="p-10 text-red-600">Cliente no encontrado.</p>;
 
+
+  
+  const cargarCliente = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${prod_url}/clientes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCliente(res.data);
+    } catch (err) {
+      console.error('Error cargando cliente:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    cargarCliente();
+  }, [id]);
+  
+
   return (
     <section className="p-6 max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">

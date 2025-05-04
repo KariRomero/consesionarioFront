@@ -20,19 +20,28 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-        <title>{typeof metadata.title === "string" ? metadata.title : "default title"}</title>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+        />
+        <title>
+          {typeof metadata.title === "string"
+            ? metadata.title
+            : "default title"}
+        </title>
         <meta
           name="description"
-          content={typeof metadata.description === "string" ? metadata.description : "undefined content"}
+          content={
+            typeof metadata.description === "string"
+              ? metadata.description
+              : "undefined content"
+          }
         />
       </head>
       <body className={`${montserrat.className} text-black`}>
         <ReduxProvider>
           <StateLoader />
-          <MainWrapper>
-            {children}
-          </MainWrapper>
+          <MainWrapper>{children}</MainWrapper>
         </ReduxProvider>
         {/* <Footer /> */}
       </body>

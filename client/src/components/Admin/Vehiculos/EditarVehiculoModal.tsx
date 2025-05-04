@@ -88,7 +88,8 @@ const EditarVehiculoModal: React.FC<EditarVehiculoModalProps> = ({
     useState<string | null>(null);
   const [confirmarEliminarModal, setConfirmarEliminarModal] = useState(false);
   const [verTodasLasImagenes, setVerTodasLasImagenes] = useState(false);
-  const [confirmarEliminarVehiculoModal, setConfirmarEliminarVehiculoModal] = useState(false);
+  const [confirmarEliminarVehiculoModal, setConfirmarEliminarVehiculoModal] =
+    useState(false);
 
   useEffect(() => {
     if (vehiculoId) dispatch(fetchCarById(vehiculoId));
@@ -285,44 +286,46 @@ const EditarVehiculoModal: React.FC<EditarVehiculoModalProps> = ({
               <ModalHeader className="flex justify-between items-center">
                 <span className="text-xl font-bold">Editar Vehículo</span>
                 <Button
-  color="danger"
-  size="sm"
-  onClick={() => setConfirmarEliminarVehiculoModal(true)}
-  className="mr-4"
->
-  Eliminar Vehículo
-</Button>
-{confirmarEliminarVehiculoModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg max-w-sm text-center shadow-lg">
-      <h2 className="text-lg font-bold mb-4">¿Estás seguro que querés eliminar este vehículo?</h2>
-      <div className="flex justify-center gap-4">
-      <button
-  onClick={async () => {
-    await eliminarVehiculo();
-    setConfirmarEliminarVehiculoModal(false); // Cerrar cartel de confirmación
-    onClose(); // Cerrar el modal de edición
+                  color="danger"
+                  size="sm"
+                  onClick={() => setConfirmarEliminarVehiculoModal(true)}
+                  className="mr-4"
+                >
+                  Eliminar Vehículo
+                </Button>
+                {confirmarEliminarVehiculoModal && (
+                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg max-w-sm text-center shadow-lg">
+                      <h2 className="text-lg font-bold mb-4">
+                        ¿Estás seguro que querés eliminar este vehículo?
+                      </h2>
+                      <div className="flex justify-center gap-4">
+                        <button
+                          onClick={async () => {
+                            await eliminarVehiculo();
+                            setConfirmarEliminarVehiculoModal(false); // Cerrar cartel de confirmación
+                            onClose(); // Cerrar el modal de edición
 
-    // 🔥 Nueva secuencia para forzar el refresco real
-    router.push('/admin/vehiculos?reload=true');
+                            // 🔥 Nueva secuencia para forzar el refresco real
+                            router.push("/admin/vehiculos?reload=true");
+                          }}
+                          className="bg-red-600 text-black px-4 py-2 rounded hover:bg-red-700"
+                        >
+                          Eliminar
+                        </button>
 
-  }}
-  className="bg-red-600 text-black px-4 py-2 rounded hover:bg-red-700"
->
-  Eliminar
-</button>
-
-        <button
-          onClick={() => setConfirmarEliminarVehiculoModal(false)}
-          className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-        >
-          Cancelar
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+                        <button
+                          onClick={() =>
+                            setConfirmarEliminarVehiculoModal(false)
+                          }
+                          className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </ModalHeader>
               <ModalBody className="flex-1 overflow-y-auto space-y-4 px-2">
                 {!verTodasLasImagenes ? (

@@ -5,9 +5,9 @@ import axios from 'axios';
 import ClienteCard from '@/components/Admin/clientes/ClienteCard';
 import { prod_url } from '@/utils/routes';
 import AdminGuard from '@/components/Admin/AdminGuard';
-import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import ClienteFormModal from '@/components/Admin/clientes/ClienteFormModal';
 
 interface Imagen {
   url: string;
@@ -33,22 +33,22 @@ interface Cliente {
 
 export default function ClientesPage() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
-  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchClientes = async () => {
+    try {
+      const res = await axios.get(`${prod_url}/clientes`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setClientes(res.data);
+    } catch (err) {
+      console.error('Error cargando clientes:', err);
+    }
+  };
 
   useEffect(() => {
-    const fetchClientes = async () => {
-      try {
-        const res = await axios.get(`${prod_url}/clientes`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        setClientes(res.data);
-      } catch (err) {
-        console.error('Error cargando clientes:', err);
-      }
-    };
-
     fetchClientes();
   }, []);
 
@@ -58,7 +58,7 @@ export default function ClientesPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Clientes</h1>
           <button
-            onClick={() => router.push('/admin/clientes/crear')}
+            onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-black px-4 py-2 rounded-md transition"
           >
             <FontAwesomeIcon icon={faUserPlus} />
@@ -67,11 +67,24 @@ export default function ClientesPage() {
         </div>
 
         <div className="flex flex-wrap gap-6">
-          {clientes.map((cliente) => (
-            <ClienteCard key={cliente.id} cliente={cliente} />
-          ))}
+        {clientes.map((cliente) => (
+  <ClienteCard
+    key={cliente.id}
+    cliente={cliente}
+    onUpdated={fetchClientes} // ✅ importante
+  />
+))}
+
         </div>
       </div>
+
+      <ClienteFormModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          fetchClientes(); // recarga lista
+        }}
+      />
     </AdminGuard>
   );
 }
