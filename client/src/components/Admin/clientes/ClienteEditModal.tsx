@@ -43,6 +43,7 @@ interface Props {
 const ClienteEditModal: React.FC<Props> = ({ isOpen, onClose, cliente, onUpdated }) => {
   const router = useRouter();
   const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
+  const [modalHeight, setModalHeight] = useState<string>("100dvh");
   const [form, setForm] = useState({
     nombre: cliente.nombre,
     apellido: cliente.apellido,
@@ -80,6 +81,24 @@ const ClienteEditModal: React.FC<Props> = ({ isOpen, onClose, cliente, onUpdated
     }
   }, [isOpen, cliente.id]);
 
+  // ✅ altura dinámica móvil
+  useEffect(() => {
+    const updateHeight = () => {
+      if (typeof window !== "undefined" && window.visualViewport) {
+        const viewportHeight = window.visualViewport.height;
+        setModalHeight(`${viewportHeight - 10}px`);
+      }
+    };
+    window.visualViewport?.addEventListener("resize", updateHeight);
+    window.visualViewport?.addEventListener("scroll", updateHeight);
+    updateHeight();
+    return () => {
+      window.visualViewport?.removeEventListener("resize", updateHeight);
+      window.visualViewport?.removeEventListener("scroll", updateHeight);
+    };
+  }, []);
+
+  // ✅ foco centrado mobile
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const input = e.target;
     setTimeout(() => {
@@ -143,15 +162,20 @@ const ClienteEditModal: React.FC<Props> = ({ isOpen, onClose, cliente, onUpdated
 
   return (
     <Modal
-      isOpen={isOpen}
-      onOpenChange={onClose}
-      placement="center"
-      className="w-full max-w-2xl"
-    >
-      <ModalContent className="flex flex-col h-[100dvh] xl:h-auto xl:max-h-[90vh] xl:my-auto transition-all duration-300 ease-in-out">
+    isOpen={isOpen}
+    onOpenChange={onClose}
+    placement="center"
+    className="w-full max-w-2xl lg:my-auto h-[100dvh] lg:h-auto overflow-hidden"
+  >
+  
+  <ModalContent
+  className="flex flex-col transition-all duration-300 ease-in-out"
+  style={{ height: typeof window !== "undefined" && window.innerWidth < 1024 ? modalHeight : "auto" }}
+>
+
         {(close) => (
           <>
-            <ModalHeader className="text-xl font-bold text-left 2xl:flex 2xl:justify-center">
+            <ModalHeader className="text-xl font-bold text-left 2xl:text-center">
               Editar Cliente
             </ModalHeader>
             <ModalBody className="flex-1 overflow-y-auto px-2 space-y-4">

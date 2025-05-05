@@ -32,6 +32,7 @@ interface ClienteFormModalProps {
 export default function ClienteFormModal({ isOpen, onClose }: ClienteFormModalProps) {
   const router = useRouter();
   const [vehiculos, setVehiculos] = useState<Vehiculo[]>([]);
+  const [modalHeight, setModalHeight] = useState<string>("100dvh");
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
@@ -42,25 +43,41 @@ export default function ClienteFormModal({ isOpen, onClose }: ClienteFormModalPr
     vehiculoIds: [] as string[],
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
+  const fetchVehiculos = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${prod_url}/vehiculos/findAll/admin`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const disponibles = res.data.vehiculos.filter((v: Vehiculo) => !v.clienteId);
+      setVehiculos(disponibles);
+    } catch (err) {
+      toast.error("Error al cargar vehículos");
+    }
+  };
 
-    const fetchVehiculos = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${prod_url}/vehiculos/findAll/admin`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const disponibles = res.data.vehiculos.filter((v: Vehiculo) => !v.clienteId);
-        setVehiculos(disponibles);
-      } catch (err) {
-        toast.error("Error al cargar vehículos");
+  useEffect(() => {
+    if (isOpen) {
+      resetForm();
+      fetchVehiculos();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (typeof window !== "undefined" && window.visualViewport) {
+        const viewportHeight = window.visualViewport.height;
+        setModalHeight(`${viewportHeight - 10}px`);
       }
     };
-
-    resetForm();
-    fetchVehiculos();
-  }, [isOpen]);
+    window.visualViewport?.addEventListener("resize", updateHeight);
+    window.visualViewport?.addEventListener("scroll", updateHeight);
+    updateHeight();
+    return () => {
+      window.visualViewport?.removeEventListener("resize", updateHeight);
+      window.visualViewport?.removeEventListener("scroll", updateHeight);
+    };
+  }, []);
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     const input = e.target;
@@ -122,12 +139,15 @@ export default function ClienteFormModal({ isOpen, onClose }: ClienteFormModalPr
         onClose();
       }}
       placement="center"
-      className="w-full max-w-2xl"
+      className="w-full max-w-2xl lg:my-auto h-[100dvh] lg:h-auto overflow-hidden"
     >
-      <ModalContent className="flex flex-col h-[100dvh] xl:h-auto xl:max-h-[90vh] xl:my-auto transition-all duration-300 ease-in-out">
+      <ModalContent
+        className="flex flex-col transition-all duration-300 ease-in-out"
+        style={{ height: typeof window !== "undefined" && window.innerWidth < 1024 ? modalHeight : "auto" }}
+      >
         {(close) => (
           <>
-            <ModalHeader className="text-xl font-bold text-left 2xl:flex 2xl:justify-center">
+            <ModalHeader className="text-xl font-bold text-left 2xl:text-center">
               Crear Cliente
             </ModalHeader>
             <ModalBody className="flex-1 overflow-y-auto px-2 space-y-4">
@@ -142,7 +162,7 @@ export default function ClienteFormModal({ isOpen, onClose }: ClienteFormModalPr
 
               <div className="mt-4">
                 <p className="font-semibold 2xl:text-center mb-2">Vehículos sin cliente</p>
-                <div className="max-h-40 2xl:max-h-[300px] overflow-y-auto border rounded p-2 space-y-2">
+                <div className="max-h-40 xl:max-h-[300px] overflow-y-auto border rounded p-2 space-y-2">
                   {vehiculos.length === 0 && (
                     <p className="text-sm text-gray-500">No hay vehículos disponibles</p>
                   )}
