@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { prod_url } from '@/utils/routes';
@@ -15,22 +15,13 @@ interface Contrato {
   vehiculo: { id: string; modelo: string; year: number; dominio: string | null; brand: { nombre: string } };
 }
 
-export default function TablaContratos() {
-  const [contratos, setContratos] = useState<Contrato[]>([]);
+interface Props {
+  contratos: Contrato[];
+  onDelete: () => void;
+}
+
+export default function TablaContratos({ contratos, onDelete }: Props) {
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchContratos = async () => {
-      const res = await axios.get(`${prod_url}/contratos`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      setContratos(res.data);
-    };
-
-    fetchContratos();
-  }, []);
 
   const eliminarContrato = (contrato: Contrato) => {
     toast.custom((t) => (
@@ -56,7 +47,7 @@ export default function TablaContratos() {
                 });
                 toast.dismiss(t.id);
                 toast.success('Contrato eliminado con éxito');
-                setContratos((prev) => prev.filter((c) => c.id !== contrato.id));
+                onDelete();
               } catch (error) {
                 console.error('Error al eliminar contrato:', error);
                 toast.error('Error al eliminar el contrato');
@@ -76,19 +67,16 @@ export default function TablaContratos() {
       <table className="min-w-full border border-gray-300 text-sm text-left">
         <thead className="bg-blue-100 text-blue-800">
           <tr>
-            <th className="px-4 py-2 border"> Fecha</th>
-            <th className="px-4 py-2 border"> Vehículo</th>
-            <th className="px-4 py-2 border"> Cliente</th>
-            <th className="px-4 py-2 border"> DNI</th>
-            <th className="px-4 py-2 border"> Acción</th>
+            <th className="px-4 py-2 border">Fecha</th>
+            <th className="px-4 py-2 border">Vehículo</th>
+            <th className="px-4 py-2 border">Cliente</th>
+            <th className="px-4 py-2 border">DNI</th>
+            <th className="px-4 py-2 border">Acción</th>
           </tr>
         </thead>
         <tbody>
           {contratos.map((contrato) => (
-            <tr
-              key={contrato.id}
-              className="hover:bg-gray-50 transition-colors"
-            >
+            <tr key={contrato.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-4 py-2 border">
                 {new Date(contrato.fechaContrato).toLocaleDateString()}
               </td>
