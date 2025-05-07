@@ -136,7 +136,7 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
         ? "justify-center"
         : "overflow-x-auto flex-nowrap scrollbar-hide"
       : isCarousel
-      ? "overflow-hidden flex-nowrap"
+      ? "overflow-hidden flex-nowrap lg:h-[54vh]"
       : "flex-wrap justify-center gap-x-5"
   }`}
 >
