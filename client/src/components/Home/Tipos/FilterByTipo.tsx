@@ -42,10 +42,10 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
 
   useEffect(() => {
     if (!isCarousel || !scrollRef.current) return;
-
+  
     const el = scrollRef.current;
     let paused = false;
-
+  
     const scrollStep = () => {
       if (!paused) {
         el.scrollLeft += 1;
@@ -54,16 +54,19 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
         }
       }
     };
-
+  
     const interval = setInterval(scrollStep, 20);
-
-    el.addEventListener("mouseenter", () => (paused = true));
-    el.addEventListener("mouseleave", () => (paused = false));
-
+  
+    const onMouseEnter = () => (paused = true);
+    const onMouseLeave = () => (paused = false);
+  
+    el.addEventListener("mouseenter", onMouseEnter);
+    el.addEventListener("mouseleave", onMouseLeave);
+  
     return () => {
       clearInterval(interval);
-      el.removeEventListener("mouseenter", () => (paused = true));
-      el.removeEventListener("mouseleave", () => (paused = false));
+      el.removeEventListener("mouseenter", onMouseEnter);
+      el.removeEventListener("mouseleave", onMouseLeave);
     };
   }, [isCarousel]);
 
