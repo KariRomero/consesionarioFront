@@ -40,7 +40,22 @@ input, textarea, select, [role="combobox"], [role="textbox"] {
 
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  @keyframes scroll-x {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-scroll-x {
+    animation: scroll-x linear infinite;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
+
