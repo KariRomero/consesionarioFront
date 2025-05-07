@@ -44,10 +44,10 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
 
   useEffect(() => {
     if (!isCarousel || !scrollRef.current) return;
-  
+
     const el = scrollRef.current;
     let paused = false;
-  
+
     const scrollStep = () => {
       if (!paused) {
         el.scrollLeft += 1;
@@ -56,15 +56,15 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
         }
       }
     };
-  
+
     const interval = setInterval(scrollStep, 20);
-  
+
     const onMouseEnter = () => (paused = true);
     const onMouseLeave = () => (paused = false);
-  
+
     el.addEventListener("mouseenter", onMouseEnter);
     el.addEventListener("mouseleave", onMouseLeave);
-  
+
     return () => {
       clearInterval(interval);
       el.removeEventListener("mouseenter", onMouseEnter);
@@ -94,11 +94,22 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
 
   if (!tipo?.vehiculos?.length) return null;
 
+  const showHint = isMobile && tipo.vehiculos.length > 1;
+  const showCenteredSingle = isMobile && tipo.vehiculos.length === 1;
+
   return (
     <div className="relative w-full px-4 sm:px-10 py-10">
-      <h1 className="text-center text-2xl lg:text-3xl font-semibold pb-8">
+      <h1 className="text-center text-2xl lg:text-3xl font-semibold pb-4">
         Estás viendo el tipo {tipo.nombre}
       </h1>
+
+      {showHint && (
+        <p className="text-center text-sm text-gray-700 -mt-2 mb-4 flex items-center justify-center gap-2">
+          <FontAwesomeIcon icon={faChevronLeft} className="text-[10px]" />
+          deslizá para ver más
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px]" />
+        </p>
+      )}
 
       {!isMobile && !isCarousel && (
         <>
@@ -117,19 +128,36 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
         </>
       )}
 
+<div
+  ref={scrollRef}
+  className={`flex ${
+    isMobile
+      ? tipo?.vehiculos?.length === 1
+        ? "justify-center"
+        : "overflow-x-auto flex-nowrap scrollbar-hide"
+      : isCarousel
+      ? "overflow-hidden flex-nowrap"
+      : "flex-wrap justify-center gap-x-5"
+  }`}
+>
+       {(isCarousel || isMobile)
+  ? (tipo?.vehiculos || []).map((v: Vehiculo) => (
       <div
-        ref={scrollRef}
-        className={`flex ${isMobile ? "overflow-x-auto flex-nowrap scrollbar-hide" : isCarousel ? "overflow-hidden flex-nowrap" : "flex-wrap justify-center gap-x-5"}`}
+        key={v.id}
+        className={
+          isMobile
+            ? (tipo?.vehiculos?.length || 0) > 1
+              ? "min-w-[90%] pr-4"
+              : "min-w-[90%]" // cuando hay una sola en mobile, igualamos tamaño
+            : "min-w-[25%] px-2"
+        }
       >
-        {(isCarousel || isMobile)
-          ? tipo.vehiculos.map((v: Vehiculo) => (
-              <div key={v.id} className={isMobile ? "min-w-[90%] pr-4" : "min-w-[25%] px-2"}>
-                <CarsCard car={v} />
-              </div>
-            ))
-          : displayedCards.map((v: Vehiculo) => (
-              <CarsCard key={v.id} car={v} />
-            ))}
+        <CarsCard car={v} />
+      </div>
+    ))
+  : displayedCards.map((v: Vehiculo) => (
+      <CarsCard key={v.id} car={v} />
+    ))}
       </div>
     </div>
   );
