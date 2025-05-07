@@ -59,13 +59,10 @@ const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
 
       {/* Imagen principal */}
       <Carusel
-        imageList={imageList}
-        currentImageIndex={currentImageIndex}
-        title={title}
-        setShowModal={setShowModal}
-        handleNextImage={handleNextImage}
-        handlePrevImage={handlePrevImage}
-      />
+  imageList={imageList}
+  title={title}
+  setShowModal={setShowModal}
+/>
 
       {/* Contenido */}
       <div className="p-2 sm:p-2">
