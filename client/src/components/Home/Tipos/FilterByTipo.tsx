@@ -1,3 +1,5 @@
+'use client';
+
 import { RootState, AppDispatch } from "@/redux/store";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -85,7 +87,7 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-10">
-        <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin" />
+        <div className="w-10 h-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin" />
       </div>
     );
   }
@@ -94,7 +96,10 @@ const FilterByTipo: React.FC<{ tipoId: string }> = ({ tipoId }) => {
 
   return (
     <div className="relative w-full px-4 sm:px-10 py-10">
-      {/* Flechas solo si no hay carrusel */}
+      <h1 className="text-center text-2xl lg:text-3xl font-semibold pb-8">
+        Estás viendo el tipo {tipo.nombre}
+      </h1>
+
       {!isMobile && !isCarousel && (
         <>
           <button
