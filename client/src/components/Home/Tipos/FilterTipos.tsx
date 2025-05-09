@@ -65,7 +65,7 @@ const FilterTipos: React.FC = () => {
           className={`flex gap-4 ${isMobile ? 'overflow-x-auto overflow-y-hidden px-4 scrollbar-hide' : 'animate-scroll-x'}`}
           style={{
             minWidth,
-            animationDuration: !isMobile ? `${tipos.length * 12}s` : undefined,
+            animationDuration: !isMobile ? `${tipos.length * 8}s` : undefined,
             animationTimingFunction: !isMobile ? "linear" : undefined,
             animationIterationCount: !isMobile ? "infinite" : undefined,
           }}

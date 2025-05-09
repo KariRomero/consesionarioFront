@@ -4,24 +4,26 @@ import { Vehiculo } from '@/types/types';
 import { prod_url } from '@/utils/routes';
 
 interface CarsState {
-  cars: Vehiculo[];
-  car: Vehiculo | null; // 👈 cambiamos esto
-  loading: boolean;
-  error: string | null;
-  page: number;
-  limit: number;
-  total: number;
+  cars: Vehiculo[]
+  destacados: Vehiculo[] // ✅ destacado separado
+  car: Vehiculo | null
+  loading: boolean
+  error: string | null
+  page: number
+  limit: number
+  total: number
 }
 
 const initialState: CarsState = {
   cars: [],
+  destacados: [],
   car: null,
   loading: false,
   error: null,
   page: 1,
   limit: 6,
   total: 0,
-};
+}
 
 
 export const fetchCars = createAsyncThunk(
@@ -84,6 +86,17 @@ export const fetchCars = createAsyncThunk(
     }
   }
 );
+
+export const fetchDestacados = createAsyncThunk(
+  'cars/fetchDestacados',
+  async () => {
+    const response = await axios.get<{ vehiculos: Vehiculo[] }>(
+      `${prod_url}/vehiculos?destacado=true&page=1&limit=99999`
+    )
+    return response.data.vehiculos
+  }
+)
+
 
 export const fetchCarById = createAsyncThunk(
   'cars/fetchCarById',
@@ -176,6 +189,22 @@ const carsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch cars by brands';
       })
+
+
+     
+    // destacados separados
+    .addCase(fetchDestacados.pending, (state) => {
+      state.loading = true
+      state.error = null
+    })
+    .addCase(fetchDestacados.fulfilled, (state, action) => {
+      state.loading = false
+      state.destacados = action.payload
+    })
+    .addCase(fetchDestacados.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Error al cargar destacados'
+    })
       //fetchCarsByTipo
       .addCase(fetchCarsByTipo.pending, (state) => {
         state.loading = true;

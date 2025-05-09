@@ -1,6 +1,8 @@
+'use client';
+
 import { RootState, AppDispatch } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchBrands } from "@/redux/slices/brandsSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -8,101 +10,93 @@ import Image from "next/image";
 import FilteredByBrand from "./FilteredByBrand";
 import { Brand } from "@/types/types";
 
+const CARD_WIDTH_LG = 300;
+const CARD_WIDTH_SM = 33.33;
+const CARD_WIDTH_XS = 60;
+
 const FilterBrands: React.FC = () => {
-    const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const { brands } = useSelector((state: RootState) => state.brands);
+  const [brandId, setBrandId] = useState<string | undefined>(undefined);
+  const [hasMounted, setHasMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        dispatch(fetchBrands());
-    }, [dispatch]);
+  useEffect(() => {
+    setHasMounted(true);
+    dispatch(fetchBrands());
 
-    const { brands } = useSelector((state: RootState) => state.brands);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [cardsToShow, setCardsToShow] = useState(6);
-    const [brandId, setBrandId] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        const resizeHandler = () => {
-            if (window.innerWidth < 640) {
-                setCardsToShow(1);
-            } else {
-                setCardsToShow(6);
-            }
-        };
-        resizeHandler();
-        window.addEventListener('resize', resizeHandler);
-
-        return () => {
-            window.removeEventListener('resize', resizeHandler);
-        };
-    }, []);
-
-    const next = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % brands.length);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
     };
 
-    const prev = () => {
-        setCurrentIndex((prevIndex) => (prevIndex - 1 + brands.length) % brands.length);
-    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [dispatch]);
 
-    const displayedBrands = brands?.slice(currentIndex, currentIndex + cardsToShow) as Brand[];
+  const duplicated = brands.length > 0
+    ? (typeof window !== 'undefined' && window.innerWidth >= 640 ? [...brands, ...brands] : brands)
+    : [];
 
-    const handleClick = async (id: string) => {
-        setBrandId(id);
-    };
+  const getMinWidth = () => {
+    if (typeof window === 'undefined') return '100%';
+    const width = window.innerWidth;
+    if (width < 640) return "100%";
+    if (width < 1024) return `calc(${duplicated.length} * ${CARD_WIDTH_SM}vw)`;
+    return `${duplicated.length * CARD_WIDTH_LG}px`;
+  };
 
-    useEffect(() => {
-        if (brandId !== undefined) {
-        }
-    }, [brandId]);        
+  const [minWidth, setMinWidth] = useState(getMinWidth());
 
-    return (
-        <div>
-            <div className="flex flex-wrap justify-center gap-4">
-                {
-                    brands && brands.length > 0 ? (
-                        <div className="flex flex-wrap justify-center gap-4 relative">
-                            <button
-                                onClick={prev}
-                                className="absolute left-0 top-1/2 transform -translate-y-1/2 px-4 py-2 rounded-full z-20"
-                            >
-                                <FontAwesomeIcon icon={faChevronLeft} />
-                            </button>
-                            <div className="flex gap-4">
-                                {displayedBrands.map((b:Brand) => (
-                                    <button
-                                        key={b.id}
-                                        className="flex flex-col items-center border border-grey rounded-md p-4 w-48 h-44 font-semibold hover:shadow-md overflow-hidden"
-                                        onClick={() => handleClick(b.id)}
-                                    >
-                                        <div className="relative w-full h-32">
-                                            <Image
-                                                sizes="(max-width: 768px) 100vw, 200px"
-                                                src={b.ImageBrand || '/car1'}
-                                                fill
-                                                alt={b.nombre}
-                                                className="w-full h-full object-contain"
-                                            />
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>
-                            <button
-                                onClick={next}
-                                className="absolute right-0 top-1/2 transform -translate-y-1/2 px-4 py-2 rounded-full z-20"
-                            >
-                                <FontAwesomeIcon icon={faChevronRight} />
-                            </button>
-                        </div>
-                    ) : (
-                        []
-                    )
-                }
-            </div>
+  useEffect(() => {
+    const handleResize = () => setMinWidth(getMinWidth());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [duplicated.length]);
 
-            <FilteredByBrand  brandId={brandId !== undefined ? brandId : ''}/>
+  const handleClick = (id: string) => setBrandId(id);
 
+  if (!hasMounted || brands.length === 0) return null;
+
+  return (
+    <>
+      <div className="overflow-hidden w-full relative">
+        <div
+          ref={scrollRef}
+          className={`flex gap-4 ${isMobile ? 'overflow-x-auto overflow-y-hidden px-4 scrollbar-hide' : 'animate-scroll-x'}`}
+          style={{
+            minWidth,
+            animationDuration: !isMobile ? `${brands.length * 12}s` : undefined,
+            animationTimingFunction: !isMobile ? "linear" : undefined,
+            animationIterationCount: !isMobile ? "infinite" : undefined,
+          }}
+        >
+          {duplicated.map((b: Brand, index) => (
+            <button
+              key={`${b.id}-${index}`}
+              className={`flex flex-col items-center border border-grey rounded-md p-4 font-semibold hover:shadow-md shrink-0
+                ${isMobile ? 'w-[60vw]' : 'sm:w-1/3 lg:w-[300px]'}
+                h-44`}
+              onClick={() => handleClick(b.id)}
+            >
+              <div className="relative w-full h-32">
+                <Image
+                  sizes="(max-width: 768px) 100vw, 200px"
+                  src={b.ImageBrand || '/car1'}
+                  fill
+                  alt={b.nombre}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </button>
+          ))}
         </div>
-    );
+      </div>
+
+      <FilteredByBrand brandId={brandId ?? ''} />
+    </>
+  );
 };
 
 export default FilterBrands;
