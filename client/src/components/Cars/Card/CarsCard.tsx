@@ -23,7 +23,7 @@ const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
   const transmission = car.transmision || 'Sin especificar';
   const price = car.precio;
   const imageList = car.imagenes ?? [];
-  const moneda = car.moneda === 'ARS' ? '$' : 'USD'
+  const moneda = car.moneda === 'ARS' ? 'ARS' : 'USD'
 
   const [shareUrl, setShareUrl] = useState('');
 
@@ -90,12 +90,11 @@ const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
           </div>
           <div className="flex flex-col">
             {car.vendido ? (
-              <p className="text-lg sm:text-xl font-bold">{moneda} {price}</p>
-
-            ) : (
               <div className="inline-block px-2 py-1 text-center text-lg text-white sm:text-xl font-bold bg-primary rounded">
                 Vendido
-              </div>
+              </div>              
+            ) : (
+              <p className="text-lg sm:text-xl font-bold">{moneda} {price}</p>
             )}
             <Link href={`/cars/${car.id}`}>
               <button className="text-primary text-sm sm:text-sm font-medium hover:underline">
