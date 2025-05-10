@@ -13,7 +13,7 @@ const Home: React.FC = () => {
  
   return (
     <section className='flex flex-col items-center space-y-28'>
-      {/* <Banner/> */}
+      <Banner/>
       <DestacadosCarrusel/>
       <CategoriasSection
       elementType='tipo'
