@@ -4,21 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGasPump,
   faGaugeHigh,
-  faGear,
-  faArrowUpRightFromSquare,
-  faPaperPlane
+  faGear
 } from '@fortawesome/free-solid-svg-icons';
 import { Vehiculo } from '@/types/types';
 import ModalCompartir from '../../Modal/ModalCompartir';
 import Carusel from './Carusel';
-import FireBorderWrapper from '@/components/Home/destacados/FireBorderWrapper';
 
 type CarsCardProps = {
   car: Vehiculo;
-  destacado?: boolean;
 };
 
-const CarsCard: React.FC<CarsCardProps> = ({ car, destacado }) => {
+const CarsCard: React.FC<CarsCardProps> = ({ car }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
@@ -90,12 +86,6 @@ const CarsCard: React.FC<CarsCardProps> = ({ car, destacado }) => {
         </div>
       </div>
     </div>
-  );
-
-  return destacado ? (
-    <FireBorderWrapper className="w-full">{Content}</FireBorderWrapper>
-  ) : (
-    Content
   );
 };
 
