@@ -114,7 +114,7 @@ const DestacadosCarrusel: React.FC = () => {
             }
           >
             <div  className='py-2'>
-              <CarsCard car={v} />
+              <CarsCard car={v}/>
             </div>
           </div>
         ))}
