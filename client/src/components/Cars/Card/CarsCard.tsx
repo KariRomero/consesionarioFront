@@ -29,7 +29,8 @@ const CarsCard: React.FC<CarsCardProps> = ({ car, destacado }) => {
   const transmission = car.transmision || 'Sin especificar';
   const price = car.precio;
   const imageList = car.imagenes ?? [];
-  const moneda = car.moneda === 'ARS' ? '$' : 'USD';
+  const moneda = car.moneda === 'ARS' ? 'ARS' : 'USD'
+  const destacado = car.destacado || false;
 
   const [shareUrl, setShareUrl] = useState('');
 
@@ -39,11 +40,11 @@ const CarsCard: React.FC<CarsCardProps> = ({ car, destacado }) => {
 
   const closeModal = () => setShowModal(false);
 
-  const Content = (
-    <div
-      className="relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-xs mx-auto"
-      style={{ minHeight: '300px' }}
-    >
+  return (
+    <div className={`relative bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-xs mx-auto
+    ${destacado ? 'shadow-primary':''}`} 
+    style={{ minHeight: '350px' }}>
+      {/* Modal compartir */}
       {showModal && (
         <ModalCompartir
           closeModal={closeModal}
@@ -76,7 +77,7 @@ const CarsCard: React.FC<CarsCardProps> = ({ car, destacado }) => {
             {car.vendido ? (
               <div className="inline-block px-2 py-1 text-center text-lg text-white sm:text-xl font-bold bg-primary rounded">
                 Vendido
-              </div>
+              </div>              
             ) : (
               <p className="text-lg sm:text-xl font-bold">{moneda} {price}</p>
             )}
