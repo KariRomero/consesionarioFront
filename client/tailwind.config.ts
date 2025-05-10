@@ -1,6 +1,7 @@
 import {nextui} from '@nextui-org/theme';
 import type { Config } from "tailwindcss";
 
+
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,14 +12,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#184c73', // tu nuevo color
+        primary: '#184c73',
         white: '#f9fafb',
         black: '#030712',
         'gray-1': '#f1f1f1',
       },
+      boxShadow: {
+        primary: '0 4px 10px 0 rgba(24, 76, 115, 0.4)'
+      }
     },
   },
   plugins: [nextui()],
 };
+
 
 export default config;
