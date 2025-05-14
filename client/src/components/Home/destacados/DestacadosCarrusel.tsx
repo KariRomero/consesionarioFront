@@ -78,7 +78,7 @@ const DestacadosCarrusel: React.FC = () => {
   const showHint = isMobile && destacados.length > 1
 
   return (
-    <div className="relative w-full px-4 sm:px-10 py-10">
+    <div className="relative w-full px-4 sm:px-10 lg:px-0 py-10">
       <h2 className="text-center text-2xl lg:text-3xl font-semibold pb-4">
         Vehículos destacados
       </h2>
@@ -99,7 +99,7 @@ const DestacadosCarrusel: React.FC = () => {
               ? 'justify-center'
               : 'overflow-x-auto flex-nowrap scrollbar-hide'
             : isCarousel
-            ? 'overflow-hidden flex-nowrap lg:h-[54vh]'
+            ? 'overflow-hidden flex-nowrap lg:pt-[1.3rem] lg:h-[52vh]'
             : 'flex-wrap justify-center gap-x-5'
         }`}
       >
