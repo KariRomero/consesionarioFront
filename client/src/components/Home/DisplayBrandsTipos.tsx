@@ -107,13 +107,17 @@ type DisplayBrandsTiposProps = {
     return isMobile ? element : [...element, ...element];
   }, [element, isMobile]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="w-10 h-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin" />
-      </div>
-    );
-  }
+ // 🔁 Mostrar spinner si está cargando y no hay elementos aún
+ if (loading && element.length === 0) {
+  return (
+    <div className="flex justify-center items-center py-20">
+      <div className="w-10 h-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin" />
+    </div>
+  );
+}
+  // 🔁 Evitar render innecesario si no hay nada y no está cargando
+  if (!element.length && !loading) return null;
+
   return (
     <>
       {isMobile && element.length > 1 && (

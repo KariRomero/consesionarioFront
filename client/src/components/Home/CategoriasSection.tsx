@@ -38,7 +38,7 @@ const CategoriasSection: React.FC<Props> = ({
         <p className="text-center text-lg font-medium pb-8">{subtitle}</p>
       </Link>
       <DisplayBrandsTipos element={elementos} loading={loading} />
-          </section>
+                </section>
   );
 };
 

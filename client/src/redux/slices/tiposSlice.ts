@@ -21,9 +21,9 @@ export const postTipo = createAsyncThunk(
   'tipos/createTipo',
   async (formData: FormData) => {
     const response = await axios.post(`${prod_url}/tipos`, formData);
-    return response.data
+    return response.data;
   }
-)
+);
 
 export const fetchTipos = createAsyncThunk(
   'tipos/fetchTipos',
@@ -44,10 +44,10 @@ export const fetchTiposById = createAsyncThunk(
 export const deleteTiposById = createAsyncThunk(
   'tipos/deleteYTiposById',
   async (id: string) => {
-    const response = await axios.delete(`${prod_url}/tipos/${id}`);
+    await axios.delete(`${prod_url}/tipos/${id}`);
     return { id };
   }
-)
+);
 
 export const updateTipo = createAsyncThunk(
   'tipos/updateTipo',
@@ -60,7 +60,13 @@ export const updateTipo = createAsyncThunk(
 const tiposSlice = createSlice({
   name: 'tipos',
   initialState,
-  reducers: {},
+  reducers: {
+    clearTipo: (state) => {
+      state.tipo = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(updateTipo.pending, (state) => {
@@ -78,20 +84,22 @@ const tiposSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Error al actualizar el tipo';
       });
+
     builder
       .addCase(postTipo.pending, (state) => {
         state.loading = true;
-        state.error = null
+        state.error = null;
       })
       .addCase(postTipo.fulfilled, (state, action) => {
         state.loading = false;
-        state.tipos = [...state.tipos, action.payload]
-        state.error = null
+        state.tipos.push(action.payload);
+        state.error = null;
       })
       .addCase(postTipo.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error al rear Tipo'
-      })
+        state.error = action.error.message || 'Error al crear Tipo';
+      });
+
     builder
       .addCase(fetchTipos.pending, (state) => {
         state.loading = true;
@@ -105,6 +113,7 @@ const tiposSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Error fetching tipos';
       });
+
     builder
       .addCase(fetchTiposById.pending, (state) => {
         state.loading = true;
@@ -118,21 +127,23 @@ const tiposSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Error fetching tipo by ID';
       });
-    builder
-    .addCase(deleteTiposById.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(deleteTiposById.fulfilled, (state, action) => {
-      state.loading = false;
-      state.tipos = state.tipos.filter((tipo) => tipo.id !== action.payload.id);
-    })
-    .addCase(deleteTiposById.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error.message || 'Error al eliminar'
 
-    })
-}
+    builder
+      .addCase(deleteTiposById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteTiposById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.tipos = state.tipos.filter((tipo) => tipo.id !== action.payload.id);
+      })
+      .addCase(deleteTiposById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Error al eliminar';
+      });
+  },
 });
+
+export const { clearTipo } = tiposSlice.actions;
 
 export default tiposSlice.reducer;
