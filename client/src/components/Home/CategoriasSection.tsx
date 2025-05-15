@@ -28,15 +28,17 @@ const CategoriasSection: React.FC<Props> = ({
   }, [dispatch, fetchFunction]);
 
   const elementos = useSelector(selector);
-
+  const loading = useSelector((state: RootState) =>
+    elementType === 'tipo' ? state.tipos.loading : state.brands.loading
+  );
   return (
     <section className="w-full">
       <Link href={linkHref}>
-        <h1 className="text-center text-3xl font-semibold pb-4 text-primary">{title}</h1>
+        <h1 className="text-center text-3xl font-bold pb-4 text-primary">{title}</h1>
         <p className="text-center text-lg font-medium pb-8">{subtitle}</p>
       </Link>
-      <DisplayBrandsTipos element={elementos} />
-    </section>
+      <DisplayBrandsTipos element={elementos} loading={loading} />
+                </section>
   );
 };
 

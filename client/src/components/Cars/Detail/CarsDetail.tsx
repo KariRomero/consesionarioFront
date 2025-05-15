@@ -89,8 +89,8 @@ const CarsDetail = ({ id }: { id: string }) => {
   // console.log(car);
 
   return (
-    <section className="w-full bg-white px-4">
-      <div className="flex flex-col lg:flex-row">
+    <section className="w-full lg:mt-[3.5rem] 2xl:mt-[2rem] lg:pb-[3.5rem] bg-white px-4">
+      <div className="flex flex-col lg:w-full lg:flex-column  lg:mb-[8rem]">
         {/* Contenedor de la imagen principal */}
         <Imagenes
           toggleZoom={toggleZoom}
@@ -99,9 +99,8 @@ const CarsDetail = ({ id }: { id: string }) => {
           handleImageSelect={handleImageSelect}
         />
         {/* Información Detallada del Vehículo */}
-        <div className="lg:w-1/2 lg:pl-8">
+        <div className="lg:w-full  lg:pl-8">
           <div className="w-full flex items-center justify-between">
-            <h2 className="text-3xl font-bold mb-5">{`${car?.brand?.nombre || ''} ${car?.modelo || ''}`}</h2>
             <button onClick={() => router.push('/cars')}>
               <FontAwesomeIcon icon={faChevronRight} className="mr-1 sm:mr-2 text-gray-500" />
             </button>

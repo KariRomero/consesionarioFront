@@ -1,54 +1,66 @@
-import React from 'react'
+import React from 'react';
 import Image from "next/image";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { Vehiculo } from '@/types/types';
 
 type ImagenesProps = {
-    toggleZoom: () => void;
-    car: Vehiculo | null;
-    selectedImage: number;
-    handleImageSelect: (index: number) => void
-}
+  toggleZoom: () => void;
+  car: Vehiculo | null;
+  selectedImage: number;
+  handleImageSelect: (index: number) => void;
+};
 
 export default function Imagenes({
-    toggleZoom,
-    car,
-    selectedImage,
-    handleImageSelect
+  toggleZoom,
+  car,
+  selectedImage,
+  handleImageSelect,
 }: ImagenesProps) {
-    return (
-        <div className="lg:w-1/2 flex flex-col items-center">
-            <div
-                className="w-full mb-4 relative cursor-zoom-in"
-                onClick={toggleZoom}
-                style={{ width: '600px', height: '470px' }}
-            >
-                {car?.imagenes?.[selectedImage]?.url ? (
-                    <Image
-                        src={car.imagenes[selectedImage].url}
-                        alt={car.modelo || 'Imagen del coche'}
-                        width={600}
-                        height={470}
-                        className="rounded-lg object-cover w-full h-full"
-                    />
-                ) : (
-                    <p>No hay imagenes disponibles</p>
-                )}
-            </div>
+  if (!car) return null;
 
-            {/* Miniaturas de imágenes */}
-            <div className="flex overflow-x-auto space-x-4">
-                {car?.imagenes?.map((img, index) => (
-                    <button key={index} onClick={() => handleImageSelect(index)}>
-                        <img
-                            src={img.url}
-                            alt={`Image ${index}`}
-                            className={`w-20 h-20 object-cover rounded ${selectedImage === index ? 'border-2 ' : ''}`}
-                        />
-                    </button>
-                ))}
-            </div>
-        </div>
-    )
+  return (
+    <div className="w-full 2xl:w-full flex flex-col items-center   justify-center text-center mb-8 px-2">
+      {/* Marca y Modelo centrado arriba */}
+      <h2 className="text-3xl 2xl:text-5xl 2xl:mb-[3rem]  text-primary font-bold mb-4">
+        {car.brand?.nombre} {car.modelo}
+      </h2>
+
+      {/* Imagen principal */}
+      <div
+        onClick={toggleZoom}
+        className="relative cursor-zoom-in rounded-lg shadow-sm overflow-hidden"
+        style={{ width: '900px', height: '600px' }}
+      >
+        {car.imagenes?.[selectedImage]?.url ? (
+          <Image
+            src={car.imagenes[selectedImage].url}
+            alt={car.modelo || 'Imagen del coche'}
+            width={900}
+            height={600}
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <p>No hay imágenes disponibles</p>
+        )}
+      </div>
+
+      {/* Miniaturas centradas */}
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
+        {car.imagenes?.map((img, index) => (
+          <button
+            key={index}
+            onClick={() => handleImageSelect(index)}
+            className={`border rounded overflow-hidden ${
+              selectedImage === index ? 'border-primary border-2' : 'border-gray-300'
+            }`}
+          >
+            <img
+              src={img.url}
+              alt={`Imagen ${index}`}
+              className="w-20 h-20 object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }

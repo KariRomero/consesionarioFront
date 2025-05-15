@@ -8,13 +8,17 @@ import DestacadosCarrusel from './DestacadosCarrusel';
 import { fetchTipos } from '@/redux/slices/tiposSlice';
 import { RootState } from '@/redux/store';
 import { fetchBrands } from '@/redux/slices/brandsSlice';
+import { useEffect } from 'react';
 
 const Home: React.FC = () => {
- 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+  
   return (
-    <section className='flex flex-col items-center space-y-28'>
+    <section className='flex flex-col items-center space-y-10'>
       <Banner/>
-      <DestacadosCarrusel/>
+      {/* <DestacadosCarrusel/> */}
       <CategoriasSection
       elementType='tipo'
       title='Tenemos una gran variedad para vos'
@@ -23,7 +27,6 @@ const Home: React.FC = () => {
       fetchFunction={fetchTipos}
       linkHref='/cars'      
       />
-      <Description/>
       <CategoriasSection
       elementType='brand'
       title='Encontrá el auto que mejor se adapte a vos'
@@ -32,6 +35,7 @@ const Home: React.FC = () => {
       fetchFunction={fetchBrands}
       linkHref='/cars'
       />
+      <Description/>
       <Footer/>
     </section>
   )

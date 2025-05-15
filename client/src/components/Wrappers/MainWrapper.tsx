@@ -20,7 +20,7 @@ export default function MainWrapper({ children }: { children: React.ReactNode })
         !hideNavBar && <NavBar />
       )}
 
-      <div className={`w-full px-0 sm:px-0 md:px-0 bg-white ${!hideNavBar ? 'mt-28' : ''}`}>
+      <div className={`w-full px-0 sm:px-0 md:px-0 bg-white ${!hideNavBar ? 'mt-[4rem] lg:mt-[6rem]' : ''}`}>
         {children}
       </div>
     </div>

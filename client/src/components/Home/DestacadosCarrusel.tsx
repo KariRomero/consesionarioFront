@@ -18,6 +18,7 @@ const DestacadosCarrusel: React.FC = () => {
   const [cardsToShow, setCardsToShow] = useState(4)
   const [isCarousel, setIsCarousel] = useState(false)
 
+  
   useEffect(() => {
     dispatch(fetchDestacados())
   }, [dispatch])
@@ -114,7 +115,7 @@ const DestacadosCarrusel: React.FC = () => {
             }
           >
             <div  className='py-2'>
-              <CarsCard car={v} />
+              <CarsCard car={v}/>
             </div>
           </div>
         ))}

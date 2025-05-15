@@ -17,51 +17,44 @@ const initialState: BrandState = {
   error: null
 };
 
-export const fetchBrands = createAsyncThunk(
-  'brands/fetchBrands',
-  async () => {
-    const response = await axios.get(`${prod_url}/brands`);
-    return response.data.brands;
-  }
-);
+export const fetchBrands = createAsyncThunk('brands/fetchBrands', async () => {
+  const res = await axios.get(`${prod_url}/brands`);
+  return res.data.brands;
+});
 
-export const fetchBrandById = createAsyncThunk(
-  'brands/fetchBrandById',
-  async (id: string) => {
-    const response = await axios.get(`${prod_url}/brands/${id}`);
-    return response.data;
-  }
-);
+export const fetchBrandById = createAsyncThunk('brands/fetchBrandById', async (id: string) => {
+  const res = await axios.get(`${prod_url}/brands/${id}`);
+  return res.data;
+});
 
-export const createBrand = createAsyncThunk(
-  'brands/createBrand',
-  async (newBrand: Partial<Brand>) => {
-    const response = await axios.post(`${prod_url}/brands`, newBrand);
-    return response.data;
-  }
-);
+export const createBrand = createAsyncThunk('brands/createBrand', async (newBrand: Partial<Brand>) => {
+  const res = await axios.post(`${prod_url}/brands`, newBrand);
+  return res.data;
+});
 
 export const updateBrand = createAsyncThunk(
   'brands/updateBrand',
   async ({ id, updatedData }: { id: string; updatedData: Partial<Brand> }) => {
-    const response = await axios.put(`${prod_url}/brands/${id}`, updatedData);
-    return response.data;
+    const res = await axios.put(`${prod_url}/brands/${id}`, updatedData);
+    return res.data;
   }
 );
 
-export const deleteBrand = createAsyncThunk(
-  'brands/deleteBrand',
-  async (id: string) => {
-    await axios.delete(`${prod_url}/brands/${id}`);
-    return id;
-  }
-);
-
+export const deleteBrand = createAsyncThunk('brands/deleteBrand', async (id: string) => {
+  await axios.delete(`${prod_url}/brands/${id}`);
+  return id;
+});
 
 const brandsSlice = createSlice({
   name: 'brands',
   initialState,
-  reducers: {},
+  reducers: {
+    clearBrand: (state) => {
+      state.brand = null;
+      state.loading = false;
+      state.error = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBrands.pending, (state) => {
@@ -74,8 +67,9 @@ const brandsSlice = createSlice({
       })
       .addCase(fetchBrands.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error fetching brands';
+        state.error = action.error.message || 'Error al obtener las marcas';
       });
+
     builder
       .addCase(fetchBrandById.pending, (state) => {
         state.loading = true;
@@ -87,8 +81,9 @@ const brandsSlice = createSlice({
       })
       .addCase(fetchBrandById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error fetching brand by ID';
+        state.error = action.error.message || 'Error al obtener la marca';
       });
+
     builder
       .addCase(createBrand.pending, (state) => {
         state.loading = true;
@@ -96,11 +91,11 @@ const brandsSlice = createSlice({
       })
       .addCase(createBrand.fulfilled, (state, action) => {
         state.loading = false;
-        state.brands.push(action.payload); 
+        state.brands.push(action.payload);
       })
       .addCase(createBrand.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error creating brand';
+        state.error = action.error.message || 'Error al crear la marca';
       });
 
     builder
@@ -110,17 +105,15 @@ const brandsSlice = createSlice({
       })
       .addCase(updateBrand.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.brands.findIndex(b => b.id === action.payload.id);
-        if (index !== -1) {
-          state.brands[index] = action.payload;
-        }
+        const index = state.brands.findIndex((b) => b.id === action.payload.id);
+        if (index !== -1) state.brands[index] = action.payload;
         if (state.brand?.id === action.payload.id) {
           state.brand = action.payload;
         }
       })
       .addCase(updateBrand.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error updating brand';
+        state.error = action.error.message || 'Error al actualizar la marca';
       });
 
     builder
@@ -130,17 +123,17 @@ const brandsSlice = createSlice({
       })
       .addCase(deleteBrand.fulfilled, (state, action) => {
         state.loading = false;
-        state.brands = state.brands.filter(b => b.id !== action.payload);
+        state.brands = state.brands.filter((b) => b.id !== action.payload);
         if (state.brand?.id === action.payload) {
           state.brand = null;
         }
       })
       .addCase(deleteBrand.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Error deleting brand';
+        state.error = action.error.message || 'Error al eliminar la marca';
       });
-
   }
 });
 
+export const { clearBrand } = brandsSlice.actions;
 export default brandsSlice.reducer;
