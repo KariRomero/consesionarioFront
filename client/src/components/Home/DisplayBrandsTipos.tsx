@@ -139,8 +139,7 @@ type DisplayBrandsTiposProps = {
           style={{
             scrollBehavior: "smooth",
             WebkitOverflowScrolling: "touch",
-            touchAction: isMobile ? "pan-x" : undefined,
-          }}
+            touchAction: isMobile ? "auto" : undefined,          }}
         >
           {duplicatedElements.map((e, index) => (
             <button
