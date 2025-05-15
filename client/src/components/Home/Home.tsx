@@ -12,9 +12,9 @@ import { fetchBrands } from '@/redux/slices/brandsSlice';
 const Home: React.FC = () => {
  
   return (
-    <section className='flex flex-col items-center space-y-28'>
+    <section className='flex flex-col items-center space-y-10'>
       <Banner/>
-      <DestacadosCarrusel/>
+      {/* <DestacadosCarrusel/> */}
       <CategoriasSection
       elementType='tipo'
       title='Tenemos una gran variedad para vos'
@@ -23,7 +23,6 @@ const Home: React.FC = () => {
       fetchFunction={fetchTipos}
       linkHref='/cars'      
       />
-      <Description/>
       <CategoriasSection
       elementType='brand'
       title='Encontrá el auto que mejor se adapte a vos'
@@ -32,6 +31,7 @@ const Home: React.FC = () => {
       fetchFunction={fetchBrands}
       linkHref='/cars'
       />
+      <Description/>
       <Footer/>
     </section>
   )
