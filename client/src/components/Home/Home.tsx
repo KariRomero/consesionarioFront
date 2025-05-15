@@ -8,9 +8,12 @@ import DestacadosCarrusel from './DestacadosCarrusel';
 import { fetchTipos } from '@/redux/slices/tiposSlice';
 import { RootState } from '@/redux/store';
 import { fetchBrands } from '@/redux/slices/brandsSlice';
+import { useEffect } from 'react';
 
 const Home: React.FC = () => {
- 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
   return (
     <section className='flex flex-col items-center space-y-10'>
       <Banner/>
