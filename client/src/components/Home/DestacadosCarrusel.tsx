@@ -18,6 +18,7 @@ const DestacadosCarrusel: React.FC = () => {
   const [cardsToShow, setCardsToShow] = useState(4)
   const [isCarousel, setIsCarousel] = useState(false)
 
+  
   useEffect(() => {
     dispatch(fetchDestacados())
   }, [dispatch])
@@ -66,22 +67,22 @@ const DestacadosCarrusel: React.FC = () => {
   useEffect(() => {
     console.log("🚗 destacados del store:", destacados.length)
   }, [destacados])
-  
+
   const loopItems = isCarousel ? [...destacados, ...destacados] : destacados
-  
+
   useEffect(() => {
     console.log("🧱 cantidad de cards que se renderizan:", loopItems.length)
   }, [loopItems])
-  
+
   if (loading || destacados.length === 0) return null
 
   const showHint = isMobile && destacados.length > 1
 
   return (
-    <div className="relative w-full px-4 sm:px-10 lg:px-0 py-10">
-      <h2 className="text-center text-2xl lg:text-3xl font-semibold pb-4">
-        Vehículos destacados
-      </h2>
+    <div className="relative w-full py-10 ">    
+    <h1 className="text-center text-3xl font-semibold pb-4 text-primary">
+      Tenemos el usado que buscás
+    </h1>
 
       {showHint && (
         <p className="text-center text-sm text-gray-700 -mt-2 mb-4 flex items-center justify-center gap-2">
@@ -93,15 +94,14 @@ const DestacadosCarrusel: React.FC = () => {
 
       <div
         ref={scrollRef}
-        className={`flex ${
-          isMobile
-            ? destacados.length === 1
-              ? 'justify-center'
-              : 'overflow-x-auto flex-nowrap scrollbar-hide'
-            : isCarousel
-            ? 'overflow-hidden flex-nowrap lg:pt-[1.3rem] lg:h-[52vh]'
+        className={`flex ${isMobile
+          ? destacados.length === 1
+            ? 'justify-center'
+            : 'overflow-x-auto flex-nowrap scrollbar-hide'
+          : isCarousel
+            ? 'overflow-hidden flex-nowrap h-[400px]'
             : 'flex-wrap justify-center gap-x-5'
-        }`}
+          }`}
       >
         {loopItems.map((v: Vehiculo, i: number) => (
           <div
@@ -114,9 +114,9 @@ const DestacadosCarrusel: React.FC = () => {
                 : 'min-w-[25%] px-2'
             }
           >
-            <div className='h-[20rem]' >
-  <CarsCard car={v} destacado />
-</div>
+            <div  className='py-2'>
+              <CarsCard car={v}/>
+            </div>
           </div>
         ))}
       </div>
