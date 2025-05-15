@@ -14,6 +14,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
+  
   return (
     <section className='flex flex-col items-center space-y-10'>
       <Banner/>
