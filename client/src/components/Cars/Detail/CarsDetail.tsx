@@ -89,7 +89,7 @@ const CarsDetail = ({ id }: { id: string }) => {
   // console.log(car);
 
   return (
-    <section className="w-full lg:mt-[3.5rem] 2xl:mt-[2rem] lg:pb-[3.5rem] bg-white px-4">
+    <section className="w-full xl:mt-[3.5rem] lg:mt-[2.5rem] 2xl:mt-[2rem] mt-[2rem] lg:pb-[3.5rem] bg-white px-4">
       <div className="flex flex-col lg:w-full lg:flex-column  lg:mb-[8rem]">
         {/* Contenedor de la imagen principal */}
         <Imagenes
@@ -171,14 +171,12 @@ const CarsDetail = ({ id }: { id: string }) => {
 
       {/* Modal de Zoom */}
       {isZoomed && (
-        <ModalZoom
-          car={car}
-          selectedImage={selectedImage}
-          toggleZoom={toggleZoom}
-          handlePrevImage={handlePrevImage}
-          handleNextImage={handleNextImage}
-        />
-      )}
+  <ModalZoom
+    car={car}
+    initialImage={selectedImage} // CAMBIO
+    toggleZoom={toggleZoom}
+  />
+)}
 
       <Footer />
     </section>

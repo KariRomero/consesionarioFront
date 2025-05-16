@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -6,19 +6,16 @@ import { Vehiculo } from '@/types/types';
 
 type ModalZoomProps = {
   car: Vehiculo | null;
-  selectedImage: number;
+  initialImage: number; // usamos un índice inicial
   toggleZoom: () => void;
-  handlePrevImage: () => void;
-  handleNextImage: () => void;
 };
 
 export default function ModalZoom({
   car,
-  selectedImage,
+  initialImage,
   toggleZoom,
-  handlePrevImage,
-  handleNextImage,
 }: ModalZoomProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(initialImage);
   const touchStartX = useRef<number | null>(null);
   const [translateX, setTranslateX] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
@@ -41,17 +38,39 @@ export default function ModalZoom({
   const handleTouchEnd = () => {
     setTransitioning(true);
     if (translateX < -minSwipeDistance) {
-      setTranslateX(0);
       handleNextImage();
     } else if (translateX > minSwipeDistance) {
-      setTranslateX(0);
       handlePrevImage();
-    } else {
-      setTranslateX(0); // snap back if not enough swipe
     }
+    setTranslateX(0);
     touchStartX.current = null;
   };
 
+  const handleNextImage = () => {
+    const imagenes = car?.imagenes;
+    if (!imagenes || imagenes.length === 0) return;
+    setSlideDirection('left');
+    setCurrentImageIndex((prev) => (prev === imagenes.length - 1 ? 0 : prev + 1));
+  };
+  
+  const handlePrevImage = () => {
+    const imagenes = car?.imagenes;
+    if (!imagenes || imagenes.length === 0) return;
+    setSlideDirection('right');
+    setCurrentImageIndex((prev) => (prev === 0 ? imagenes.length - 1 : prev - 1));
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') toggleZoom();
+      else if (event.key === 'ArrowRight') handleNextImage();
+      else if (event.key === 'ArrowLeft') handlePrevImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [car]);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(50,50,50,0.8)] backdrop-blur-sm">
       {/* Mensaje solo en mobile */}
@@ -69,16 +88,20 @@ export default function ModalZoom({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <div
-          className={`transition-transform duration-300 ease-out`}
-          style={{
-            transform: `translateX(${translateX}px)`,
-            transition: transitioning ? 'transform 0.3s ease' : 'none',
-          }}
-        >
-          {car?.imagenes?.[selectedImage]?.url ? (
+       <div
+  className={`transition-transform duration-500 ease-in-out ${
+    slideDirection === 'left' ? 'animate-slide-left' :
+    slideDirection === 'right' ? 'animate-slide-right' : ''
+  }`}
+  onAnimationEnd={() => setSlideDirection(null)}
+  style={{
+    transform: `translateX(${translateX}px)`,
+    transition: transitioning ? 'transform 0.3s ease' : 'none',
+  }}
+>
+          {car?.imagenes?.[currentImageIndex]?.url ? (
             <Image
-              src={car.imagenes[selectedImage].url}
+              src={car.imagenes[currentImageIndex].url}
               alt={car.modelo || 'Imagen del coche'}
               width={800}
               height={600}
@@ -89,7 +112,7 @@ export default function ModalZoom({
           )}
         </div>
 
-        {/* Cerrar */}
+        {/* Botón cerrar */}
         <button
           onClick={toggleZoom}
           className="absolute top-1 right-4 p-3 text-2xl"
