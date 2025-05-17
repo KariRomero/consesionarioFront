@@ -5,6 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ButtonsCompartir from '@/components/Buttons/ButtonsCompartir';
 import { Toaster } from 'react-hot-toast';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 type ImagenesProps = {
   toggleZoom: () => void;
@@ -82,7 +83,7 @@ export default function Imagenes({
   </div>
 </div>
 
-{/* Precio + Compartir alineados horizontalmente en lg+ */}
+{/* Precio + WhatsApp alineados horizontalmente en lg+ */}
 <div className="mt-4 w-full 
   max-w-[99vw] 
   sm:max-w-[600px] 
@@ -98,10 +99,10 @@ export default function Imagenes({
   {/* Precio alineado a la izquierda */}
   <div className="text-left">
     {car?.vendido === true ? (
-     <div className="inline-block px-2 py-1 text-center font-bold bg-primary rounded 
-     text-lg lg:text-[1.6rem] lg:leading-[2.25rem] xl:text-3xl 2xl:text-4xl text-white">
-Vendido
-</div>
+      <div className="inline-block px-2 py-1 text-center font-bold bg-primary rounded 
+      text-lg lg:text-[1.6rem] lg:leading-[2.25rem] xl:text-3xl 2xl:text-4xl text-white">
+        Vendido
+      </div>
     ) : (
       <p className="text-lg lg:text-[1.6rem] lg:leading-[2.25rem] xl:text-3xl 2xl:text-4xl text-black font-bold">
         {car?.moneda === 'ARS' ? 'ARS $' : 'USD $'}{" "}
@@ -110,10 +111,23 @@ Vendido
     )}
   </div>
 
-  {/* Compartir alineado a la derecha */}
+  {/* Contactar por WhatsApp alineado a la derecha */}
   <div className="flex items-center">
-    <p className="font-semibold text-gray-500 mr-2">Compartir</p>
-    <ButtonsCompartir shareText={shareText} shareUrl={shareUrl} />
+  <a
+  href={`https://wa.me/5493435263738?text=${encodeURIComponent(
+    `Hola RodAR, estoy interesado en el vehículo ${car?.brand?.nombre || ""} ${car?.modelo || ""} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
+  )}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="flex items-center text-lg text-green-700 hover:text-green-800"
+>
+  <span className="mr-2 font-semibold">WhatsApp</span>
+  <FontAwesomeIcon
+    icon={faWhatsapp}
+    size="lg"
+    className="bg-green-700 text-white px-2 py-1.5 rounded-full"
+  />
+</a>
   </div>
 </div>
       

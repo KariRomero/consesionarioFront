@@ -183,30 +183,11 @@ const CarsDetail = ({ id }: { id: string }) => {
                 {moneda} {car?.precio}
               </p>
             )}
-            <div className="flex items-center">
-              <a
-                href={`https://wa.me/5493435263738?text=${encodeURIComponent(
-                  `Hola Rodar, estoy interesado en el vehículo ${
-                    car?.brand?.nombre || ""
-                  } ${
-                    car?.modelo || ""
-                  } que vi en su página. Quisiera más información. https://rodar.ar/cars/${
-                    car?.id
-                  }`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-lg"
-              >
-                Contactar por WhatsApp
-              </a>
-              <FontAwesomeIcon
-                icon={faWhatsapp}
-                size="lg"
-                className="ml-2 bg-green-700 text-white px-2 py-1.5 rounded-full"
-              />
             </div>
-          </div>
+            <div className="hidden 2xl:mt-[2rem] lg:flex items-center justify-end w-full max-w-[99vw] sm:max-w-[640px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto mt-4">
+  <p className="font-semibold text-gray-500 mr-2">Compartir</p>
+  <ButtonsCompartir shareText={shareText} shareUrl={shareUrl} />
+</div>
         </div>
       </div>
 
