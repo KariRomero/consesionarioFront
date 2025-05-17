@@ -6,7 +6,7 @@ import { metadata } from "./metadata";
 import ReduxProvider from "../redux/ReduxProvider";
 import StateLoader from "@/components/StateLoader/StateLoader";
 import MainWrapper from "@/components/Wrappers/MainWrapper";
-// import Footer from "@/components/Footer/Footer"; // Si lo usás después, lo descomentás
+import { Toaster } from "react-hot-toast";
 
 config.autoAddCss = false;
 
@@ -43,6 +43,7 @@ export default function RootLayout({
           <StateLoader />
           <MainWrapper>{children}</MainWrapper>
         </ReduxProvider>
+        <Toaster position="top-center" />
         {/* <Footer /> */}
       </body>
     </html>

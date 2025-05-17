@@ -23,11 +23,13 @@ export default function ModalZoom({
   const minSwipeDistance = 50;
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) return; // ⛔️ NO hacer nada si es pinch
     touchStartX.current = e.targetTouches[0].clientX;
     setTransitioning(false);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) return; // ⛔️ evitar swipe si es pinch
     if (touchStartX.current !== null) {
       const currentX = e.targetTouches[0].clientX;
       const deltaX = currentX - touchStartX.current;
@@ -35,7 +37,8 @@ export default function ModalZoom({
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (e.changedTouches.length > 1) return; // ⛔️ no cerrar swipe si fue multitouch
     setTransitioning(true);
     if (translateX < -minSwipeDistance) {
       handleNextImage();

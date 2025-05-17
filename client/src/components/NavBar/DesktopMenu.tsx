@@ -23,7 +23,7 @@ export default function DesktopMenu({
 
 }: DesktopMenuProps) {
   return (
-    <div className="hidden w-full sm:flex sm:justify-between px-20">
+    <div className="hidden w-full sm:flex sm:justify-end gap-10 px-20">
       <DropdownButton
         label="MARCAS"
         type="brands"
@@ -42,9 +42,9 @@ export default function DesktopMenu({
         setHover={setHover}
       />
 
-      <NavLink to="/vende">VENDE TU AUTO</NavLink>
+      {/* <NavLink to="/vende">VENDE TU AUTO</NavLink> */}
 
-      <div
+      {/* <div
         className="relative"
         onMouseEnter={() => {
           setShowNosotrosDropdown(true);
@@ -60,7 +60,6 @@ export default function DesktopMenu({
           className={showNosotrosDropdown && hover ? 'text-primary' : 'text-black'}
         />
 
-        {/* Este contenedor está DENTRO del mismo <div> que tiene onMouseEnter/onMouseLeave */}
         <div className="absolute mt-9 w-64 z-50">
           <DropdownWrapper
             isOpen={showNosotrosDropdown}
@@ -84,7 +83,7 @@ export default function DesktopMenu({
             }
           />
         </div>
-      </div>
+      </div> */}
 
       <NavLink to="/contact">CONTACTO</NavLink>
     </div>
