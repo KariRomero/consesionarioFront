@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ButtonsCompartir from '@/components/Buttons/ButtonsCompartir';
 import { Toaster } from 'react-hot-toast';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import TituloResponsive from './TituloResponsive';
 
 type ImagenesProps = {
   toggleZoom: () => void;
@@ -30,8 +31,7 @@ export default function Imagenes({
     <div className="w-full 2xl:w-full flex flex-col items-center   justify-center text-center mb-8  px-2">
       {/* Marca y Modelo centrado arriba */}
       <h2 className="text-3xl 2xl:text-5xl xl:text-4xl 2xl:mb-[3rem]   text-primary font-bold mb-4">
-        {car.brand?.nombre} {car.modelo}
-      </h2>
+      <TituloResponsive brand={car.brand?.nombre || ''} modelo={car.modelo || ''} />      </h2>
 
       {/* Imagen principal */}
       <div

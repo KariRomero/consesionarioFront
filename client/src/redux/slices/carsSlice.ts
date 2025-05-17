@@ -3,15 +3,31 @@ import axios from 'axios';
 import { Vehiculo } from '@/types/types';
 import { prod_url } from '@/utils/routes';
 
+interface Filters {
+  transmision?: string;
+  combustible?: string;
+  minKilometraje?: number;
+  maxKilometraje?: number;
+  minPrecio?: number;
+  maxPrecio?: number;
+  tipoId?: string;
+  brandId?: string;
+  page?: number;
+  limit?: number;
+}
+
 interface CarsState {
-  cars: Vehiculo[]
-  destacados: Vehiculo[] // ✅ destacado separado
-  car: Vehiculo | null
-  loading: boolean
-  error: string | null
-  page: number
-  limit: number
-  total: number
+  cars: Vehiculo[];
+  destacados: Vehiculo[];
+  car: Vehiculo | null;
+  loading: boolean;
+  error: string | null;
+  page: number;
+  limit: number;
+  total: number;
+  filters: Filters;
+  editable?: boolean;
+  token?: string;
 }
 
 const initialState: CarsState = {
@@ -23,8 +39,10 @@ const initialState: CarsState = {
   page: 1,
   limit: 6,
   total: 0,
-}
-
+  filters: {},
+  editable: false,
+  token: undefined,
+};
 
 export const fetchCars = createAsyncThunk(
   'cars/fetchCars',
@@ -34,18 +52,7 @@ export const fetchCars = createAsyncThunk(
       editable = false,
       token,
     }: {
-      filters: {
-        transmision?: string;
-        combustible?: string;
-        minKilometraje?: number;
-        maxKilometraje?: number;
-        minPrecio?: number;
-        maxPrecio?: number;
-        tipoId?: string;
-        brandId?: string;
-        page?: number;
-        limit?: number;
-      };
+      filters: Filters;
       editable?: boolean;
       token?: string;
     },
@@ -60,11 +67,13 @@ export const fetchCars = createAsyncThunk(
       if (filters.maxKilometraje) params.append('kmMax', filters.maxKilometraje.toString());
       if (filters.minPrecio) params.append('precioMin', filters.minPrecio.toString());
       if (filters.maxPrecio) params.append('precioMax', filters.maxPrecio.toString());
-      if (filters.tipoId) params.append('tipoId', filters.tipoId.toString());
-      if (filters.brandId) params.append('brandId', filters.brandId.toString());
+      if (filters.tipoId) params.append('tipoId', filters.tipoId);
+      if (filters.brandId) params.append('brandId', filters.brandId);
 
-      params.append('page', (filters.page || 1).toString());
-      params.append('limit', (filters.limit || 6).toString());
+      const page = filters.page || 1;
+      const limit = filters.limit || 6;
+      params.append('page', page.toString());
+      params.append('limit', limit.toString());
 
       const endpoint = editable
         ? `${prod_url}/vehiculos/findAll/admin`
@@ -79,7 +88,15 @@ export const fetchCars = createAsyncThunk(
         { headers }
       );
 
-      return response.data;
+      return {
+        vehiculos: response.data.vehiculos,
+        total: response.data.total,
+        filters,
+        editable,
+        token,
+        page,
+        limit,
+      };
     } catch (error) {
       console.error('Error al cargar los vehículos:', error);
       return thunkAPI.rejectWithValue('Error al cargar los vehículos');
@@ -92,11 +109,10 @@ export const fetchDestacados = createAsyncThunk(
   async () => {
     const response = await axios.get<{ vehiculos: Vehiculo[] }>(
       `${prod_url}/vehiculos?destacado=true&page=1&limit=99999`
-    )
-    return response.data.vehiculos
+    );
+    return response.data.vehiculos;
   }
-)
-
+);
 
 export const fetchCarById = createAsyncThunk(
   'cars/fetchCarById',
@@ -108,19 +124,23 @@ export const fetchCarById = createAsyncThunk(
 
 export const fetchCarsByBrand = createAsyncThunk(
   'cars/fetchCarsByBrand',
-  async (brandId:string) => {
-    const response = await axios.get<{ vehiculos: Vehiculo[]}>(`${prod_url}/vehiculos?brandId=${brandId}`);
+  async (brandId: string) => {
+    const response = await axios.get<{ vehiculos: Vehiculo[] }>(
+      `${prod_url}/vehiculos?brandId=${brandId}`
+    );
     return response.data;
   }
-)
+);
 
 export const fetchCarsByTipo = createAsyncThunk(
   'cars/fetchCarsByTipo',
-  async (tipoId:string) => {
-    const response = await axios.get<{ vehiculos: Vehiculo[]}>(`${prod_url}/vehiculos?tipoId=${tipoId}`);
+  async (tipoId: string) => {
+    const response = await axios.get<{ vehiculos: Vehiculo[] }>(
+      `${prod_url}/vehiculos?tipoId=${tipoId}`
+    );
     return response.data;
   }
-)
+);
 
 const carsSlice = createSlice({
   name: 'cars',
@@ -149,7 +169,6 @@ const carsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // fetchCars
       .addCase(fetchCars.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -158,12 +177,16 @@ const carsSlice = createSlice({
         state.loading = false;
         state.cars = action.payload.vehiculos;
         state.total = action.payload.total;
+        state.filters = action.payload.filters;
+        state.editable = action.payload.editable;
+        state.token = action.payload.token;
+        state.page = action.payload.page;
+        state.limit = action.payload.limit;
       })
       .addCase(fetchCars.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch cars';
+        state.error = action.payload as string;
       })
-      // fetchCarById
       .addCase(fetchCarById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -176,50 +199,52 @@ const carsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch car by ID';
       })
-      //fetchCarsByBrand
       .addCase(fetchCarsByBrand.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchCarsByBrand.fulfilled, (state, action) => {
         state.loading = false;
-        state.cars = action.payload.vehiculos
+        state.cars = action.payload.vehiculos;
       })
       .addCase(fetchCarsByBrand.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch cars by brands';
       })
-
-
-     
-    // destacados separados
-    .addCase(fetchDestacados.pending, (state) => {
-      state.loading = true
-      state.error = null
-    })
-    .addCase(fetchDestacados.fulfilled, (state, action) => {
-      state.loading = false
-      state.destacados = action.payload
-    })
-    .addCase(fetchDestacados.rejected, (state, action) => {
-      state.loading = false
-      state.error = action.error.message || 'Error al cargar destacados'
-    })
-      //fetchCarsByTipo
       .addCase(fetchCarsByTipo.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchCarsByTipo.fulfilled, (state, action) => {
         state.loading = false;
-        state.cars = action.payload.vehiculos
+        state.cars = action.payload.vehiculos;
       })
       .addCase(fetchCarsByTipo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch cars by tipo';
       })
+      .addCase(fetchDestacados.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDestacados.fulfilled, (state, action) => {
+        state.loading = false;
+        state.destacados = action.payload;
+      })
+      .addCase(fetchDestacados.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Error al cargar destacados';
+      });
   },
 });
 
-export const { setPage, setLimit, nextPage, previousPage, resetPage, goToLastPage } = carsSlice.actions;
+export const {
+  setPage,
+  setLimit,
+  nextPage,
+  previousPage,
+  resetPage,
+  goToLastPage,
+} = carsSlice.actions;
+
 export default carsSlice.reducer;

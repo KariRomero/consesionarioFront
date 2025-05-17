@@ -1,9 +1,14 @@
+'use client';
+
 import { RootState, AppDispatch } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { fetchFilterOptions } from '@/redux/slices/filtersSlice';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { Select, SelectItem } from '@nextui-org/react';
+
+type Option = { id: string; nombre: string };
 
 const FilterBar: React.FC<{
   isVisible: boolean;
@@ -24,12 +29,11 @@ const FilterBar: React.FC<{
   const [brandId, setBrandId] = useState<string>('');
 
   const { options } = useSelector((state: RootState) => state.filters || {});
-  const brands = options?.brands || [];
-  const tipos = options?.tipos || [];
-  const transmisiones = options?.transmision || [];
-  const combustibles = options?.combustible || [];
+  const brands: Option[] = options?.brands || [];
+  const tipos: Option[] = options?.tipos || [];
+  const transmisiones: string[] = options?.transmision || [];
+  const combustibles: string[] = options?.combustible || [];
 
-  // Actualiza opciones dinámicamente cuando se cambia algún filtro
   useEffect(() => {
     const queryParams: Record<string, string> = {};
     if (brandId) queryParams.brandId = brandId;
@@ -46,6 +50,7 @@ const FilterBar: React.FC<{
       tipoId: tipoId || undefined,
       brandId: brandId || undefined,
     });
+    onClose(); // cerrar sidebar
   };
 
   const resetLocalFilters = () => {
@@ -53,88 +58,106 @@ const FilterBar: React.FC<{
     setTipoId('');
     setTransmision('');
     setCombustible('');
-    dispatch(fetchFilterOptions({})); // volver a traer todas las opciones
+    dispatch(fetchFilterOptions({}));
     onResetFilters();
   };
 
+  const ensureSelectedPresent = <T extends { id: string; nombre: string }>(
+    list: T[],
+    selectedId: string
+  ): T[] => {
+    if (!selectedId) return list;
+    const exists = list.some((item) => item.id === selectedId);
+    if (!exists) {
+      return [...list, { id: selectedId, nombre: selectedId } as T];
+    }
+    return list;
+  };
+
+  const ensureStringSelected = (list: string[], selected: string): string[] => {
+    if (!selected || list.includes(selected)) return list;
+    return [selected, ...list];
+  };
+
+  const brandsSafe = ensureSelectedPresent(brands, brandId);
+  const tiposSafe = ensureSelectedPresent(tipos, tipoId);
+  const transmisionesSafe = ensureStringSelected(transmisiones, transmision);
+  const combustiblesSafe = ensureStringSelected(combustibles, combustible);
+
+  const transmisionesItems = ['', ...transmisionesSafe].map((v) => ({
+    label: v || 'Todos',
+    value: v,
+  }));
+
+  const combustiblesItems = ['', ...combustiblesSafe].map((v) => ({
+    label: v || 'Todos',
+    value: v,
+  }));
+
   return (
     <aside
-    className={`fixed top-20 left-0 w-64 h-full bg-white shadow-lg p-4 z-50 transition-transform transform ${
-      isVisible ? 'translate-x-0' : '-translate-x-full'
-    }`}
-  >
+      className={`fixed top-[4rem] left-0 w-64 h-full bg-white shadow-lg pt-[2rem] lg:pt-[3rem] p-4 z-50 transition-transform transform ${
+        isVisible ? 'translate-x-0' : '-translate-x-full'
+      }`}
+    >
       <div className="flex justify-end items-center mb-4">
         <button className="font-bold" onClick={onClose}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
       </div>
 
-      {/* Marca */}
-      <div className='mb-2'>
-        <label className='block text-sm font-semibold'>Marca</label>
-        <select
-          className='w-full p-1 border rounded-lg'
-          value={brandId}
+      <div className="flex flex-col gap-4">
+        {/* Marca */}
+        <Select
+          label="Marca"
+          selectedKeys={brandId ? [brandId] : []}
+          items={[{ id: '', nombre: 'Todos' }, ...brandsSafe]}
           onChange={(e) => setBrandId(e.target.value)}
         >
-          <option value="">Todos</option>
-          {brands.map((b: any) => (
-            <option key={b.id} value={b.id}>{b.nombre}</option>
-          ))}
-        </select>
-      </div>
+          {(item) => <SelectItem key={item.id}>{item.nombre}</SelectItem>}
+        </Select>
 
-      {/* Tipo */}
-      <div className='mb-2'>
-        <label className='block text-sm font-semibold'>Tipo</label>
-        <select
-          className='w-full p-1 border rounded-lg'
-          value={tipoId}
+        {/* Tipo */}
+        <Select
+          label="Tipo"
+          selectedKeys={tipoId ? [tipoId] : []}
+          items={[{ id: '', nombre: 'Todos' }, ...tiposSafe]}
           onChange={(e) => setTipoId(e.target.value)}
         >
-          <option value="">Todos</option>
-          {tipos.map((t: any) => (
-            <option key={t.id} value={t.id}>{t.nombre}</option>
-          ))}
-        </select>
-      </div>
+          {(item) => <SelectItem key={item.id}>{item.nombre}</SelectItem>}
+        </Select>
 
-      {/* Transmisión */}
-      <div className="mb-2">
-        <label className="block text-sm font-semibold">Transmisión</label>
-        <select
-          className="w-full p-1 border rounded-lg"
-          value={transmision}
+        {/* Transmisión */}
+        <Select
+          label="Transmisión"
+          selectedKeys={transmision ? [transmision] : []}
+          items={transmisionesItems}
           onChange={(e) => setTransmision(e.target.value)}
         >
-          <option value="">Todos</option>
-          {transmisiones.map((tr: string, i: number) => (
-            <option key={i} value={tr}>{tr}</option>
-          ))}
-        </select>
-      </div>
+          {(item) => <SelectItem key={item.value}>{item.label}</SelectItem>}
+        </Select>
 
-      {/* Combustible */}
-      <div className="mb-4">
-        <label className="block text-sm font-semibold">Combustible</label>
-        <select
-          className="w-full p-1 border rounded-lg"
-          value={combustible}
+        {/* Combustible */}
+        <Select
+          label="Combustible"
+          selectedKeys={combustible ? [combustible] : []}
+          items={combustiblesItems}
           onChange={(e) => setCombustible(e.target.value)}
         >
-          <option value="">Todos</option>
-          {combustibles.map((c: string, i: number) => (
-            <option key={i} value={c}>{c}</option>
-          ))}
-        </select>
-      </div>
+          {(item) => <SelectItem key={item.value}>{item.label}</SelectItem>}
+        </Select>
 
-      {/* Botones */}
-      <div className='flex flex-col gap-2'>
-        <button className="rounded p-2 w-full bg-primary text-white" onClick={applyFilters}>
+        {/* Botones */}
+        <button
+          className="rounded p-2 w-full bg-primary text-white"
+          onClick={applyFilters}
+        >
           Aplicar Filtros
         </button>
-        <button className="rounded p-2 w-full border" onClick={resetLocalFilters}>
+        <button
+          className="rounded p-2 w-full border"
+          onClick={resetLocalFilters}
+        >
           Restablecer Filtros
         </button>
       </div>

@@ -50,7 +50,7 @@ const NavBar: React.FC = () => {
   }, [openDropdown]);
 
   return (
-    <nav ref={navRef} className="fixed top-0 left-0 w-full bg-white z-50 shadow-sm">
+    <nav ref={navRef} className="fixed top-0 left-0 w-full bg-white z-[9999] shadow-sm">
       <div className="flex justify-between items-center px-4 py-4 md:px-10 md:py-6 lg:py-8">
         <Logo />
         <button

@@ -9,7 +9,6 @@ import FilterBar from "../FilterBar/FilterBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import CarsPagination from "./CarsPagination";
-import Footer from "../Footer/Footer";
 import VehiculoCardAdmin from "../Admin/Vehiculos/VehiculoCardAdmin";
 import { Vehiculo } from "@/types/types";
 
@@ -20,7 +19,6 @@ interface CarsProps {
 export default function Cars({ editable = false }: CarsProps) {
   const dispatch: AppDispatch = useDispatch();
   const [isFilterVisible, setIsFilterVisible] = useState(false);
-
   const [filters, setFilters] = useState<{
     transmision?: string;
     combustible?: string;
@@ -31,24 +29,32 @@ export default function Cars({ editable = false }: CarsProps) {
     tipoId?: string;
     brandId?: string;
   }>({});
+  
+  const [page, setPage] = useState(1);
+
+  const { cars, total, limit } = useSelector((state: RootState) => state.cars);
 
   useEffect(() => {
     const token = localStorage.getItem('token') ?? undefined;
-        dispatch(fetchCars({ filters, editable, token }));
-  }, [dispatch, filters, editable]);
+    dispatch(fetchCars({
+      filters: { ...filters, page },
+      editable,
+      token,
+    }));
+  }, [dispatch, filters, editable, page]);
 
   const applyFilters = (newFilters: typeof filters) => {
+    setPage(1);
     setFilters(newFilters);
   };
 
   const resetFilters = () => {
+    setPage(1);
     setFilters({});
   };
 
-  const { cars } = useSelector((state: RootState) => state.cars);
-
   return (
-    <section >
+    <section>
       <button
         className="mb-4 px-4 py-2 rounded"
         onClick={() => setIsFilterVisible(!isFilterVisible)}
@@ -64,23 +70,24 @@ export default function Cars({ editable = false }: CarsProps) {
         onResetFilters={resetFilters}
       />
 
-      <CarsPagination />
+      
 
       <div className="grid grid-cols-1 px-6 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
-              {cars.map((v: Vehiculo) =>
-  editable ? (
-    <VehiculoCardAdmin key={v.id} vehiculo={v} />
-  ) : (
-    <CarsCard
-      key={v.id}
-      car={v}
-    />
-  )
-)}
+        {cars.map((v: Vehiculo) =>
+          editable ? (
+            <VehiculoCardAdmin key={v.id} vehiculo={v} />
+          ) : (
+            <CarsCard key={v.id} car={v} />
+          )
+        )}
       </div>
 
-      <CarsPagination />
-      {/* <Footer /> */}
+      <CarsPagination
+        currentPage={page}
+        totalItems={total}
+        itemsPerPage={limit}
+        onPageChange={setPage}
+      />
     </section>
   );
 }

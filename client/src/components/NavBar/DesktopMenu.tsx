@@ -1,7 +1,22 @@
-import React from 'react'
+import React from 'react';
 import Link from 'next/link';
 import DropdownButton from './DropdownButton';
 import DropdownWrapper from './DropdownWrapper';
+
+type NavLinkProps = {
+  children: React.ReactNode;
+  to: string;
+};
+
+const NavLink = ({ children, to }: NavLinkProps) => {
+  return (
+    <Link href={to}>
+      <button className="font-medium text-base text-black hover:text-primary transition-colors">
+        {children}
+      </button>
+    </Link>
+  );
+};
 
 interface DesktopMenuProps {
   openDropdown: "brands" | "tipos" | null;
@@ -12,7 +27,6 @@ interface DesktopMenuProps {
   setShowNosotrosDropdown: (value: boolean) => void;
 }
 
-
 export default function DesktopMenu({
   openDropdown,
   hover,
@@ -20,7 +34,6 @@ export default function DesktopMenu({
   setOpenDropdown,
   setHover,
   setShowNosotrosDropdown
-
 }: DesktopMenuProps) {
   return (
     <div className="hidden w-full sm:flex sm:justify-end gap-10 px-20">
@@ -42,65 +55,9 @@ export default function DesktopMenu({
         setHover={setHover}
       />
 
-      {/* <NavLink to="/vende">VENDE TU AUTO</NavLink> */}
-
-      {/* <div
-        className="relative"
-        onMouseEnter={() => {
-          setShowNosotrosDropdown(true);
-          setHover(true);
-        }}
-        onMouseLeave={() => {
-          setShowNosotrosDropdown(false);
-          setHover(false);
-        }}
-      >
-        <DropdownButton
-          label="NOSOTROS"
-          className={showNosotrosDropdown && hover ? 'text-primary' : 'text-black'}
-        />
-
-        <div className="absolute mt-9 w-64 z-50">
-          <DropdownWrapper
-            isOpen={showNosotrosDropdown}
-            customContent={
-              <div className="flex flex-col ">
-                <Link
-                  href="/nosotros/faq"
-                  className="block px-4 py-2 text-sm hover:bg-gray-1 rounded-sm hover:shadow-sm"
-                  onClick={() => setShowNosotrosDropdown(false)}
-                >
-                  Preguntas Frecuentes
-                </Link>
-                <Link
-                  href="/nosotros/quienes-somos"
-                  className="block px-4 py-2 text-sm hover:bg-gray-1 rounded-sm hover:shadow-sm"
-                  onClick={() => setShowNosotrosDropdown(false)}
-                >
-                  Quiénes Somos
-                </Link>
-              </div>
-            }
-          />
-        </div>
-      </div> */}
+      <NavLink to="/cars">TODOS LOS VEHÍCULOS</NavLink>
 
       <NavLink to="/contact">CONTACTO</NavLink>
     </div>
-  )
-}
-
-type NavLinkProps = {
-  children: React.ReactNode;
-  to: string;
-};
-
-const NavLink = ({ children, to }: NavLinkProps) => {
-  return (
-    <Link href={to}>
-      <button className="text-left text-base font-medium text-gray-800 hover:text-blue-600 transition-colors">
-        {children}
-      </button>
-    </Link>
   );
-};
+}
