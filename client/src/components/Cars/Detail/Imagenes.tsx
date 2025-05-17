@@ -92,11 +92,24 @@ export default function Imagenes({
   2xl:max-w-[900px] 
   mx-auto 
   text-gray-600 text-xl 
-  hidden lg:flex 
+   lg:flex 
   lg:justify-between 
   lg:items-center"
 >
   {/* Precio alineado a la izquierda */}
+  {/* 💻 Desktop: Precio y WhatsApp en el mismo renglón */}
+<div className="hidden lg:flex w-full 
+  max-w-[99vw] 
+  lg:max-w-[630px] 
+  xl:max-w-[800px] 
+  2xl:max-w-[900px] 
+  mx-auto 
+  justify-between 
+  items-center 
+  text-gray-600 
+  text-xl mt-4"
+>
+  {/* Precio */}
   <div className="text-left">
     {car?.vendido === true ? (
       <div className="inline-block px-2 py-1 text-center font-bold bg-primary rounded 
@@ -111,24 +124,51 @@ export default function Imagenes({
     )}
   </div>
 
-  {/* Contactar por WhatsApp alineado a la derecha */}
-  <div className="flex items-center">
+  {/* Botón WhatsApp */}
   <a
-  href={`https://wa.me/5493435263738?text=${encodeURIComponent(
-    `Hola RodAR, estoy interesado en el vehículo ${car?.brand?.nombre || ""} ${car?.modelo || ""} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
-  )}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="flex items-center text-lg text-green-700 hover:text-green-800"
->
-  <span className="mr-2 font-semibold">WhatsApp</span>
-  <FontAwesomeIcon
-    icon={faWhatsapp}
-    size="lg"
-    className="bg-green-700 text-white px-2 py-1.5 rounded-full"
-  />
-</a>
-  </div>
+    href={`https://wa.me/5493435263738?text=${encodeURIComponent(
+      `Hola RodAR, estoy interesado en el vehículo ${car?.brand?.nombre || ""} ${car?.modelo || ""} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
+    )}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center text-lg text-green-700 hover:text-green-800"
+  >
+    <span className="mr-2 font-semibold">WhatsApp</span>
+    <FontAwesomeIcon
+      icon={faWhatsapp}
+      size="lg"
+      className="bg-green-700 text-white px-2 py-1.5 rounded-full"
+    />
+  </a>
+</div>
+{/* 📱 Mobile: Precio y WhatsApp en el mismo renglón */}
+<div className="mt-4 w-full mx-auto px-2 sm:px-0 max-w-[99vw] sm:max-w-[600px] xl:max-w-[800px] 2xl:max-w-[900px] flex justify-between items-center lg:hidden">  {car?.vendido === true ? (
+    <div className="inline-block px-2 py-1 text-center text-lg text-white sm:text-xl font-bold bg-primary rounded">
+      Vendido
+    </div>
+  ) : (
+    <p className="text-[1.5rem] sm:text-2xl font-bold text-black">
+      {car?.moneda === 'ARS' ? 'ARS $' : 'USD $'}{" "}
+      {new Intl.NumberFormat("es-AR").format(car?.precio || 0)}
+    </p>
+  )}
+
+  <a
+    href={`https://wa.me/5493435263738?text=${encodeURIComponent(
+      `Hola RodAR, estoy interesado en el vehículo ${car?.brand?.nombre || ""} ${car?.modelo || ""} que vi en su página. Quisiera más información. https://rodar.ar/cars/${car?.id}`
+    )}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center text-sm sm:text-base text-green-700 hover:text-green-800"
+  >
+    {/* <span className="mr-2 font-semibold">WhatsApp</span> */}
+    <FontAwesomeIcon
+      icon={faWhatsapp}
+      size="lg"
+      className="bg-green-700 text-white px-2 py-1.5 rounded-full"
+    />
+  </a>
+</div>
 </div>
       
     </div>

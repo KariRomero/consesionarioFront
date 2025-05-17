@@ -55,7 +55,7 @@ export default function ButtonsCompartir({
 
       <button
         onClick={handleCopy}
-        className="text-gray-600 px-3 py-2 text-sm sm:text-base flex items-center justify-center gap-2"
+        className="text-gray-600 px-0 lg:px-3 py-0 lg:py-2 text-sm sm:text-base flex items-center justify-center gap-2"
       >
         <FontAwesomeIcon icon={faCopy} size="lg" />
       </button>

@@ -111,15 +111,11 @@ const CarsDetail = ({ id }: { id: string }) => {
           </div>
 
           <div className="w-full max-w-[98vw] sm:max-w-[640px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto">
-            <div className="flex  gap-2 text-gray-600 text-xl lg:hidden lg:ml-auto lg:w-fit">
-              <p className="font-semibold text-gray-500">Compartir</p>
-              <ButtonsCompartir shareText={shareText} shareUrl={shareUrl} />
-            </div>
             {/* Marca/Modelo/Año + Datos técnicos alineados */}
-            {/* Marca/Modelo/Año + Datos técnicos alineados */}
-            <div className="grid grid-cols-1 2xl:mt-[0rem] lg:grid-cols-2 gap-y-2 gap-x-6 mb-6">
-              {/* Columna izquierda: Marca, Modelo, Año */}
-              <div className="flex flex-col gap-2 text-gray-600 text-xl">
+            <div className="w-full flex justify-center">
+            <div className="grid grid-cols-2 gap-y-2 gap-x-6 mb-6
+  w-full max-w-[99vw] sm:max-w-[600px] xl:max-w-[800px] 2xl:max-w-[900px] px-4 sm:px-0">          {/* Columna izquierda: Marca, Modelo, Año */}
+              <div className="flex flex-col gap-2 text-gray-600 text-base lg:text-xl">
                 <p className="font-normal flex items-center">
                   <span className="font-bold text-primary mr-1">Marca:</span>{" "}
                   {car?.brand?.nombre || "N/A"}
@@ -135,33 +131,36 @@ const CarsDetail = ({ id }: { id: string }) => {
               </div>
 
               {/* Columna derecha: KMs, Combustible, Transmisión */}
-              <div className="flex flex-col gap-2 text-gray-600 text-xl lg:ml-auto lg:w-fit">
-                <p className="flex items-center">
-                  <FontAwesomeIcon
-                    icon={faGaugeHigh}
-                    className="mr-2 text-primary"
-                  />
-                  {`${car?.kilometraje} kms`}
-                </p>
-                <p className="flex items-center">
-                  <FontAwesomeIcon
-                    icon={faGasPump}
-                    className="mr-2 text-primary"
-                  />
-                  {car?.combustible}
-                </p>
-                <p className="flex items-center">
-                  <FontAwesomeIcon
-                    icon={faGear}
-                    className="mr-2 text-primary"
-                  />
-                  {car?.transmision}
-                </p>
-              </div>
+              <div className="flex flex-col gap-2 text-gray-600 text-base lg:text-xl lg:ml-auto lg:w-fit pl-10 sm:pl-14">
+  <div className="flex items-start gap-2">
+    <FontAwesomeIcon
+      icon={faGaugeHigh}
+      className="text-primary text-sm lg:text-base mt-1"
+    />
+    <p>{`${car?.kilometraje} kms`}</p>
+  </div>
+  <div className="flex items-start gap-2">
+    <FontAwesomeIcon
+      icon={faGasPump}
+      className="text-primary text-sm lg:text-base mt-1"
+    />
+    <p>{car?.combustible}</p>
+  </div>
+  <div className="flex items-start gap-2">
+    <FontAwesomeIcon
+      icon={faGear}
+      className="text-primary text-sm lg:text-base mt-1"
+    />
+    <p>{car?.transmision}</p>
+  </div>
+</div>
             </div>
 
+            </div>
+
+            <div className="px-2 lg:px-0">
             {/* 🟦 Descripción abajo, sin cambios de estilo */}
-            <div className="bg-[#e6f0f7] text-gray-800 p-4 rounded-lg shadow-sm mb-4">
+            <div className="bg-[#e6f0f7]   text-gray-800 p-4 rounded-lg shadow-sm mb-4">
               <p className="text-base">{car?.descripcion2}</p>
             </div>
             {showModal && (
@@ -171,23 +170,18 @@ const CarsDetail = ({ id }: { id: string }) => {
                 shareUrl={shareUrl}
               />
             )}
-          </div>
 
-          <div className="flex lg:hidden flex-col space-y-2">
-            {car?.vendido === true ? (
-              <div className="inline-block px-2 py-1 text-center text-lg text-white sm:text-xl font-bold bg-primary rounded mr-4">
-                Vendido
-              </div>
-            ) : (
-              <p className="text-lg sm:text-4xl font-bold">
-                {moneda} {car?.precio}
-              </p>
-            )}
-            </div>
-            <div className="hidden 2xl:mt-[2rem] lg:flex items-center justify-end w-full max-w-[99vw] sm:max-w-[640px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto mt-4">
-  <p className="font-semibold text-gray-500 mr-2">Compartir</p>
+            {/* 📱 Compartir SOLO en mobile (debajo de descripción) */}
+            <div className="w-full max-w-[99vw] sm:max-w-[600px] mx-auto px-0 flex items-center justify-end gap-0 mt-2 lg:hidden">  
+            <p className="font-semibold text-gray-500">Compartir</p>
   <ButtonsCompartir shareText={shareText} shareUrl={shareUrl} />
 </div>
+          </div>
+        </div>
+          <div className=" 2xl:mt-[2rem] hidden lg:flex items-center justify-end w-full max-w-[99vw] sm:max-w-[640px] xl:max-w-[800px] 2xl:max-w-[900px] mx-auto mt-4">
+            <p className="font-semibold text-gray-500 mr-2">Compartir</p>
+            <ButtonsCompartir shareText={shareText} shareUrl={shareUrl} />
+          </div>
         </div>
       </div>
 
