@@ -1,8 +1,7 @@
 import { RootState, AppDispatch } from '@/redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { fetchBrands } from '@/redux/slices/brandsSlice';
-import { fetchTipos } from '@/redux/slices/tiposSlice';
+import { fetchFilterOptions } from '@/redux/slices/filtersSlice';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,87 +11,95 @@ const FilterBar: React.FC<{
   onApplyFilters: (filters: {
     transmision?: string;
     combustible?: string;
-    minKilometraje?: number;
-    maxKilometraje?: number;
-    minPrecio?: number;
-    maxPrecio?: number;
     tipoId?: string;
     brandId?: string;
   }) => void;
   onResetFilters: () => void;
 }> = ({ isVisible, onClose, onApplyFilters, onResetFilters }) => {
-
   const dispatch: AppDispatch = useDispatch();
 
+  const [transmision, setTransmision] = useState<string>('');
+  const [combustible, setCombustible] = useState<string>('');
+  const [tipoId, setTipoId] = useState<string>('');
+  const [brandId, setBrandId] = useState<string>('');
+
+  const { options } = useSelector((state: RootState) => state.filters || {});
+  const brands = options?.brands || [];
+  const tipos = options?.tipos || [];
+  const transmisiones = options?.transmision || [];
+  const combustibles = options?.combustible || [];
+
+  // Actualiza opciones dinámicamente cuando se cambia algún filtro
   useEffect(() => {
-    dispatch(fetchBrands())
-    dispatch(fetchTipos())
-  }, [dispatch]);
-
-  const { brands } = useSelector((state: RootState) => state.brands);
-  const { tipos } = useSelector((state: RootState) => state.tipos);
-
-  const [transmision, setTransmision] = useState<string | undefined>(undefined);
-  const [combustible, setCombustible] = useState<string | undefined>(undefined);
-  const [minKilometraje, setMinKilometraje] = useState<number>(0);
-  const [maxKilometraje, setMaxKilometraje] = useState<number>(10000);
-  const [minPrecio, setMinPrecio] = useState<number | undefined>(undefined);
-  const [maxPrecio, setMaxPrecio] = useState<number | undefined>(undefined);
-  const [tipoId, setTipoId] = useState<string | undefined>(undefined);
-  const [brandId, setBrandId] = useState<string | undefined>(undefined);
+    const queryParams: Record<string, string> = {};
+    if (brandId) queryParams.brandId = brandId;
+    if (tipoId) queryParams.tipoId = tipoId;
+    if (transmision) queryParams.transmision = transmision;
+    if (combustible) queryParams.combustible = combustible;
+    dispatch(fetchFilterOptions(queryParams));
+  }, [dispatch, brandId, tipoId, transmision, combustible]);
 
   const applyFilters = () => {
     onApplyFilters({
-      transmision,
-      combustible,
-      minKilometraje,
-      maxKilometraje,
-      minPrecio,
-      maxPrecio,
-      tipoId,
-      brandId,
+      transmision: transmision || undefined,
+      combustible: combustible || undefined,
+      tipoId: tipoId || undefined,
+      brandId: brandId || undefined,
     });
+  };
+
+  const resetLocalFilters = () => {
+    setBrandId('');
+    setTipoId('');
+    setTransmision('');
+    setCombustible('');
+    dispatch(fetchFilterOptions({})); // volver a traer todas las opciones
+    onResetFilters();
   };
 
   return (
     <aside
-      className={`fixed top-20 left-0 w-64 h-full bg-white shadow-lg p-4 transition-transform transform ${isVisible ? 'translate-x-0' : '-translate-x-full'
-        }`}
-    >
-      <div className="flex justify-end items-center">
+    className={`fixed top-20 left-0 w-64 h-full bg-white shadow-lg p-4 z-50 transition-transform transform ${
+      isVisible ? 'translate-x-0' : '-translate-x-full'
+    }`}
+  >
+      <div className="flex justify-end items-center mb-4">
         <button className="font-bold" onClick={onClose}>
-        <FontAwesomeIcon icon={faChevronLeft} />
+          <FontAwesomeIcon icon={faChevronLeft} />
         </button>
       </div>
 
+      {/* Marca */}
       <div className='mb-2'>
         <label className='block text-sm font-semibold'>Marca</label>
         <select
           className='w-full p-1 border rounded-lg'
           value={brandId}
-          onChange={(e) => setBrandId(String(e.target.value))}
+          onChange={(e) => setBrandId(e.target.value)}
         >
-          <option value="">Cualquiera</option>
-          {brands.map((b) => (
+          <option value="">Todos</option>
+          {brands.map((b: any) => (
             <option key={b.id} value={b.id}>{b.nombre}</option>
           ))}
         </select>
       </div>
 
+      {/* Tipo */}
       <div className='mb-2'>
         <label className='block text-sm font-semibold'>Tipo</label>
         <select
           className='w-full p-1 border rounded-lg'
           value={tipoId}
-          onChange={(e) => setTipoId(String(e.target.value))}
+          onChange={(e) => setTipoId(e.target.value)}
         >
-          <option value="">Cualquiera</option>
-          {tipos.map((t) => (
+          <option value="">Todos</option>
+          {tipos.map((t: any) => (
             <option key={t.id} value={t.id}>{t.nombre}</option>
           ))}
         </select>
       </div>
 
+      {/* Transmisión */}
       <div className="mb-2">
         <label className="block text-sm font-semibold">Transmisión</label>
         <select
@@ -100,71 +107,37 @@ const FilterBar: React.FC<{
           value={transmision}
           onChange={(e) => setTransmision(e.target.value)}
         >
-          <option value="">Cualquiera</option>
-          <option value="manual">Manual</option>
-          <option value="automatica">Automático</option>
+          <option value="">Todos</option>
+          {transmisiones.map((tr: string, i: number) => (
+            <option key={i} value={tr}>{tr}</option>
+          ))}
         </select>
       </div>
 
-      <div className="mb-2">
+      {/* Combustible */}
+      <div className="mb-4">
         <label className="block text-sm font-semibold">Combustible</label>
         <select
           className="w-full p-1 border rounded-lg"
           value={combustible}
           onChange={(e) => setCombustible(e.target.value)}
         >
-          <option value="">Cualquiera</option>
-          <option value="gasolina">Gasolina</option>
-          <option value="diesel">Diésel</option>
-          <option value="hibrido">Híbrido</option>
+          <option value="">Todos</option>
+          {combustibles.map((c: string, i: number) => (
+            <option key={i} value={c}>{c}</option>
+          ))}
         </select>
       </div>
 
-      <div className="mb-2">
-        <label className="block text-sm font-semibold">Precio Mínimo</label>
-        <input
-          type="number"
-          className="w-full p-1 border rounded-lg"
-          value={minPrecio || ''}
-          onChange={(e) => setMinPrecio(Number(e.target.value))}
-        />
-      </div>
-
-      <div className="mb-2">
-        <label className="block text-sm font-semibold">Precio Máximo</label>
-        <input
-          type="number"
-          className="w-full p-1 border rounded-lg"
-          value={maxPrecio || ''}
-          onChange={(e) => setMaxPrecio(Number(e.target.value))}
-        />
-      </div>
-
-      <div className='mb-4'>
-        <div className="flex justify-between mb-2">
-          <span>{minKilometraje} km</span>
-          <span>{maxKilometraje} km</span>
-        </div>
-        <input
-          type="range"
-          min={0}
-          max={150000}
-          step="1000"
-          value={maxKilometraje}
-          onChange={(e) => setMaxKilometraje(Number(e.target.value))}
-          className="w-full"
-        />
-      </div>
-
-      <div className='flex justify-center items-center'>
-        <button className="rounded p-2 w-full mb-2" onClick={applyFilters}>
+      {/* Botones */}
+      <div className='flex flex-col gap-2'>
+        <button className="rounded p-2 w-full bg-primary text-white" onClick={applyFilters}>
           Aplicar Filtros
         </button>
-        <button className="rounded p-2 w-full" onClick={onResetFilters}>
+        <button className="rounded p-2 w-full border" onClick={resetLocalFilters}>
           Restablecer Filtros
         </button>
       </div>
-
     </aside>
   );
 };

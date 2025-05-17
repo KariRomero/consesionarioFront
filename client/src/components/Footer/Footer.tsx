@@ -14,8 +14,8 @@ const Footer: React.FC = () => {
 // 
   // const brands = useSelector((state: RootState) => state.brands)
   return (
-    <section className="w-full border border-x-0 border-y-grey pt-28">
-      <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 pb-28 pt-16 px-10 gap-10">
+    <section className="w-full border border-x-0 border-y-grey pt-0">
+      <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-4 pb-28 pt-[2rem] px-10 gap-10">
         <div>
           <h1 className="font-semibold text-xl">Compañía</h1>
           <ul>

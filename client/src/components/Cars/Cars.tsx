@@ -66,8 +66,8 @@ export default function Cars({ editable = false }: CarsProps) {
 
       <CarsPagination />
 
-      <div className={`grid grid-cols-1 px-6 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ${isFilterVisible ? 'ml-64' : ''}`}>
-      {cars.map((v: Vehiculo) =>
+      <div className="grid grid-cols-1 px-6 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
+              {cars.map((v: Vehiculo) =>
   editable ? (
     <VehiculoCardAdmin key={v.id} vehiculo={v} />
   ) : (
