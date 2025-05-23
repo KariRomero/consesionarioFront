@@ -42,7 +42,7 @@ const NavBar: React.FC = () => {
 
 
 
-  
+
   useEffect(() => {
     if (openDropdown === null) {
       const timeout = setTimeout(() => setShowDropdown(null), 300);
@@ -50,6 +50,7 @@ const NavBar: React.FC = () => {
     } else {
       setShowDropdown(openDropdown);
     }
+    
   }, [openDropdown]);
 
   return (
