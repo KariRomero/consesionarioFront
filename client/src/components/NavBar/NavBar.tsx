@@ -40,6 +40,8 @@ const NavBar: React.FC = () => {
     };
   }, []);
 
+
+
   
   useEffect(() => {
     if (openDropdown === null) {
