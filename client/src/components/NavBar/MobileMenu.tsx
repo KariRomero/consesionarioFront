@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
 import DropdownWrapper from "./DropdownWrapper";
@@ -14,7 +14,9 @@ const MobileMenu = ({
   brands: any[];
   tipos: any[];
 }) => {
-  const [openMobileDropdown, setOpenMobileDropdown] = useState<"brands" | "tipos" | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<
+    "brands" | "tipos" | null
+  >(null);
 
   return (
     <div
@@ -32,7 +34,9 @@ const MobileMenu = ({
         <li>
           <button
             onClick={() =>
-              setOpenMobileDropdown(openMobileDropdown === "brands" ? null : "brands")
+              setOpenMobileDropdown(
+                openMobileDropdown === "brands" ? null : "brands"
+              )
             }
             className="font-semibold text-left w-full"
           >
@@ -42,10 +46,13 @@ const MobileMenu = ({
             <DropdownWrapper dropdown={brands} type="brands" isOpen={true} />
           )}
         </li>
+
         <li>
           <button
             onClick={() =>
-              setOpenMobileDropdown(openMobileDropdown === "tipos" ? null : "tipos")
+              setOpenMobileDropdown(
+                openMobileDropdown === "tipos" ? null : "tipos"
+              )
             }
             className="font-semibold text-left w-full"
           >
@@ -55,6 +62,19 @@ const MobileMenu = ({
             <DropdownWrapper dropdown={tipos} type="tipos" isOpen={true} />
           )}
         </li>
+
+        <li>
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              window.open("/cars", "_self");
+            }}
+            className="font-semibold text-left w-full"
+          >
+            TODOS LOS VEHÍCULOS
+          </button>
+        </li>
+
         <li>
           <Link href="/contact" onClick={() => setIsOpen(false)}>
             CONTACTO
