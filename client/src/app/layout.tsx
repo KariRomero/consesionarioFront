@@ -7,7 +7,7 @@ import ReduxProvider from "../redux/ReduxProvider";
 import StateLoader from "@/components/StateLoader/StateLoader";
 import MainWrapper from "@/components/Wrappers/MainWrapper";
 import { Toaster } from "react-hot-toast";
-
+import WhatsappButton from "@/components/Buttons/WhatsappButton";
 config.autoAddCss = false;
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -44,6 +44,7 @@ export default function RootLayout({
           <MainWrapper>{children}</MainWrapper>
         </ReduxProvider>
         <Toaster position="top-center" />
+        <WhatsappButton />
         {/* <Footer /> */}
       </body>
     </html>

@@ -205,4 +205,37 @@ input, textarea, select, [role="combobox"], [role="textbox"] {
   .animate-slide-right {
     animation: slide-right 0.5s ease-in-out;
   }
+
+
+  @keyframes slide-in-left {
+    0% {
+      transform: translateX(8px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-out-left {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(8px);
+      opacity: 0;
+    }
+  }
+  
+  @layer utilities {
+    .animate-slide-in-left {
+      animation: slide-in-left 0.3s ease-out forwards;
+    }
+  
+    .animate-slide-out-left {
+      animation: slide-out-left 0.3s ease-in forwards;
+    }
+  }
 }
