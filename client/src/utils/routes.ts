@@ -1,6 +1,6 @@
 // export const prod_url = 'https://concesionarioback-1.onrender.com'
 
-export const prod_url = 'https://concesionarioback-1.onrender.com'
+export const prod_url = 'http://138.219.42.213:5000';
 // export const prod_url = 'http://192.168.0.210:3000';
 // export const prod_url = 'http://localhost:3000'
 // export const prod_url = 'http://192.168.0.210:3000'
